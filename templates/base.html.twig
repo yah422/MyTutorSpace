@@ -18,25 +18,25 @@
 
         <nav class="bg-[#1B4255] p-4">
             <div class="container mx-auto flex justify-between items-center">
-              <!-- Logo ou titre de la navbar -->
+              <!-- Logo de la navbar -->
               <a href="#" style="color:#FFD700;" class=" text-xl font-bold">MyTutorSpace</a>
           
               <!-- Menu principal -->
               <ul class="flex items-center space-x-6">
                 <!-- Dropdown Matières -->
                 <li class="relative group">
-                  <button class="text-gray-200 hover:text-white focus:outline-none">Matières</button>
-                  <ul class="absolute left-0 mt-2 w-48 bg-blue-900 text-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <li><a href="#" class="block px-4 py-2 hover:bg-blue-700">Mathématiques</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-blue-700">Physique</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-blue-700">Informatique</a></li>
+                  <button class="text-gray-300 hover:text-white focus:outline-none">Matières</button>
+                  <ul class="absolute left-0 mt-2 w-48 bg-gray-900 text-gray-300 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Mathématiques</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Physique</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Informatique</a></li>
                   </ul>
                 </li>
                 <!-- Autres liens -->
-                <li><a href="#" class="text-gray-200 hover:text-white">Professeurs</a></li>
-                <li><a href="#" class="text-gray-200 hover:text-white">Ressources</a></li>
-                <li><a href="#" class="text-gray-200 hover:text-white">Tarifs</a></li>
-                <li><a href="#" class="text-gray-200 hover:text-white">À propos</a></li>
+                <li><a href="#" class="text-gray-300 hover:text-white">Professeurs</a></li>
+                <li><a href="#" class="text-gray-300 hover:text-white">Ressources</a></li>
+                <li><a href="#" class="text-gray-300 hover:text-white">Tarifs</a></li>
+                <li><a href="#" class="text-gray-300 hover:text-white">À propos</a></li>
               </ul>
           
               <!-- Barre de recherche -->
@@ -50,6 +50,7 @@
               </div>
             </div>
           </nav>
+          
           
         {% block body %}
         {% endblock %}

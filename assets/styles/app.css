@@ -27,3 +27,9 @@ h1{
     align-content: center;
     justify-content: center;
 }
+
+.listMatieres{
+    margin-left: 70px;
+    margin-right: 70px;
+    margin-top: 50px;
+}
