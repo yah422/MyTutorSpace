@@ -24,6 +24,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
+      /**
+     * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Choice(
+     *     choices={"tuteur", "parent", "eleve"},
+     *     message="Le rôle doit être soit 'tuteur', 'parent' ou 'eleve'."
+     * )
+     */
     #[ORM\Column]
     private array $roles = [];
 

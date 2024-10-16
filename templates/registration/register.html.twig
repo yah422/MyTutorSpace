@@ -7,26 +7,32 @@
         <div class="bg-red-500 text-white p-4 rounded mb-4" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <h1 class="text-3xl font-bold mb-6 text-gray-300"> Inscription </h1>
+    <h1 class="text-3xl font-bold mb-6"> Inscription </h1>
 
-    <div id="registerForm" class="bg-gray-300 p-6 rounded-lg">
+    <div id="registerForm" class=" p-6 rounded-lg">
         {{ form_errors(registrationForm) }}
 
         <div id="formR">
             {{ form_start(registrationForm) }}
                 <div class="mb-4">
                     {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
-                    {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-950'}}) }}
                 </div>
                 
                 <div class="mb-4">
                     {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
-                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-950'}}) }}
                 </div>
                 
-                <div class="mb-4">
-                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }}
-                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                <div class="mb-4" style="display: flex;
+                    flex-direction: row;
+                    align-content: center;
+                    justify-content: center;
+                    align-items: center;">
+                    <p style="width: 50%;">
+                        {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }}
+                    </p>
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-950'}}) }}
                 </div>
 
                 <br>
