@@ -9,30 +9,32 @@
 
     <h1 class="text-3xl font-bold mb-6 text-gray-300"> Inscription </h1>
 
-    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+    <div id="registerForm" class="bg-gray-300 p-6 rounded-lg">
         {{ form_errors(registrationForm) }}
 
-        {{ form_start(registrationForm) }}
-            <div class="mb-4">
-                {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
-                {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-300'}}) }}
-            </div>
-            
-            <div class="mb-4">
-                {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
-                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-300'}}) }}
-            </div>
-            
-            <div class="mb-4">
-                {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
-                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-300'}}) }}
-            </div>
+        <div id="formR">
+            {{ form_start(registrationForm) }}
+                <div class="mb-4">
+                    {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                </div>
+                
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }} <br>
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                </div>
+                
+                <div class="mb-4">
+                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'block text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-full p-2 bg-gray-300 border border-gray-600 rounded text-gray-300'}}) }}
+                </div>
 
-            <br>
+                <br>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">
-                S'inscrire
-            </button>
-        {{ form_end(registrationForm) }}
+                <button type="submit" style="width:20%; background-color:#FFD700; color:black;" class="text-white font-bold py-2 px-4 rounded w-full">
+                    S'inscrire
+                </button>
+            {{ form_end(registrationForm) }}
+        </div>
     </div>
 {% endblock %}
