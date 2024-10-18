@@ -33,3 +33,37 @@ h1{
     margin-right: 70px;
     margin-top: 50px;
 }
+
+/* -------------------------------  Register/Role ------------------------------- */
+.RoleChoix{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    background-color: #ECECEC;
+    width: 470px;
+    height: 350px;
+    border-radius: 15px;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+
+
+}
+.RoleDiv{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    border-radius: 15px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.h1log{
+    color: #ECECEC;
+    font-size: xxx-large;
+    margin-bottom: 60px;
+}

@@ -3,18 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\EleveType;
+use App\Form\ParentType;
+use App\Form\TuteurType;
 use App\Security\EmailVerifier;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -58,6 +61,47 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form,
         ]);
     }
+
+    #[Route('/register/{role}', name: 'app_register_role')]
+    public function registerRole(string $role, Request $request, EntityManagerInterface $entityManager)
+    {
+        switch ($role) {
+            case 'eleve':
+                $form = $this->createForm(EleveType::class);
+                break;
+            case 'tuteur':
+                $form = $this->createForm(TuteurType::class);
+                break;
+            case 'parent':
+                $form = $this->createForm(ParentType::class);
+                break;
+            default:
+                throw $this->createNotFoundException('Rôle non valide');
+        }
+
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $form->getData();
+            $user->setRole($role);  // Définir le rôle dans l'entité
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('registration/form.html.twig', [
+            'form' => $form->createView(),
+            'role' => $role,
+        ]);
+    }
+
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
