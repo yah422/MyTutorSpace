@@ -3,12 +3,33 @@
 {% block body %}
     <div class="container mx-auto px-4 py-8">
         <div class="w-full max-w-md p-8 rounded-lg shadow-md">
-            <h1 class="text-2xl font-bold mb-6 text-center">Inscription en tant que {{ role|capitalize }}</h1>
+            <h1 class="text-2xl font-bold mb-6 text-center"> Inscription </h1>
 
-            {{ form_start(form) }}
+            {% if app.user %}
+                <div class="text-white p-3 rounded mb-3">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                    <a href="{{ path('app_logout') }}" class="underline text-gray-300 hover:text-blue-300"> Se déconnecter </a>
+                </div>
+            {% endif %}
             
+            {{ form_start(form) }}
+
             <div class="mb-4">
                 {{ form_row(form.email, {
+                    'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
+                    'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
+                }) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.nom, {
+                    'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
+                    'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
+                }) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.prenom, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
                 }) }}
@@ -21,19 +42,33 @@
                 }) }}
             </div>
 
-            <button type="submit" style="background-color: #FFD700" class="w-full text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                S'inscrire
-            </button>
-
             <div class="mb-6">
+                <label class="block text-gray-300 text-sm font-bold mb-2">Choisissez un rôle</label>
+                <div class="flex flex-col">
+                    {% for choice in form.roles %}
+                        <div class="mb-2">
+                            <label class="inline-flex items-center">
+                                {{ form_widget(choice) }} &nbsp;&nbsp;
+                                <span class="ml-2 text-gray-300">{{ choice.vars.label }}</span>
+                            </label>
+                        </div> &nbsp;&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+                {{ form_errors(form.roles) }}
+            </div>
+
+            <div style="display: flex;justify-content: space-between;" class="mb-6">
                 {{ form_row(form.agreeTerms, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'text-gray-700'}
                 }) }}
             </div>
 
-            {{ form_end(form) }}
+            <button type="submit" style="background-color: #FFD700" class="w-full text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                S'inscrire
+            </button>
 
+            {{ form_end(form) }}
 
             <p class="text-center mt-4 text-gray-300">
                 Vous avez déjà un compte ? 

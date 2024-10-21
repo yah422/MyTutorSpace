@@ -22,7 +22,7 @@
             {% endfor %}
 
             <div class="titleRegister">
-                <h1 class="h1log"> <strong> Inscription </strong>  </h1>
+                <h1 class="h1log"> <strong> Se connecter </strong>  </h1>
                 <a href="{{ path('home') }}" style="width: 40PX;height: auto;margin-right: 20px;"> <img src="/img/close.png" alt="imageClose"> </a>
             </div>
             <div class="RoleDiv"> 
@@ -33,8 +33,8 @@
                     <h3> <strong> Je suis un Parent </strong>  </h3>
                     <p style="text-align: center;margin: 10px;"> Manage payments or lessons for your child </p>
                     <br>
-                    <a href="{{ path('app_register_role', {role: 'parent'}) }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> S'inscrire </a>
+                    <a href="{{ path('app_login') }}" style="background-color: #1B4255;
+                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je me connecte </a>
                 </div>
 
                 {# ========================== Registeur eleve ============================== #}
@@ -43,8 +43,8 @@
                     <h3> <strong> Je suis un Élève </strong>  </h3>
                     <p style="text-align: center;margin: 10px;"> Have lessons, message your tutor or watch your lessons back </p>
                     <br>
-                    <a href="{{ path('app_register_role', {role: 'eleve'}) }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> S'inscrire </a>
+                    <a href="{{ path('app_login') }}" style="background-color: #1B4255;
+                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je me connecte </a>
                 </div>
 
                 {# ========================== Registeur tuteur ============================== #}
@@ -53,12 +53,16 @@
                     <h3> <strong> Je suis un Tuteur </strong>  </h3>
                     <p style="text-align: center;margin: 10px;"> Give lessons or manage bookings with your customers </p>
                     <br>
-                    <a href="{{ path('app_register_role', {role: 'tuteur'}) }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> S'inscrire </a>
+                    <a href="{{ path('app_login') }}" style="background-color: #1B4255;
+                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je me connecte </a>
                 </div>
-
-            
             </div>
+            <br>
+            <div style="display: flex;flex-direction: row;align-content: center;justify-content: flex-end;padding-right: 50px;">
+                <a href="{{ path('app_register_role', {role: 'tuteur'}) }}" style="background-color: #FFD700;
+                color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> <strong> S'inscrire </strong></a> 
+            </div>
+
         {% endblock %}
 
     </body>

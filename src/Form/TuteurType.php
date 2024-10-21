@@ -15,7 +15,6 @@ class TuteurType extends AbstractType
     {
         $builder
             ->add('email', TextType::class)
-            ->add('roles')
             ->add('password')
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
