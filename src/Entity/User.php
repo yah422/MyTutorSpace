@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     /**
-     * @var list<string> The user roles
+     * @var string[] The user roles
      */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
@@ -70,20 +70,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Cette méthode retourne l'identifiant utilisateur (email dans ce cas)
+     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
+    /**
+     * Cette méthode renvoie les rôles de l'utilisateur.
+     * Le rôle est basé sur le champ `role` et est converti en format Symfony (ROLE_TUTEUR, ROLE_ELEVE, etc.)
+     */
     public function getRoles(): array
     {
+        $roles = $this->roles;
+
         // Ajout du rôle principal basé sur le champ role
-        return ['ROLE_' . strtoupper($this->role)];
+        if ($this->role) {
+            $roles[] = 'ROLE_' . strtoupper($this->role);
+        }
+
+        // ROLE_USER est garanti pour tous les utilisateurs
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
+    /**
+     * Le setter des rôles ne sert pas dans ce cas, puisque le rôle est défini via le champ `role`.
+     * Cette méthode peut être laissée vide ou redéfinie selon tes besoins futurs.
+     */
     public function setRoles(array $roles): static
     {
-        // Cette méthode ne sert pas, puisque le rôle est déterminé par le champ `role`
         $this->roles = $roles;
 
         return $this;
@@ -101,9 +120,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Effacement des données sensibles (e.g., plain password)
+     */
     public function eraseCredentials(): void
     {
-        // Effacement des données sensibles si nécessaire
+        // Si tu stockes des données sensibles temporairement, elles peuvent être effacées ici.
     }
 
     public function getNom(): ?string
@@ -147,6 +169,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->role;
     }
 
+    /**
+     * Setter pour le rôle, avec validation du rôle choisi (tuteur, parent, élève)
+     */
     public function setRole(string $role): static
     {
         $this->role = $role;

@@ -21,9 +21,10 @@
                 <div class="bg-red-500 text-white p-4 rounded mb-4" role="alert">{{ flash_error }}</div>
             {% endfor %}
 
-
-            <h1 class="h1log"> <strong> Inscription </strong>  </h1>
-
+            <div class="titleRegister">
+                <h1 class="h1log"> <strong> Inscription </strong>  </h1>
+                <a href="{{ path('home') }}" style="width: 40PX;height: auto;margin-right: 20px;"> <img src="/img/close.png" alt="imageClose"> </a>
+            </div>
             <div class="RoleDiv"> 
                 
                 {# ========================== Registeur parent ============================== #}

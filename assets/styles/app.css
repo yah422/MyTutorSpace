@@ -68,3 +68,11 @@ h1{
     font-size: xxx-large;
     margin-bottom: 60px;
 }
+
+.titleRegister{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
