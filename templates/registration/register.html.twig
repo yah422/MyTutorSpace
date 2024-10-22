@@ -12,38 +12,38 @@
                 </div>
             {% endif %}
 
-            {{ form_start(form) }}
+            {{ form_start(registrationForm) }}
 
             <div class="mb-4">
-                {{ form_row(form.email, {
+                {{ form_row(registrationForm.email, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
                 }) }}
             </div>
 
             <div class="mb-4">
-                {{ form_row(form.nom, {
+                {{ form_row(registrationForm.nom, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
                 }) }}
             </div>
 
             <div class="mb-4">
-                {{ form_row(form.prenom, {
+                {{ form_row(registrationForm.prenom, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
                 }) }}
             </div>
 
             <div class="mb-6">
-                {{ form_row(form.plainPassword, {
+                {{ form_row(registrationForm.plainPassword, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
                 }) }}
             </div>
 
             <div style="display: flex;justify-content: space-between;" class="mb-6">
-                {{ form_row(form.agreeTerms, {
+                {{ form_row(registrationForm.agreeTerms, {
                     'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
                     'attr': {'class': 'text-gray-700'}
                 }) }}
@@ -53,7 +53,7 @@
                 S'inscrire
             </button>
 
-            {{ form_end(form) }}
+            {{ form_end(registrationForm) }}
 
             <p class="text-center mt-4 text-gray-300">
                 Vous avez déjà un compte ? 

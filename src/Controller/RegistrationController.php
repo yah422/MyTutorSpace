@@ -30,58 +30,55 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/register', name: 'app_register')]
-    public function register(
-        Request $request, 
-        EntityManagerInterface $entityManager, 
-        UserPasswordHasherInterface $passwordHasher, 
-        AuthorizationCheckerInterface $authChecker
-    ): Response {
-        // Création d'un nouvel utilisateur
+    #[Route('/register/tuteur', name: 'app_register_tuteur')]
+    public function registerTuteur(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_TUTEUR');
+    }
+
+    #[Route('/register/eleve', name: 'app_register_eleve')]
+    public function registerEleve(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_ELEVE');
+    }
+
+    #[Route('/register/parent', name: 'app_register_parent')]
+    public function registerParent(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_PARENT');
+    }
+
+    // Commun a tous les roles
+    private function registerWithRole(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, string $role): Response
+    {
         $user = new User();
-        
-        // Création du formulaire d'inscription
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-    
-        // Traitement du formulaire si il est soumis et valide
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hashage du mot de passe
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $form->get('plainPassword')->getData()
+            // Hash password
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
             );
-            $user->setPassword($hashedPassword);
-    
-            // Attribuer un rôle de manière sécurisée selon la logique métier
-            if ($authChecker->isGranted('ROLE_ADMIN')) {
-                // L'administrateur peut assigner des rôles spécifiques comme tuteur ou parent
-                $role = $request->get('role');
-                if (in_array($role, ['ROLE_TUTEUR', 'ROLE_PARENT', 'ROLE_ELEVE'])) {
-                    $user->setRoles([$role]);
-                } else {
-                    // Si le rôle n'est pas autorisé, assignez un rôle par défaut
-                    $user->setRoles(['ROLE_USER']);
-                }
-            } else {
-                // Si l'utilisateur n'a pas les droits administratifs, il reçoit le rôle par défaut
-                $user->setRoles(['ROLE_USER']);
-            }
-    
-            // Enregistrement de l'utilisateur
+
+            // Assign the role based on the route
+            $user->setRoles([$role]);
+
+            // Save user to the database
             $entityManager->persist($user);
             $entityManager->flush();
-    
-            // Redirection après inscription réussie
+
+            // Redirect to login or any other page
             return $this->redirectToRoute('app_login');
         }
-    
-        // Affichage du formulaire d'inscription
+
         return $this->render('registration/register.html.twig', [
-            'form' => $form->createView(),
+            'registrationForm' => $form->createView(),
         ]);
     }
-    
 
     #[Route('/choix-role', name: 'app_role_choice')]
     public function roleChoice(): Response

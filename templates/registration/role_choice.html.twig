@@ -6,7 +6,7 @@
         <title>{% block title %} Inscription {% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -20,27 +20,40 @@
                 <h1 class="text-2xl font-bold mb-6">Choisissez votre rôle</h1>
                 
                 <div class="flex justify-center space-x-4"> 
-                    <a href="{{ path('app_register', {'role': 'ROLE_TUTEUR'}) }}">
+                    <!-- Choix pour le rôle Tuteur -->
+                    <a href="{{ path('app_register_tuteur') }}">
                         <div class="cursor-pointer bg-yellow-500 text-white font-bold py-6 px-10 rounded shadow-md hover:bg-yellow-600">
                             Tuteur
                         </div>
                     </a>
 
-                    <a href="{{ path('app_register', {'role': 'ROLE_ELEVE'}) }}">
+                    <!-- Choix pour le rôle Élève -->
+                    <a href="{{ path('app_register_eleve') }}">
                         <div class="cursor-pointer bg-blue-500 text-white font-bold py-6 px-10 rounded shadow-md hover:bg-blue-600">
                             Élève
                         </div>
                     </a>
 
-                    <a href="{{ path('app_register', {'role': 'ROLE_PARENT'}) }}">
+                    <!-- Choix pour le rôle Parent -->
+                    <a href="{{ path('app_register_parent') }}">
                         <div class="cursor-pointer bg-green-500 text-white font-bold py-6 px-10 rounded shadow-md hover:bg-green-600">
                             Parent
                         </div>
                     </a>
-        
                 </div>
+
+                <div class="flex justify-center space-x-4 mt-6">
+                    <!-- Choix pour un rôle admin caché si nécessaire (géré ailleurs) -->
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_register', {'role': 'ROLE_ADMIN'}) }}">
+                        <div class="cursor-pointer bg-red-500 text-white font-bold py-6 px-10 rounded shadow-md hover:bg-red-600">
+                            Administrateur
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+
             </div>
         {% endblock %}
     </body>
-    </html>
-
+</html>
