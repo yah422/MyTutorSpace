@@ -40,10 +40,28 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'required' => true,
                 'mapped' => true,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Répéter le mot de passe'],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'label_attr' => [
+                        'class' => 'block text-gray-300 text-sm font-bold mb-2'
+                    ],
+                    'attr' => [
+                        'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                    ]
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe',
+                    'label_attr' => [
+                        'class' => 'block text-gray-300 text-sm font-bold mb-2'
+                    ],
+                    'attr' => [
+                        'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                    ]
+                ],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe est obligatoire']),
+                    new Assert\NotBlank([
+                        'message' => 'Le mot de passe est obligatoire'
+                    ]),
                     new Assert\Length([
                         'min' => 6,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères'
@@ -54,6 +72,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

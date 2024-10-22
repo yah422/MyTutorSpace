@@ -15,6 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -30,30 +31,42 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
+    public function register(
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        UserPasswordHasherInterface $passwordHasher, 
+        AuthorizationCheckerInterface $authChecker
+    ): Response {
+        // Création d'un nouvel utilisateur
         $user = new User();
-    
-        // Récupération du formulaire
+        
+        // Création du formulaire d'inscription
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
     
-        // Si le formulaire est soumis et valide
+        // Traitement du formulaire si il est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupération du mot de passe en clair
-            $plainPassword = $form->get('plainPassword')->getData();
-            if ($plainPassword) {
-                // Encodage du mot de passe
-                $encodedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-                $user->setPassword($encodedPassword);
-            } else {
-                // Gérer l'erreur si le mot de passe est manquant
-                $this->addFlash('error', 'Le mot de passe est obligatoire.');
-                return $this->redirectToRoute('app_register'); // Ou une autre gestion d'erreur
-            }
+            // Hashage du mot de passe
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            );
+            $user->setPassword($hashedPassword);
     
-            // Définir le rôle par défaut de l'utilisateur
-            $user->setRoles([$_GET['role']]);
+            // Attribuer un rôle de manière sécurisée selon la logique métier
+            if ($authChecker->isGranted('ROLE_ADMIN')) {
+                // L'administrateur peut assigner des rôles spécifiques comme tuteur ou parent
+                $role = $request->get('role');
+                if (in_array($role, ['ROLE_TUTEUR', 'ROLE_PARENT', 'ROLE_ELEVE'])) {
+                    $user->setRoles([$role]);
+                } else {
+                    // Si le rôle n'est pas autorisé, assignez un rôle par défaut
+                    $user->setRoles(['ROLE_USER']);
+                }
+            } else {
+                // Si l'utilisateur n'a pas les droits administratifs, il reçoit le rôle par défaut
+                $user->setRoles(['ROLE_USER']);
+            }
     
             // Enregistrement de l'utilisateur
             $entityManager->persist($user);
@@ -63,6 +76,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     
+        // Affichage du formulaire d'inscription
         return $this->render('registration/register.html.twig', [
             'form' => $form->createView(),
         ]);
