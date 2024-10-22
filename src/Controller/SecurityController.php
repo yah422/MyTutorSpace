@@ -29,54 +29,6 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/register/{role}', name: 'app_register_role')]
-    public function registerRole(
-        string $role, 
-        Request $request, 
-        EntityManagerInterface $entityManager, 
-        UserPasswordHasherInterface $passwordHasher
-    ): Response 
-    {
-        // Validation du rôle
-        if (!in_array($role, ['eleve', 'tuteur', 'parent'])) {
-            throw $this->createNotFoundException('Rôle non valide');
-        }
-
-        // Création du formulaire d'enregistrement
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Hacher le mot de passe
-            $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
-            $user->setPassword($hashedPassword);
-
-            // Définir le rôle spécifique
-            switch ($role) {
-                case 'eleve':
-                    $user->setRoles(['ROLE_ELEVE']);
-                    break;
-                case 'tuteur':
-                    $user->setRoles(['ROLE_TUTEUR']);
-                    break;
-                case 'parent':
-                    $user->setRoles(['ROLE_PARENT']);
-                    break;
-            }
-
-            // Enregistrer l'utilisateur en base de données
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render('registration/form.html.twig', [
-            'form' => $form->createView(),
-            'role' => $role,
-        ]);
-    }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void

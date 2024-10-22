@@ -15,7 +15,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public function __construct()
     {
-        $this->roles = []; // Initialise avec un tableau vide
+        // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
+        $this->roles = ['ROLE_USER'];
     }
 
     #[ORM\Id]
@@ -24,43 +25,74 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\Email] // Validation de l'email
+    #[Assert\Email(message: 'Veuillez entrer un email valide.')]  // Validation de l'email
     private ?string $email = null;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = []; // Initialisation avec un tableau vide
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    private ?string $nom = null;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le prénom est obligatoire.')]
+    private ?string $prenom = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
+    #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
+    private array $roles = [];
+
+    /**
+     * Retourne les rôles de l'utilisateur, en ajoutant ROLE_USER s'il n'est pas déjà présent.
+     */
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';  // Chaque utilisateur doit au moins avoir ce rôle
+
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
-        // Limiter à un seul rôle
-        // if (count($roles) > 1) {
-        //     throw new \InvalidArgumentException('Un seul rôle est autorisé.');
-        // }
         $this->roles = $roles;
 
         return $this;
     }
 
-    /**
-     * @var string Le mot de passe hashé
-     */
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 255)]  // Colonne password en base de données
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    /**
+     * Mot de passe en clair non mappé à la base de données, utilisé uniquement pour l'encodage.
+     */
+    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
+    #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.')]
+    private ?string $plainPassword = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $isVerified = false;
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -86,24 +119,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     /**
-     * Effacement des données sensibles (e.g., plain password).
+     * Efface les informations sensibles après leur traitement (plain password).
      */
     public function eraseCredentials(): void
     {
-        // Si vous stockez des données sensibles temporairement, elles peuvent être effacées ici.
+        // Supprimer les données sensibles temporairement stockées
+        $this->plainPassword = null;
     }
 
     public function getNom(): ?string

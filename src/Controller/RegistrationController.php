@@ -30,72 +30,51 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+    
+        // Récupération du formulaire
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+    
+        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupération du mot de passe en clair
             $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
-            
-            // Initialiser les rôles ici
-            $user->setRoles(['ROLE_USER']); // Assurez-vous que l'utilisateur a un rôle
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('admin@gmail.com', 'MyTutor Bot'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
-            return $this->redirectToRoute('app_home'); // Rediriger vers la page d'accueil après l'enregistrement
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/register/{role}', name: 'app_register_role')]
-    public function registerRole(Request $request, string $role): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-
-        // Initialiser le rôle de l'utilisateur ici
-        $user->setRoles([$role]); // Assurez-vous que le rôle est défini
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
-
-            // Obtenez le rôle unique du formulaire
-            $role = $form->get('role')->getData();
-            if ($role) {
-                $user->setRoles([$role]); // Définir le rôle sélectionné
+            if ($plainPassword) {
+                // Encodage du mot de passe
+                $encodedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($encodedPassword);
             } else {
-                // Définir un rôle par défaut si aucun rôle n'est sélectionné
-                $user->setRoles(['ROLE_USER']);
+                // Gérer l'erreur si le mot de passe est manquant
+                $this->addFlash('error', 'Le mot de passe est obligatoire.');
+                return $this->redirectToRoute('app_register'); // Ou une autre gestion d'erreur
             }
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('app_home'); // Rediriger vers la page d'accueil après l'enregistrement
+    
+            // Définir le rôle par défaut de l'utilisateur
+            $user->setRoles([$_GET['role']]);
+    
+            // Enregistrement de l'utilisateur
+            $entityManager->persist($user);
+            $entityManager->flush();
+    
+            // Redirection après inscription réussie
+            return $this->redirectToRoute('app_login');
         }
-
-        return $this->render('registration/form.html.twig', [
-            'registrationForm' => $form->createView(),
-            'role' => $role, // Passer le rôle à la vue si nécessaire
+    
+        return $this->render('registration/register.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
+    
+
+    #[Route('/choix-role', name: 'app_role_choice')]
+    public function roleChoice(): Response
+    {
+        return $this->render('registration/role_choice.html.twig');
+    }
+
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
