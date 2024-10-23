@@ -1,20 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ExerciceController!{% endblock %}
+{% block title %} Exercices !{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/MyTutorSpace/src/Controller/ExerciceController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/MyTutorSpace/templates/exercice/index.html.twig</code></li>
-    </ul>
+<div class="listExercice">
+    {% for exercice in exercices %}
+        <ul class="divide-y divide-gray-200 rounded-lg">   
+            <li style="display: flex;
+            flex-direction: row;
+            align-content: space-between;
+            justify-content: space-between;
+            align-items: center;" class="px-4 py-2 hover:bg-gray-100"> 
+                <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-200 hover:underline"> 
+                    {{ exercice.titre }} 
+                </a>
+               
+            </li>
+        </ul> <br>            
+    {% endfor %}
+    <br>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('add_exercice') }}" class="text-white font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+            Ajouter un exercice
+        </a>
+    {% endif %}
+   
 </div>
 {% endblock %}

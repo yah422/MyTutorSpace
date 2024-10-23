@@ -40,14 +40,14 @@ class MatiereController extends AbstractController
 
         // Vérification si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarde de la catégorie en base de données
-            $entityManager->persist($categorie);
+            // Sauvegarde de la matière en base de données
+            $entityManager->persist($matiere);
             $entityManager->flush();
 
             // Message de confirmation
-            $this->addFlash('success', 'Catégorie ajoutée avec succès !');
+            $this->addFlash('success', 'Matière ajoutée avec succès !');
 
-            // Redirection vers la page de liste des catégories (à ajuster si nécessaire)
+            // Redirection vers la page de liste des matières (à ajuster si nécessaire)
             return $this->redirectToRoute('app_matiere');
         }
 
