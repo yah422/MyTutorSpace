@@ -43,10 +43,24 @@ class Lecon
     #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
     private Collection $exercices;
 
+    /**
+     * @var Collection<int, Niveau>
+     */
+    #[ORM\ManyToMany(targetEntity: Niveau::class, inversedBy: 'lecons')]
+    private Collection $niveau;
+
+    /**
+     * @var Collection<int, Niveau>
+     */
+    #[ORM\ManyToMany(targetEntity: Niveau::class, mappedBy: 'lecon')]
+    private Collection $niveaux;
+
     public function __construct()
     {
         $this->exercice = new ArrayCollection();
         $this->exercices = new ArrayCollection();
+        $this->niveau = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,6 +164,38 @@ class Lecon
     public function getExercices(): Collection
     {
         return $this->exercices;
+    }
+
+    /**
+     * @return Collection<int, Niveau>
+     */
+    public function getNiveau(): Collection
+    {
+        return $this->niveau;
+    }
+
+    public function addNiveau(Niveau $niveau): static
+    {
+        if (!$this->niveau->contains($niveau)) {
+            $this->niveau->add($niveau);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): static
+    {
+        $this->niveau->removeElement($niveau);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Niveau>
+     */
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
     }
 
 }
