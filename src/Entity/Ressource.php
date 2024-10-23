@@ -19,12 +19,6 @@ class Ressource
     #[ORM\Column(length: 255)]
     private ?string $contenu = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ressource')]
-    private ?Exercice $exercice = null;
-
-    #[ORM\ManyToOne(inversedBy: 'ressources')]
-    private ?Exercice $exercices = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -54,27 +48,4 @@ class Ressource
         return $this;
     }
 
-    public function getExercice(): ?Exercice
-    {
-        return $this->exercice;
-    }
-
-    public function setExercice(?Exercice $exercice): static
-    {
-        $this->exercice = $exercice;
-
-        return $this;
-    }
-
-    public function getExercices(): ?Exercice
-    {
-        return $this->exercices;
-    }
-
-    public function setExercices(?Exercice $exercices): static
-    {
-        $this->exercices = $exercices;
-
-        return $this;
-    }
 }

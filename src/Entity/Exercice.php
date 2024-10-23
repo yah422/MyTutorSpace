@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ExerciceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,33 +22,6 @@ class Exercice
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exercices')]
-    private ?Lecon $lecon = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exercices')]
-    private ?Type $type = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exercice')]
-    private ?Type $types = null;
-
-    /**
-     * @var Collection<int, Ressource>
-     */
-    #[ORM\OneToMany(targetEntity: Ressource::class, mappedBy: 'exercice')]
-    private Collection $ressource;
-
-    /**
-     * @var Collection<int, Ressource>
-     */
-    #[ORM\OneToMany(targetEntity: Ressource::class, mappedBy: 'exercices')]
-    private Collection $ressources;
-
-    public function __construct()
-    {
-        $this->ressource = new ArrayCollection();
-        $this->ressources = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -92,79 +63,4 @@ class Exercice
 
         return $this;
     }
-
-    public function getLecon(): ?Lecon
-    {
-        return $this->lecon;
-    }
-
-    public function setLecon(?Lecon $lecon): static
-    {
-        $this->lecon = $lecon;
-
-        return $this;
-    }
-
-    public function getType(): ?Type
-    {
-        return $this->type;
-    }
-
-    public function setType(?Type $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getTypes(): ?Type
-    {
-        return $this->types;
-    }
-
-    public function setTypes(?Type $types): static
-    {
-        $this->types = $types;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Ressource>
-     */
-    public function getRessource(): Collection
-    {
-        return $this->ressource;
-    }
-
-    public function addRessource(Ressource $ressource): static
-    {
-        if (!$this->ressource->contains($ressource)) {
-            $this->ressource->add($ressource);
-            $ressource->setExercice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRessource(Ressource $ressource): static
-    {
-        if ($this->ressource->removeElement($ressource)) {
-            // set the owning side to null (unless already changed)
-            if ($ressource->getExercice() === $this) {
-                $ressource->setExercice(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Ressource>
-     */
-    public function getRessources(): Collection
-    {
-        return $this->ressources;
-    }
-
 }
