@@ -8,13 +8,33 @@
     <h1 class="text-2xl font-bold text-center mb-4">Détail de la leçon</h1>
 </div>
 
-<div  class=" p-6 rounded-lg shadow-md">
+<div class="p-6 rounded-lg shadow-md">
     <p class="text-gray-300">
-        <strong class="font-semibold"> Description: </strong> {{ matiere.description }} <br>
+        <strong class="font-semibold">Description: </strong> {{ lecon.description }} <br>
     </p>
-    <a href="{{ path('show_exercice', {'id': exercice.id }) }}"> Exercices </a>
+
+    {# --------------------------------  Affichage des exercices associés à la leçon  ----------------------------- #}
+    {# <div class="mt-6">
+        <h2 class="text-xl font-semibold">Exercices associés</h2>
+        
+        {% if exercices is not empty %}
+            <ul class="mt-4">
+                {% for exercice in exercices %}
+                    <li class="mb-2">
+                        <a href="{{ path('show_exercice', {'id': exercice.id }) }}" class="text-blue-500 underline">
+                            {{ exercice.titre }}
+                        </a>
+                        <p class="text-gray-400">Date de création : {{ exercice.dateCreation|date('d/m/Y') }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-400">Aucun exercice disponible pour cette leçon.</p>
+        {% endif %}
+    </div> #}
 
 </div>
+
 <br>
 
 {% endblock %}
