@@ -23,9 +23,6 @@ class Exercice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -67,15 +64,4 @@ class Exercice
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 }

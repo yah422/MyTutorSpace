@@ -23,9 +23,6 @@ class Lecon
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $niveau = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -67,15 +64,4 @@ class Lecon
         return $this;
     }
 
-    public function getNiveau(): ?string
-    {
-        return $this->niveau;
-    }
-
-    public function setNiveau(string $niveau): static
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
 }
