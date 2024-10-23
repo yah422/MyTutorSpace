@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Matiere;
 use App\Form\MatiereType;
+use Doctrine\ORM\EntityManager;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,18 +82,15 @@ class MatiereController extends AbstractController
     }
 
     #[Route('/matiere/{id}', name: 'show_matiere')]
-    public function show(Matiere $matiere): Response
+    public function show(Matiere $matiere,MatiereRepository $matiereRepository): Response
     {
+        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
         return $this->render('matiere/show.html.twig', [
             'matiere' => $matiere,
-
+            'matieres' => $matieres,
+            
         ]);
 
     }
-
-
-
-
-
 
 }

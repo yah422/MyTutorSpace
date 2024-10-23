@@ -47,6 +47,7 @@ class RegistrationController extends AbstractController
     {
         return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_PARENT');
     }
+    
 
     // Commun a tous les roles
     private function registerWithRole(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, string $role): Response
@@ -98,11 +99,11 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('app_login');
         }
 
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 }
