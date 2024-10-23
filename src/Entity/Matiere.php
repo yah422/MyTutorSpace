@@ -21,6 +21,17 @@ class Matiere
     #[ORM\Column(length: 500)]
     private ?string $description = null;
 
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'matiere')]
+    private Collection $lecons;
+
+    public function __construct()
+    {
+        $this->lecons = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +57,36 @@ class Matiere
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): static
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->setMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): static
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            // set the owning side to null (unless already changed)
+            if ($lecon->getMatiere() === $this) {
+                $lecon->setMatiere(null);
+            }
+        }
 
         return $this;
     }

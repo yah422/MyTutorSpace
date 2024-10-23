@@ -23,6 +23,12 @@ class Exercice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'exercice')]
+    private ?Lecon $lecon = null;
+
+    #[ORM\ManyToOne(inversedBy: 'exercice')]
+    private ?Type $type = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +66,30 @@ class Exercice
     public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getLecon(): ?Lecon
+    {
+        return $this->lecon;
+    }
+
+    public function setLecon(?Lecon $lecon): static
+    {
+        $this->lecon = $lecon;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

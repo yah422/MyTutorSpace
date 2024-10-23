@@ -18,6 +18,17 @@ class Type
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'type')]
+    private Collection $exercice;
+
+    public function __construct()
+    {
+        $this->exercice = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +42,36 @@ class Type
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercice(): Collection
+    {
+        return $this->exercice;
+    }
+
+    public function addExercice(Exercice $exercice): static
+    {
+        if (!$this->exercice->contains($exercice)) {
+            $this->exercice->add($exercice);
+            $exercice->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): static
+    {
+        if ($this->exercice->removeElement($exercice)) {
+            // set the owning side to null (unless already changed)
+            if ($exercice->getType() === $this) {
+                $exercice->setType(null);
+            }
+        }
 
         return $this;
     }
