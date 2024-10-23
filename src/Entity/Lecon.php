@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LeconRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,30 @@ class Lecon
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lecons')]
+    private ?Matiere $matiere = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lecon')]
+    private ?Matiere $matieres = null;
+
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
+    private Collection $exercice;
+
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
+    private Collection $exercices;
+
+    public function __construct()
+    {
+        $this->exercice = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -62,6 +88,68 @@ class Lecon
         $this->dateCreation = $dateCreation;
 
         return $this;
+    }
+
+    public function getMatiere(): ?Matiere
+    {
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matiere $matiere): static
+    {
+        $this->matiere = $matiere;
+
+        return $this;
+    }
+
+    public function getMatieres(): ?Matiere
+    {
+        return $this->matieres;
+    }
+
+    public function setMatieres(?Matiere $matieres): static
+    {
+        $this->matieres = $matieres;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercice(): Collection
+    {
+        return $this->exercice;
+    }
+
+    public function addExercice(Exercice $exercice): static
+    {
+        if (!$this->exercice->contains($exercice)) {
+            $this->exercice->add($exercice);
+            $exercice->setLecon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): static
+    {
+        if ($this->exercice->removeElement($exercice)) {
+            // set the owning side to null (unless already changed)
+            if ($exercice->getLecon() === $this) {
+                $exercice->setLecon(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
     }
 
 }

@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20241023122357 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE exercice DROP FOREIGN KEY FK_E418C74DEC1308A5');
+        $this->addSql('DROP INDEX IDX_E418C74DEC1308A5 ON exercice');
+        $this->addSql('ALTER TABLE exercice DROP lecon_id');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE exercice ADD lecon_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE exercice ADD CONSTRAINT FK_E418C74DEC1308A5 FOREIGN KEY (lecon_id) REFERENCES lecon (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
+        $this->addSql('CREATE INDEX IDX_E418C74DEC1308A5 ON exercice (lecon_id)');
+    }
+}
