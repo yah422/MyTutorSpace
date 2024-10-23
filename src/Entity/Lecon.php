@@ -34,9 +34,26 @@ class Lecon
     #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
     private Collection $exercice;
 
+    /**
+     * @var Collection<int, Niveau>
+     */
+    #[ORM\ManyToMany(targetEntity: Niveau::class, inversedBy: 'lecons')]
+    private Collection $niveau;
+
+    #[ORM\ManyToOne(inversedBy: 'lecon')]
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'lecons')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->exercice = new ArrayCollection();
+        $this->niveau = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +134,69 @@ class Lecon
             if ($exercice->getLecon() === $this) {
                 $exercice->setLecon(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Niveau>
+     */
+    public function getNiveau(): Collection
+    {
+        return $this->niveau;
+    }
+
+    public function addNiveau(Niveau $niveau): static
+    {
+        if (!$this->niveau->contains($niveau)) {
+            $this->niveau->add($niveau);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): static
+    {
+        $this->niveau->removeElement($niveau);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addLecon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeLecon($this);
         }
 
         return $this;

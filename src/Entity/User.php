@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -17,6 +19,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
         $this->roles = ['ROLE_USER'];
+        $this->lecon = new ArrayCollection();
+        $this->lecons = new ArrayCollection();
     }
 
     #[ORM\Id]
@@ -69,6 +73,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
     #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.')]
     private ?string $plainPassword = null;
+
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'user')]
+    private Collection $lecon;
+
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
+    private Collection $lecons;
 
     public function getPassword(): ?string
     {
@@ -162,5 +178,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecon(): Collection
+    {
+        return $this->lecon;
+    }
+
+    public function addLecon(Lecon $lecon): static
+    {
+        if (!$this->lecon->contains($lecon)) {
+            $this->lecon->add($lecon);
+            $lecon->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): static
+    {
+        if ($this->lecon->removeElement($lecon)) {
+            // set the owning side to null (unless already changed)
+            if ($lecon->getUser() === $this) {
+                $lecon->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
     }
 }

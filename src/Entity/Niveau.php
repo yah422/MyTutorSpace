@@ -18,6 +18,17 @@ class Niveau
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\ManyToMany(targetEntity: Lecon::class, mappedBy: 'niveau')]
+    private Collection $lecons;
+
+    public function __construct()
+    {
+        $this->lecons = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +42,33 @@ class Niveau
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): static
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->addNiveau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): static
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            $lecon->removeNiveau($this);
+        }
 
         return $this;
     }
