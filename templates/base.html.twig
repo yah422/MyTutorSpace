@@ -36,7 +36,7 @@
                 <ul class="divide-y divide-gray-200 rounded-lg">
                   <li class="relative group">
                     <!-- Bouton pour ouvrir le dropdown -->
-                    <button class="text-gray-300 hover:text-white focus:outline-none">Matières</button>
+                    <button class="text-gray-300 hover:text-white focus:outline-none"><a href="{{ path('app_matiere') }}"> Matières </a></button>
                     
                     <!-- Liste des matières affichées dans le dropdown -->
                     <ul class="absolute left-0 mt-2 w-48 bg-gray-900 text-gray-300 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -52,7 +52,7 @@
               
           
                 <!-- Autres liens -->
-                <li><a href="#" class="text-gray-300 hover:text-white">Tuteurs</a></li>
+                <li><a href="{{ path('app_log') }}" class="text-gray-300 hover:text-white">Tuteurs</a></li>
                 <li><a href="#" class="text-gray-300 hover:text-white">Ressources</a></li>
                 <li><a href="#" class="text-gray-300 hover:text-white">Tarifs</a></li>
                 <li>  <a href="{{ path('app_login') }}" style="background-color: #ECECEC;
