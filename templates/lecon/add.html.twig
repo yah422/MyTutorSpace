@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Ajouter une leçon {% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-center mb-4">Ajouter une nouvelle leçon</h1>
+
+    {{ form_start(form) }}
+
+    <div class="mb-4">
+        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-input mt-1 block w-full'}}) }}
+        {{ form_errors(form.titre) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-input mt-1 block w-full'}}) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.dateCreation, 'Date de création', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.dateCreation, {'attr': {'class': 'form-input mt-1 block w-full'}}) }}
+        {{ form_errors(form.dateCreation) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.matiere, 'Matière', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.matiere, {'attr': {'class': 'form-select mt-1 block w-full'}}) }}
+        {{ form_errors(form.matiere) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.niveau, 'Niveau', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.niveau, {'attr': {'class': 'form-select mt-1 block w-full'}}) }}
+        {{ form_errors(form.niveau) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.user, 'Auteur', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.user, {'attr': {'class': 'form-select mt-1 block w-full'}}) }}
+        {{ form_errors(form.user) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.users, 'Participants', {'label_attr': {'class': 'font-bold'}}) }}
+        {{ form_widget(form.users, {'attr': {'class': 'form-select mt-1 block w-full'}}) }}
+        {{ form_errors(form.users) }}
+    </div>
+
+    <div class="mt-6">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Enregistrer
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
