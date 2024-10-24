@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Exercices !{% endblock %}
+{% block title %} Exercices {% endblock %}
 
 {% block body %}
 
 <div class="listExercice">
     {% for exercice in exercices %}
         <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li style="display: flex;
-            flex-direction: row;
-            align-content: space-between;
-            justify-content: space-between;
-            align-items: center;" class="px-4 py-2 hover:bg-gray-100"> 
-                <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-200 hover:underline"> 
+            <li class="px-4 py-2"> 
+                <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-300"> 
                     {{ exercice.titre }} 
                 </a>
                
@@ -20,8 +16,8 @@
         </ul> <br>            
     {% endfor %}
     <br>
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('add_exercice') }}" class="text-white font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+    {% if is_granted('ROLE_TUTEUR') %}
+        <a href="{{ path('add_exercice') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
             Ajouter un exercice
         </a>
     {% endif %}

@@ -96,3 +96,22 @@ h1{
     font-size: x-large;
     text-align: left;
 }
+
+/* ------------------------------- Exercices --------------------------------------- */
+.listExercice ul li{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* -------------------------------  Ressources ------------------------------- */
+.listRessource ul li{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+}

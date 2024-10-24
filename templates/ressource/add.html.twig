@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Ajouter une Ressource {% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-center mb-4"> Ajouter une nouvelle Ressource </h1>
+
+    {{ form_start(form) }}
+
+    <div class="mb-4">
+        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.titre) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.contenu, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.contenu) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.exercice, 'Exercice', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.exercice, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.exercice) }}
+    </div>
+
+    <div class="mt-6">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Enregistrer
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
