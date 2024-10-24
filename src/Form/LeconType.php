@@ -2,14 +2,15 @@
 
 namespace App\Form;
 
-use App\Entity\Lecon;
-use App\Entity\Matiere;
-use App\Entity\Niveau;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Lecon;
+use App\Entity\Niveau;
+use App\Entity\Matiere;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class LeconType extends AbstractType
 {
@@ -18,25 +19,27 @@ class LeconType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
-            ->add('dateCreation', null, [
+            ->add('dateCreation', DateType::class, [
                 'widget' => 'single_text',
+                'html5' => true,   // Utilisation de l'input type date HTML5
+                'format' => 'yyyy-MM-dd', // Format de la date
             ])
             ->add('matiere', EntityType::class, [
                 'class' => Matiere::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
             ->add('niveau', EntityType::class, [
                 'class' => Niveau::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
             ->add('users', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
         ;
