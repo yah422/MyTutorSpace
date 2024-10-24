@@ -27,10 +27,11 @@ class MatiereController extends AbstractController
     // Méthode pour ajouter une Matière
     #[Route('/matiere/ajouter', name: 'add_matiere')]
     #[IsGranted('ROLE_ADMIN')]
-    public function add(matiere $matiere, Request $request, EntityManagerInterface $entityManager): Response
+    public function add(MatiereRepository $matiereRepository, Matiere $matiere, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
         // Création d'une nouvelle instance de Matiere
-        $categorie = new Matiere();
+        $matiere = new Matiere();
 
         // Création du formulaire
         $form = $this->createForm(MatiereType::class, $matiere);
@@ -54,6 +55,7 @@ class MatiereController extends AbstractController
         // Rendu de la vue avec le formulaire
         return $this->render('matiere/add.html.twig', [
             'form' => $form->createView(),
+            'matieres' => $matieres,
         ]);
     
     }
@@ -68,7 +70,7 @@ class MatiereController extends AbstractController
      
         // Vérifier le token CSRF
         if ($this->isCsrfTokenValid('delete_matiere', $request->request->get('_token'))) {
-            // Si valide, on peut supprimer la categorie
+            // Si valide, on peut supprimer la matière
             $entityManager->remove($matiere);
             $entityManager->flush();
 
