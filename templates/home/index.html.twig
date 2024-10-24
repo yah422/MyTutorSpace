@@ -3,17 +3,22 @@
 {% block title %} Accueil {% endblock %}
 
 {% block body %}
-
     <div id="homePage1Part" class="container mx-auto px-4 py-8">
-        <div>
-            <h1 style="justify-content: flex-start;;text-align: left;" class="text-3xl font-bold mb-4"> My Tutor Space  </h1>
-            <p class="pHomePage"> Donner aux tuteurs privés les outils pour façonner l’avenir,une leçon à la fois. </p>
-        </div>
-        <div>
-            <img src="/img/photoelearning.png" alt="photoElearning">
+        {% if app.user %}
+            <div class="text-gray-300 p-4 mb-4 rounded">
+                <p class="text-xl">Bienvenue, {{ app.user.prenom }} {{ app.user.nom }} !</p>
+            </div>
+        {% endif %}
+
+        <div class="PicTitle">
+            <div>
+                <h1 style="justify-content: flex-start; text-align: left;" class="text-3xl font-bold mb-4">My Tutor Space</h1>
+                <p class="pHomePage">Donner aux tuteurs privés les outils pour façonner l’avenir, une leçon à la fois.</p>
+            </div>
+            <div>
+                <img src="/img/photoelearning.png" alt="photoElearning">
+            </div>
         </div>
 
     </div>
-
-
 {% endblock %}

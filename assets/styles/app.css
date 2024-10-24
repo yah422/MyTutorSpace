@@ -35,6 +35,14 @@ h1{
     margin-top: 50px;
 }
 
+.listMatieres ul li{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* -------------------------------  Register/Role ------------------------------- */
 .RoleChoix{
     display: flex;
@@ -89,12 +97,16 @@ h1{
     padding-left: 50px;
     padding-right: 50px;
     margin-top: 80px;
+    flex-direction: column;
 }
 
 .pHomePage{
     color: #ECECEC;
     font-size: x-large;
     text-align: left;
+}
+.PicTitle{
+    display: flex;
 }
 
 /* ------------------------------- Exercices --------------------------------------- */
@@ -109,6 +121,16 @@ h1{
 
 /* -------------------------------  Ressources ------------------------------- */
 .listRessource ul li{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* -------------------------------  Leçons ------------------------------- */
+
+.listLecon ul li{
     display: flex;
     flex-direction: row;
     align-content: space-between;

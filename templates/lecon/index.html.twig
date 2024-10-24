@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Leçons !{% endblock %}
+{% block title %} Leçons {% endblock %}
 
 {% block body %}
 
@@ -8,11 +8,7 @@
   
     {% for lecon in lecons %}
         <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li style="display: flex;
-            flex-direction: row;
-            align-content: space-between;
-            justify-content: space-between;
-            align-items: center;" class="px-4 py-2"> 
+            <li class="px-4 py-2"> 
                 <a href="{{ path('show_lecon',{'id': lecon.id })}}" class="text-gray-200"> 
                     {{ lecon.titre }} 
                 </a>
@@ -20,7 +16,7 @@
         </ul> <br>            
     {% endfor %}
     <br>
-    {% if is_granted('ROLE_TUTEUR') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('add_lecon') }}" class="text-white font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
             Ajouter une lecon
         </a>

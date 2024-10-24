@@ -54,11 +54,26 @@
                 <!-- Autres liens -->
                 <li><a href="{{ path('app_ressource') }}" class="text-gray-300 hover:text-white">Ressources</a></li>
                 <li><a href="{{ path('app_lecon') }}" class="text-gray-300 hover:text-white">Leçons</a></li>
-                <li>  <a href="{{ path('app_login') }}" style="background-color: #ECECEC;
-                  color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> <strong> Se connecter </strong>  </a> </li>
-                <li>  <a href="{{ path('app_role_choice') }}" style="background-color: #FFD700;
-                  color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> <strong> S'inscrire </strong></a> 
-                </li>
+
+                <!-- Vérifier si l'utilisateur est connecté -->
+                {% if app.user %}
+                  <li>
+                    <a href="{{ path('app_logout') }}" style="background-color: #ECECEC; color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
+                      <strong>Se déconnecter</strong>
+                    </a>
+                  </li>
+                {% else %}
+                  <li>
+                    <a href="{{ path('app_login') }}" style="background-color: #ECECEC; color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
+                      <strong>Se connecter</strong>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ path('app_role_choice') }}" style="background-color: #FFD700; color: black;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
+                      <strong>S'inscrire</strong>
+                    </a>
+                  </li>
+                {% endif %}
               </ul>
           
             </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Matières !{% endblock %}
+{% block title %}Matières {% endblock %}
 
 {% block body %}
 
@@ -8,25 +8,25 @@
   
     {% for matiere in matieres %}
         <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li style="display: flex;
-            flex-direction: row;
-            align-content: space-between;
-            justify-content: space-between;
-            align-items: center;" class="px-4 py-2"> 
+            <li class="px-4 py-2"> 
                 <a href="{{ path('show_matiere',{'id': matiere.id })}}" class="text-gray-200"> 
                     {{ matiere.nom }} 
                 </a>
-                <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post" onsubmit="return confirm('Etes-vous sûre ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
-                    <button type="submit" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-                        Supprimer
-                    </button>
-                </form>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post" onsubmit="return confirm('Etes-vous sûre ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
+                        <button type="submit" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+                            Supprimer
+                        </button>
+                    </form>
+                {% endif %}
+                
             </li>
         </ul> <br>            
     {% endfor %}
     <br>
-    {% if is_granted('ROLE_TUTEUR') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('add_matiere') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
             Ajouter une matière
         </a>
