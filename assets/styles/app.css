@@ -100,6 +100,14 @@ h1{
     flex-direction: column;
 }
 
+.TextTitle{
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .pHomePage{
     color: #ECECEC;
     font-size: x-large;
