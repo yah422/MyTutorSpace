@@ -12,13 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MatiereController extends AbstractController
 {
     #[Route('/matiere', name: 'app_matiere')]
     public function index(MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('matiere/index.html.twig', [
             'matieres' => $matieres,
         ]);
@@ -29,7 +30,7 @@ class MatiereController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function add(MatiereRepository $matiereRepository, Matiere $matiere, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         // Création d'une nouvelle instance de Matiere
         $matiere = new Matiere();
 
@@ -57,17 +58,17 @@ class MatiereController extends AbstractController
             'form' => $form->createView(),
             'matieres' => $matieres,
         ]);
-    
+
     }
 
     #[Route('/matiere/supprimer/{id}', name: 'delete_matiere', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, Matiere $matiere, EntityManagerInterface $entityManager,int $id): Response
+    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, Matiere $matiere, EntityManagerInterface $entityManager, int $id): Response
     {
         if (!$matiere) {
             throw $this->createNotFoundException('No matiere found for id ' . $id);
         }
-     
+
         // Vérifier le token CSRF
         if ($this->isCsrfTokenValid('delete_matiere', $request->request->get('_token'))) {
             // Si valide, on peut supprimer la matière
@@ -77,20 +78,20 @@ class MatiereController extends AbstractController
             // Redirection après suppression
             return $this->redirectToRoute('app_matiere');
         }
-     
+
         // Si le token est invalide, lever une exception
         throw $this->createAccessDeniedException('Token CSRF invalide.');
-        
+
     }
 
     #[Route('/matiere/{id}', name: 'show_matiere')]
-    public function show(Matiere $matiere,MatiereRepository $matiereRepository): Response
+    public function show(Matiere $matiere, MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('matiere/show.html.twig', [
             'matiere' => $matiere,
             'matieres' => $matieres,
-            
+
         ]);
 
     }
