@@ -5,7 +5,8 @@
 {% block body %}
 
 <div class="listMatieres">
-  
+{# {% dump(matieres) %} pour récup dans la barre de symfony #}
+{# {{ dump(array) }} pour recup et afficher dans la vue #}
     {% for matiere in matieres %}
         <ul class="divide-y divide-gray-200 rounded-lg">   
             <li class="px-4 py-2"> 
