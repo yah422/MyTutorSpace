@@ -1,10 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-body {
+/* body {
     background-color: #1B4255;
-}
+} */
 
 h1{
     width: 100%;
@@ -86,6 +86,21 @@ h1{
 }
 
 /* -------------------------------  HomePage ------------------------------- */
+
+/* -------------  Navbar  -------------- */
+/* #menuButton{
+    width: 40px;
+    height: 40px;
+}
+
+#menuItems{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 130px; */
+/* } */
+
+
 #homePage1Part{
     display: flex;
     flex-direction: row;

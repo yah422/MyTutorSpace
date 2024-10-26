@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -18,8 +19,8 @@ class RessourceController extends AbstractController
     #[Route('/ressource', name: 'app_ressource')]
     public function index(MatiereRepository $matiereRepository, RessourceRepository $ressourceRepository): Response
     {
-        $ressources = $ressourceRepository->findBy([],["titre" => "ASC"]);
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $ressources = $ressourceRepository->findBy([], ["titre" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('ressource/index.html.twig', [
             'ressource' => 'ressource',
             'ressources' => $ressources,
@@ -33,7 +34,7 @@ class RessourceController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function add(MatiereRepository $matiereRepository, Ressource $ressource, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         // Création d'une nouvelle instance de Ressource
         $ressource = new Ressource();
 
@@ -61,17 +62,17 @@ class RessourceController extends AbstractController
             'form' => $form->createView(),
             'matieres' => $matieres,
         ]);
-    
+
     }
 
     #[Route('/ressource/supprimer/{id}', name: 'delete_ressource', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, Ressource $ressource, EntityManagerInterface $entityManager,int $id): Response
+    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, Ressource $ressource, EntityManagerInterface $entityManager, int $id): Response
     {
         if (!$ressource) {
             throw $this->createNotFoundException('No Ressource found for id ' . $id);
         }
-     
+
         // Vérifier le token CSRF
         if ($this->isCsrfTokenValid('delete_ressource', $request->request->get('_token'))) {
             // Si valide, on peut supprimer la ressource
@@ -81,20 +82,20 @@ class RessourceController extends AbstractController
             // Redirection après suppression
             return $this->redirectToRoute('app_ressource');
         }
-     
+
         // Si le token est invalide, lever une exception
         throw $this->createAccessDeniedException('Token CSRF invalide.');
-        
+
     }
 
     #[Route('/ressource/{id}', name: 'show_ressource')]
-    public function show(Ressource $ressource,MatiereRepository $matiereRepository): Response
+    public function show(Ressource $ressource, MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('ressource/show.html.twig', [
             'ressource' => $ressource,
             'matieres' => $matieres,
-            
+
         ]);
 
     }
