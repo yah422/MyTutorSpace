@@ -6,21 +6,21 @@
 
 <div class="listRessource">
     {% for ressource in ressources %}
-        <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li class="px-4 py-2"> 
-                <a href="{{ path('show_ressource',{'id': ressource.id })}}" class="text-gray-300"> 
-                    {{ ressource.titre }} 
-                </a>
-               
-            </li>
-        </ul> <br>            
+    <ul class="divide-y divide-gray-200 rounded-lg">
+        <li class="px-4 py-2">
+            <a href="{{ path('show_ressource',{'id': ressource.id })}}" class="text-gray-300">
+                {{ ressource.titre }}
+            </a>
+        </li>
+    </ul> <br>
     {% endfor %}
     <br>
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('add_ressource') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-            Ajouter une ressource
-        </a>
+    <a href="{{ path('add_ressource') }}" class="text-black font-bold py-2 px-4 rounded"
+        style="background-color: #FFD700;">
+        Ajouter une ressource
+    </a>
     {% endif %}
-   
+
 </div>
 {% endblock %}

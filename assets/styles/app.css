@@ -87,20 +87,6 @@ h1{
 
 /* -------------------------------  HomePage ------------------------------- */
 
-/* -------------  Navbar  -------------- */
-/* #menuButton{
-    width: 40px;
-    height: 40px;
-}
-
-#menuItems{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 130px; */
-/* } */
-
-
 #homePage1Part{
     display: flex;
     flex-direction: row;
@@ -141,6 +127,14 @@ h1{
     align-items: center;
 }
 
+.listExercice {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 60px
+}
 
 /* -------------------------------  Ressources ------------------------------- */
 .listRessource ul li{
@@ -151,6 +145,15 @@ h1{
     align-items: center;
 }
 
+.listRessource {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 60px
+}
+
 /* -------------------------------  Leçons ------------------------------- */
 
 .listLecon ul li{
@@ -159,4 +162,13 @@ h1{
     align-content: space-between;
     justify-content: space-between;
     align-items: center;
+}
+
+.listLecon{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 60px
 }
