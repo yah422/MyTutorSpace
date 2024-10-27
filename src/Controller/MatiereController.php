@@ -5,14 +5,15 @@ namespace App\Controller;
 use App\Entity\Matiere;
 use App\Form\MatiereType;
 use Doctrine\ORM\EntityManager;
+use App\Repository\UserRepository;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MatiereController extends AbstractController
 {
@@ -84,14 +85,35 @@ class MatiereController extends AbstractController
 
     }
 
+    #[Route('/matiere/{id}/tuteurs', name: 'matiere_tuteurs')]
+    public function getTuteursByMatiere(EntityManagerInterface $entityManager, Matiere $matiere): Response
+    {
+        $query = $entityManager->createQuery(
+            'SELECT u
+        FROM App\Entity\User u
+        JOIN u.matieres m
+        WHERE m = :matiere
+        AND u.roles LIKE :role'
+        )->setParameter('matiere', $matiere)
+            ->setParameter('role', '%"ROLE_TUTEUR"%');
+
+        $tuteurs = $query->getResult();
+
+        return $this->render('matiere/tuteurs.html.twig', [
+            'tuteurs' => $tuteurs,
+            'matiere' => $matiere,
+        ]);
+    }
+
     #[Route('/matiere/{id}', name: 'show_matiere')]
-    public function show(Matiere $matiere, MatiereRepository $matiereRepository): Response
+    public function show(Matiere $matiere, MatiereRepository $matiereRepository, UserRepository $userRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        $tuteurs = $userRepository->findTuteursByMatiere($matiere);
         return $this->render('matiere/show.html.twig', [
             'matiere' => $matiere,
             'matieres' => $matieres,
-
+            'tuteurs' => $tuteurs, // Passer les tuteurs à la vue
         ]);
 
     }

@@ -21,6 +21,9 @@ class Matiere
     #[ORM\Column(length: 500)]
     private ?string $description = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: "matieres")]
+    private Collection $users;
+    
     /**
      * @var Collection<int, Lecon>
      */
@@ -30,8 +33,12 @@ class Matiere
     public function __construct()
     {
         $this->lecons = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
-
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
     public function getId(): ?int
     {
         return $this->id;

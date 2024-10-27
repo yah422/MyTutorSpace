@@ -18,6 +18,10 @@
         </p>
         <br>
     </div>
+
+    {% for tuteur in tuteurs %}
+    <p>{{ tuteur.nom }} {{ tuteur.prenom }}</p>
+    
+{% endfor %}
 </div>
-     
 {% endblock %}

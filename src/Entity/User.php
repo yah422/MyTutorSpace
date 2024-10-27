@@ -21,6 +21,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = ['ROLE_USER'];
         $this->lecon = new ArrayCollection();
         $this->lecons = new ArrayCollection();
+        $this->matieres = new ArrayCollection();
+
     }
 
     #[ORM\Id]
@@ -31,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email(message: 'Veuillez entrer un email valide.')]  // Validation de l'email
     private ?string $email = null;
+
+    #[ORM\ManyToMany(targetEntity: Matiere::class, inversedBy: "users")]
+    private Collection $matieres;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
@@ -61,6 +66,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = $roles;
 
+        return $this;
+    }
+
+    public function getMatieres(): Collection
+    {
+        return $this->matieres;
+    }
+
+    public function addMatiere(Matiere $matiere): self
+    {
+        if (!$this->matieres->contains($matiere)) {
+            $this->matieres[] = $matiere;
+        }
+        return $this;
+    }
+
+    public function removeMatiere(Matiere $matiere): self
+    {
+        $this->matieres->removeElement($matiere);
         return $this;
     }
 
