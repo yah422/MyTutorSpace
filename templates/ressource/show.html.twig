@@ -4,20 +4,20 @@
 
 {% block body %}
 
-<div class="content mt-12">
+<div class="content">
 
-    {# --------------------------------  Affichage details ressources  ----------------------------- #}
+    {# -------------------------------- Affichage details ressources ----------------------------- #}
 
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold text-center mb-4"> {{ ressource.titre }}</h1><br>
     </div>
-    
-    <div  class=" p-6 rounded-lg">
+
+    <div class=" p-6 rounded-lg">
         <p class="text-gray-300">
             <strong class="font-semibold"> Contenu: </strong> <br> {{ ressource.contenu }} <br>
         </p>
         <br>
     </div>
 </div>
-     
+
 {% endblock %}
