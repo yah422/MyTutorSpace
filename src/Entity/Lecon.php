@@ -44,6 +44,16 @@ class Lecon
     private ?User $user = null;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lecon", mappedBy="niveau") 
+     */
+    private $lecons;
+
+    public function getLecons()
+    {
+        return $this->lecons;
+    }
+
+    /**
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'lecons')]

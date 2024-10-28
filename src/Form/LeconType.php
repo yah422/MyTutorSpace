@@ -11,14 +11,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class LeconType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
-            ->add('description')
+            ->add('titre', TextType::class)
+            ->add('description', TextType::class)
             ->add('dateCreation', DateType::class, [
                 'widget' => 'single_text',
                 'html5' => true,   // Utilisation de l'input type date HTML5

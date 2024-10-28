@@ -50,7 +50,7 @@ class MatiereController extends AbstractController
             // Message de confirmation
             $this->addFlash('success', 'Matière ajoutée avec succès !');
 
-            // Redirection vers la page de liste des matières (à ajuster si nécessaire)
+            // Redirection vers la page de liste des matières
             return $this->redirectToRoute('app_matiere');
         }
 

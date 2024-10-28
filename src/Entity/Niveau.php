@@ -14,15 +14,14 @@ class Niveau
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
-
     /**
      * @var Collection<int, Lecon>
      */
     #[ORM\ManyToMany(targetEntity: Lecon::class, mappedBy: 'niveau')]
     private Collection $lecons;
+
+    #[ORM\Column(length: 255)]
+    private ?string $titre = null;
 
     public function __construct()
     {
@@ -32,18 +31,6 @@ class Niveau
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
     }
 
     /**
@@ -69,6 +56,18 @@ class Niveau
         if ($this->lecons->removeElement($lecon)) {
             $lecon->removeNiveau($this);
         }
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): static
+    {
+        $this->titre = $titre;
 
         return $this;
     }

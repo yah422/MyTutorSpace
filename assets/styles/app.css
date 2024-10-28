@@ -14,6 +14,16 @@ h1{
     color: #FFD700;
     font-size: xx-large;
 }
+
+h2{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    color: #FFD700;
+    font-size: xx-large;
+}
+
 #registerForm{
     width: 100%;
     display: flex;
@@ -169,6 +179,17 @@ h1{
 }
 
 .listLecon{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 60px
+}
+
+
+/* ----------------------- Niveau --------------------------------- */
+.listNiveau{
     display: flex;
     flex-direction: column;
     align-content: center;

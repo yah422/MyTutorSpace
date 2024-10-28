@@ -16,6 +16,16 @@ class LeconRepository extends ServiceEntityRepository
         parent::__construct($registry, Lecon::class);
     }
 
+    public function findLeconsParNiveau()
+    {
+        return $this->createQueryBuilder('l')
+            ->join('l.niveau', 'n')
+            ->addSelect('n')
+            ->orderBy('n.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Lecon[] Returns an array of Lecon objects
     //     */

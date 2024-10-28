@@ -20,15 +20,16 @@ class LeconController extends AbstractController
 
 
     #[Route('/lecon', name: 'app_lecon')]
-    public function index(LeconRepository $leconRepository,MatiereRepository $matiereRepository): Response
+    public function index(LeconRepository $leconRepository, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-
+        $leconsParNiveau = $leconRepository->findLeconsParNiveau();
         $lecons = $leconRepository->findBy([],["titre" => "ASC"]);
         return $this->render('lecon/index.html.twig', [
             'lecon' => 'lecon',
             'lecons' => $lecons,
             'matieres' => $matieres,
+            'leconsParNiveau' => $leconsParNiveau,
 
         ]);
     }
@@ -79,7 +80,6 @@ class LeconController extends AbstractController
         if (!$lecon) {
             throw $this->createNotFoundException('No leçon found for id ' . $id);
         }
-     
         // Vérifier le token CSRF
         if ($this->isCsrfTokenValid('delete_lecon', $request->request->get('_token'))) {
             // Si valide, on peut supprimer la categorie
@@ -89,7 +89,6 @@ class LeconController extends AbstractController
             // Redirection après suppression
             return $this->redirectToRoute('app_lecon');
         }
-     
         // Si le token est invalide, lever une exception
         throw $this->createAccessDeniedException('Token CSRF invalide.');
         
