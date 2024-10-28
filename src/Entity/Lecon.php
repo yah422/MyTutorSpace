@@ -55,7 +55,23 @@ class Lecon
         $this->niveaux = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
+    /**
+     * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="lecons")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $niveau;
 
+    public function getNiveau(): ?Niveau
+    {
+        return $this->niveau;
+    }
+
+    public function setNiveau(?Niveau $niveau): self
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lecons")
      * @ORM\JoinTable(name="lecon_user")
