@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Lecon;
 use App\Entity\Niveau;
 use App\Entity\Matiere;
 use App\Form\NiveauType;
+use App\Repository\LeconRepository;
 use App\Repository\NiveauRepository;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,8 +22,8 @@ class NiveauController extends AbstractController
     #[Route('/niveau', name: 'app_niveau')]
     public function index(NiveauRepository $niveauRepository, MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-        $niveaux =$niveauRepository->findBy([], ["titre" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
         return $this->render('niveau/index.html.twig', [
             'niveaux' => $niveaux,
             'matieres' => $matieres,
@@ -34,8 +36,8 @@ class NiveauController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function add(NiveauRepository $niveauRepository, Niveau $niveau, Request $request, EntityManagerInterface $entityManager, MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-        $niveaux =$niveauRepository->findBy([], ["titre" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
         // Création d'une nouvelle instance de Niveau
         $niveau = new Niveau();
 
@@ -90,19 +92,37 @@ class NiveauController extends AbstractController
 
     }
 
-    #[Route('/niveau/{id}', name: 'show_niveau')]
-    public function show(NiveauRepository $niveauRepository, Niveau $niveau, MatiereRepository $matiereRepository): Response
+    public function findLeconsByNiveau(Niveau $niveau, EntityManagerInterface $entityManager)
     {
-        $lecons = $niveau->getLecons();
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-        $niveaux =$niveauRepository->findBy([], ["titre" => "ASC"]);
+        return $entityManager->getRepository(Lecon::class)->createQueryBuilder('l')
+            ->innerJoin('l.niveaux', 'n')
+            ->where('n.id = :niveauId')
+            ->setParameter('niveauId', $niveau->getId())
+            ->getQuery()
+            ->getResult();
+    }
+    
+    #[Route('/niveau/{id}', name: 'show_niveau')]
+    public function show(Niveau $niveau, MatiereRepository $matiereRepository, LeconRepository $leconRepository, NiveauRepository $niveauRepository): Response
+    {
+        // Vérification si le niveau est trouvé
+        if (!$niveau) {
+            throw $this->createNotFoundException('Niveau not found');
+        }
+
+        // Récupération des leçons par le niveau
+        $lecons = $leconRepository->findLeconsByNiveau($niveau);
+
+        // Récupération de toutes les matières et niveaux triés
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
+
         return $this->render('niveau/show.html.twig', [
-            'niveau' => $niveau,
             'niveaux' => $niveaux,
             'matieres' => $matieres,
+            'niveau' => $niveau,
             'lecons' => $lecons,
         ]);
-
     }
 
 }

@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Lecon;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Niveau;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Lecon>
@@ -22,6 +23,16 @@ class LeconRepository extends ServiceEntityRepository
             ->join('l.niveau', 'n')
             ->addSelect('n')
             ->orderBy('n.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLeconsByNiveau(Niveau $niveau)
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.niveaux', 'n')
+            ->where('n.id = :niveauId')
+            ->setParameter('niveauId', $niveau->getId())
             ->getQuery()
             ->getResult();
     }

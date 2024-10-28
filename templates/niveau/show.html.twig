@@ -7,29 +7,25 @@
 <h2>Leçons : {{ niveau.titre }}</h2>
 
 <div class="listLecon">
-
     {% if lecons|length > 0 %}
-    <ul>
-        {% for lecon in lecons %}
-        <li class="px-4 py-2">
-            <a href="{{ path('show_lecon', {'id': lecon.id }) }}" class="text-gray-800">
-                {{ lecon.titre }}
-            </a>
-        </li>
-        {% endfor %}
+    ul>
+    {% for lecon in lecons %}
+    <li>{{ lecon.titre }}</li>
+    {% else %}
+    <li>Aucune leçon trouvée pour ce niveau.</li>
+    {% endfor %}
     </ul>
     {% else %}
-    <p class="text-gray-300">Aucune leçon associée à ce niveau</p>
+    <p class="text-gray-300">Aucune leçon associée à ce niveau.</p>
     {% endif %}
 
     <br>
 
     {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('add_lecon') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-        Ajouter une lecon
+        Ajouter une leçon
     </a>
     {% endif %}
-
 </div>
 
 {% endblock %}
