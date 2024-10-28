@@ -16,11 +16,11 @@ class NiveauType extends AbstractType
     {
         $builder
             ->add('titre', TextType::class)
-            ->add('lecons', EntityType::class, [
-                'class' => Lecon::class,
-                'choice_label' => 'titre',
-                'multiple' => true,
-            ])
+            // ->add('lecons', EntityType::class, [
+            //     'class' => Lecon::class,
+            //     'choice_label' => 'titre',
+            //     'multiple' => true,
+            // ])
         ;
     }
 
