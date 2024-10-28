@@ -6,16 +6,19 @@
 
 <div class="listLecon">
 
-    {% for niveau in leconsParNiveau %}
-        <h2>{{ niveau.titre }}</h2>
-        <ul>
-            {% for lecon in niveau.lecons %}
-                <li>{{ lecon.titre }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-
-    {# {% for lecon in lecons %}
+    {# {% for niveau in leconsParNiveau %}
+    <h2>{{ niveau.titre }}</h2>
+    <ul>
+        {% for lecon in niveau.lecons %}
+        <li class="px-4 py-2">
+            <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="text-gray-200">
+                {{ lecon.titre }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %} #}
+    {% for lecon in lecons %}
     <ul class="divide-y divide-gray-200 rounded-lg">
         <li class="px-4 py-2">
             <a href="{{ path('show_lecon',{'id': lecon.id })}}" class="text-gray-200">
@@ -23,7 +26,9 @@
             </a>
         </li>
     </ul> <br>
-    {% endfor %} #}
+    {% endfor %}
+
+
     <br>
     {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('add_lecon') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">

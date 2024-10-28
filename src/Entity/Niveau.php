@@ -14,14 +14,13 @@ class Niveau
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    /**
-     * @var Collection<int, Lecon>
-     */
-    #[ORM\ManyToMany(targetEntity: Lecon::class, mappedBy: 'niveau')]
-    private Collection $lecons;
 
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
+
+    #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'niveaux')]
+    #[ORM\JoinTable(name: 'niveau_lecon')]
+    private Collection $lecons;
 
     public function __construct()
     {
@@ -41,17 +40,17 @@ class Niveau
         return $this->lecons;
     }
 
-    public function addLecon(Lecon $lecon): static
+    public function addLecon(Lecon $lecon): self
     {
         if (!$this->lecons->contains($lecon)) {
-            $this->lecons->add($lecon);
+            $this->lecons[] = $lecon;
             $lecon->addNiveau($this);
         }
 
         return $this;
     }
 
-    public function removeLecon(Lecon $lecon): static
+    public function removeLecon(Lecon $lecon): self
     {
         if ($this->lecons->removeElement($lecon)) {
             $lecon->removeNiveau($this);
@@ -59,6 +58,7 @@ class Niveau
 
         return $this;
     }
+
 
     public function getTitre(): ?string
     {
@@ -71,5 +71,4 @@ class Niveau
 
         return $this;
     }
-
 }

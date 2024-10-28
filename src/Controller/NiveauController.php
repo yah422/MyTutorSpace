@@ -99,6 +99,7 @@ class NiveauController extends AbstractController
             'niveau' => $niveau,
             'niveaux' => $niveaux,
             'matieres' => $matieres,
+            'lecons' => $niveau->getLecons(), // relation ManyToMany
         ]);
 
     }

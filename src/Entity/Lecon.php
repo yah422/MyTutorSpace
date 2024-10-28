@@ -156,6 +156,11 @@ class Lecon
     {
         return $this->niveau;
     }
+    
+    public function setNiveau(): Collection
+    {
+        return $this->niveau;
+    }
 
     public function addNiveau(Niveau $niveau): static
     {

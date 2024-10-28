@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lecon;
+use App\Entity\Niveau;
 use App\Form\LeconType;
 use App\Repository\LeconRepository;
 use App\Repository\MatiereRepository;
@@ -10,101 +11,95 @@ use App\Repository\ExerciceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LeconController extends AbstractController
 {
-
-
     #[Route('/lecon', name: 'app_lecon')]
-    public function index(LeconRepository $leconRepository, MatiereRepository $matiereRepository): Response
+    public function index(LeconRepository $leconRepository, MatiereRepository $matiereRepository, EntityManagerInterface $entityManager): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-        $leconsParNiveau = $leconRepository->findLeconsParNiveau();
-        $lecons = $leconRepository->findBy([],["titre" => "ASC"]);
+        // Récupération des matières triées par nom
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+
+        // Récupération des niveaux avec leurs leçons
+        $niveauRepository = $entityManager->getRepository(Niveau::class);
+        $leconsParNiveau = $niveauRepository->findAll();
+
+        // Récupération des leçons triées par titre
+        $lecons = $leconRepository->findBy([], ["titre" => "ASC"]);
+
         return $this->render('lecon/index.html.twig', [
             'lecon' => 'lecon',
             'lecons' => $lecons,
             'matieres' => $matieres,
             'leconsParNiveau' => $leconsParNiveau,
-
         ]);
     }
 
-    
-    // Méthode pour ajouter une Leçon
     #[Route('/lecon/ajouter', name: 'add_lecon')]
     #[IsGranted('ROLE_ADMIN')]
-    public function add(MatiereRepository $matiereRepository,Lecon $lecon, Request $request, EntityManagerInterface $entityManager): Response
+    public function add(MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
 
-        // Création d'une nouvelle instance de Matiere
-        $categorie = new lecon();
+        // Création d'une nouvelle instance de Lecon
+        $lecon = new Lecon();
 
         // Création du formulaire
         $form = $this->createForm(LeconType::class, $lecon);
-
-        // Gestion de la soumission du formulaire
         $form->handleRequest($request);
 
-        // Vérification si le formulaire est soumis et valide
+        // Sauvegarde de la leçon si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarde de la matière en base de données
             $entityManager->persist($lecon);
             $entityManager->flush();
 
             // Message de confirmation
             $this->addFlash('success', 'Leçon ajoutée avec succès !');
 
-            // Redirection vers la page de liste des leçons (à ajuster si nécessaire)
             return $this->redirectToRoute('app_lecon');
         }
 
-        // Rendu de la vue avec le formulaire
         return $this->render('lecon/add.html.twig', [
             'form' => $form->createView(),
             'matieres' => $matieres,
-
         ]);
-    
     }
 
     #[Route('/lecon/supprimer/{id}', name: 'delete_lecon', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, lecon $lecon, EntityManagerInterface $entityManager,int $id): Response
+    public function delete(Request $request, CsrfTokenManagerInterface $csrfTokenManager, Lecon $lecon, EntityManagerInterface $entityManager): Response
     {
         if (!$lecon) {
-            throw $this->createNotFoundException('No leçon found for id ' . $id);
+            throw $this->createNotFoundException('Aucune leçon trouvée pour cet identifiant.');
         }
-        // Vérifier le token CSRF
+
+        // Vérification du token CSRF
         if ($this->isCsrfTokenValid('delete_lecon', $request->request->get('_token'))) {
-            // Si valide, on peut supprimer la categorie
             $entityManager->remove($lecon);
             $entityManager->flush();
 
-            // Redirection après suppression
+            $this->addFlash('success', 'Leçon supprimée avec succès !');
+
             return $this->redirectToRoute('app_lecon');
         }
-        // Si le token est invalide, lever une exception
+
         throw $this->createAccessDeniedException('Token CSRF invalide.');
-        
     }
 
     #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Lecon $lecon,ExerciceRepository $exerciceRepository,MatiereRepository $matiereRepository): Response
+    public function show(Lecon $lecon, ExerciceRepository $exerciceRepository, MatiereRepository $matiereRepository): Response
     {
-        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
-        // Récupérer les exercices associés à cette leçon
-        $exercices = $exerciceRepository->findBy([],["titre" => "ASC"]);
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        $exercices = $exerciceRepository->findBy([], ["titre" => "ASC"]);
+
         return $this->render('lecon/show.html.twig', [
             'lecon' => $lecon,
             'exercices' => $exercices,
             'matieres' => $matieres,
-
         ]);
     }
 }
