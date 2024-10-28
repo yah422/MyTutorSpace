@@ -53,8 +53,35 @@ class Lecon
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lecons")
+     * @ORM\JoinTable(name="lecon_user")
+     */
+    private $users;
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;
