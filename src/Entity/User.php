@@ -216,7 +216,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->lecons->contains($lecon)) {
             $this->lecons->add($lecon);
-            $lecon->addNiveau($this);
+            $lecon->addUser($this);
         }
 
         return $this;
@@ -225,8 +225,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLecon(Lecon $lecon): self
     {
         if ($this->lecons->removeElement($lecon)) {
-            if ($lecon->getNiveaux()->contains($this)) {
-                $lecon->removeNiveau($this);
+            if ($lecon->getUsers()->contains($this)) {
+                $lecon->removeUser($this);
             }
         }
 

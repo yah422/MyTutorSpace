@@ -26,7 +26,6 @@ class Niveau
     {
         $this->lecons = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -40,27 +39,27 @@ class Niveau
         return $this->lecons;
     }
 
+    // Méthode pour ajouter un leçon
     public function addLecon(Lecon $lecon): self
     {
         if (!$this->lecons->contains($lecon)) {
-            $this->lecons->add($lecon);
+            $this->lecons[] = $lecon;
             $lecon->addNiveau($this);
         }
 
         return $this;
     }
 
+    // Méthode pour retirer un leçon
     public function removeLecon(Lecon $lecon): self
     {
-        if ($this->lecons->removeElement($lecon)) {
-            if ($lecon->getNiveaux()->contains($this)) {
-                $lecon->removeNiveau($this);
-            }
+        if ($this->lecons->contains($lecon)) {
+            $this->lecons->removeElement($lecon);
+            $lecon->removeNiveau($this);
         }
 
         return $this;
     }
-
     public function getTitre(): ?string
     {
         return $this->titre;

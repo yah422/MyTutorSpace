@@ -14,14 +14,12 @@ class NiveauType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('titre', TextType::class)
-            // ->add('lecons', EntityType::class, [
-            //     'class' => Lecon::class,
-            //     'choice_label' => 'titre',
-            //     'multiple' => true,
-            // ])
-        ;
+        $builder->add('niveau', EntityType::class, [
+            'class' => Niveau::class,
+            'choice_label' => 'titre',
+            'multiple' => false,
+            'expanded' => false,
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
