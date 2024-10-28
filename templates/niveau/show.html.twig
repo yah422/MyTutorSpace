@@ -1,22 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Leçons du Niveau - {{ niveau.titre }} {% endblock %}
+{% block title %}Leçons pour le niveau {{ niveau.titre }}{% endblock %}
 
 {% block body %}
-
-<h2>Leçons : {{ niveau.titre }}</h2>
-
 <div class="listLecon">
-    {% if lecons|length > 0 %}
-    ul>
-    {% for lecon in lecons %}
-    <li>{{ lecon.titre }}</li>
+
+    <h1>Leçons pour le niveau : {{ niveau.titre }}</h1>
+
+    {% if lecons is empty %}
+    <p class="text-gray-300">Aucune leçon trouvée pour ce niveau.</p>
     {% else %}
-    <li>Aucune leçon trouvée pour ce niveau.</li>
-    {% endfor %}
+    <ul>
+        {% for lecon in lecons %}
+        <li>
+            <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
+                <div>
+                    <h2 class="text-gray-700 font-semibold">Titre : {{ lecon.titre }}</h2>
+                </div>
+                <div>
+                    <p class="text-gray-600">Description : {{ lecon.description }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
     </ul>
-    {% else %}
-    <p class="text-gray-300">Aucune leçon associée à ce niveau.</p>
     {% endif %}
 
     <br>
@@ -26,6 +36,8 @@
         Ajouter une leçon
     </a>
     {% endif %}
-</div>
+    <br>
+    <a class="text-gray-300" href="{{ path('app_niveau') }}">Retour à la liste des niveaux</a>
 
+</div>
 {% endblock %}
