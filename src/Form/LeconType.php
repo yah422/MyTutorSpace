@@ -31,7 +31,7 @@ class LeconType extends AbstractType
             ])
             ->add('niveau', EntityType::class, [
                 'class' => Niveau::class,
-                'choice_label' => 'nom',
+                'choice_label' => 'titre',
                 'multiple' => true,
             ])
             ->add('user', EntityType::class, [

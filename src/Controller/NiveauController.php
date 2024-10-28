@@ -93,13 +93,14 @@ class NiveauController extends AbstractController
     #[Route('/niveau/{id}', name: 'show_niveau')]
     public function show(NiveauRepository $niveauRepository, Niveau $niveau, MatiereRepository $matiereRepository): Response
     {
+        $lecons = $niveau->getLecons();
         $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
         $niveaux =$niveauRepository->findBy([], ["titre" => "ASC"]);
         return $this->render('niveau/show.html.twig', [
             'niveau' => $niveau,
             'niveaux' => $niveaux,
             'matieres' => $matieres,
-            'lecons' => $niveau->getLecons(), // relation ManyToMany
+            'lecons' => $lecons,
         ]);
 
     }

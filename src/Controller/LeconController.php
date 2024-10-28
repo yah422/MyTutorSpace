@@ -44,7 +44,6 @@ class LeconController extends AbstractController
     public function add(MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
-
         // Création d'une nouvelle instance de Lecon
         $lecon = new Lecon();
 
