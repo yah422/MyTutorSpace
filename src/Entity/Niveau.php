@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Lecon;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\NiveauRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NiveauRepository::class)]
@@ -43,7 +43,7 @@ class Niveau
     public function addLecon(Lecon $lecon): self
     {
         if (!$this->lecons->contains($lecon)) {
-            $this->lecons[] = $lecon;
+            $this->lecons->add($lecon);
             $lecon->addNiveau($this);
         }
 
@@ -53,7 +53,9 @@ class Niveau
     public function removeLecon(Lecon $lecon): self
     {
         if ($this->lecons->removeElement($lecon)) {
-            $lecon->removeNiveau($this);
+            if ($lecon->getNiveaux()->contains($this)) {
+                $lecon->removeNiveau($this);
+            }
         }
 
         return $this;

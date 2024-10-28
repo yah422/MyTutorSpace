@@ -50,20 +50,24 @@ class Lecon
     {
         return $this->niveaux;
     }
-
     public function addNiveau(Niveau $niveau): self
     {
         if (!$this->niveaux->contains($niveau)) {
             $this->niveaux[] = $niveau;
+            $niveau->addLecon($this);
         }
-
+    
         return $this;
     }
-
+    
     public function removeNiveau(Niveau $niveau): self
     {
-        $this->niveaux->removeElement($niveau);
-
+        if ($this->niveaux->removeElement($niveau)) {
+            if ($niveau->getLecons()->contains($this)) {
+                $niveau->removeLecon($this);
+            }
+        }
+    
         return $this;
     }
 }

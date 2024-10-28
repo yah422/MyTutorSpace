@@ -212,22 +212,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lecon;
     }
 
-    public function addLecon(Lecon $lecon): static
+    public function addLecon(Lecon $lecon): self
     {
-        if (!$this->lecon->contains($lecon)) {
-            $this->lecon->add($lecon);
-            $lecon->setUser($this);
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->addNiveau($this);
         }
 
         return $this;
     }
 
-    public function removeLecon(Lecon $lecon): static
+    public function removeLecon(Lecon $lecon): self
     {
-        if ($this->lecon->removeElement($lecon)) {
-            // set the owning side to null (unless already changed)
-            if ($lecon->getUser() === $this) {
-                $lecon->setUser(null);
+        if ($this->lecons->removeElement($lecon)) {
+            if ($lecon->getNiveaux()->contains($this)) {
+                $lecon->removeNiveau($this);
             }
         }
 

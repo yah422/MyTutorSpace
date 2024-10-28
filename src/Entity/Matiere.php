@@ -80,18 +80,21 @@ class Matiere
     {
         if (!$this->lecons->contains($lecon)) {
             $this->lecons->add($lecon);
-            $lecon->setMatiere($this);
+            if (method_exists($lecon, 'setMatiere')) {
+                $lecon->setMatiere($this);
+            }
         }
 
         return $this;
     }
-
     public function removeLecon(Lecon $lecon): static
     {
         if ($this->lecons->removeElement($lecon)) {
             // set the owning side to null (unless already changed)
-            if ($lecon->getMatiere() === $this) {
-                $lecon->setMatiere(null);
+            if (method_exists($lecon, 'getMatiere') && $lecon->getMatiere() === $this) {
+                if (method_exists($lecon, 'setMatiere')) {
+                    $lecon->setMatiere(null);
+                }
             }
         }
 
