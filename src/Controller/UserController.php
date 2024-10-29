@@ -66,25 +66,30 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/edit/{id}', name: 'app_user_edit')]
-    public function editProfile(User $user, Request $request, EntityManagerInterface $entityManager,MatiereRepository $matiereRepository): Response
+    public function edit(User $user, Request $request, EntityManagerInterface $em, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $form = $this->createForm(UserType::class, $user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
+            // Traiter le mot de passe uniquement s'il a été changé
+            if ($form->get('password')->getData()) {
+                $user->setPassword(
+                    password_hash($form->get('password')->getData(), PASSWORD_BCRYPT)
+                );
+            }
 
-            $this->addFlash('success', 'Profil mis à jour avec succès');
+            $em->flush();
 
-            return $this->redirectToRoute('app_user');
+            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('user/edit.html.twig', [
-            'user' => $user,
             'form' => $form->createView(),
             'matieres' => $matieres,
+
         ]);
     }
 }
