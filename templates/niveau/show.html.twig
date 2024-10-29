@@ -13,17 +13,16 @@
     <ul>
         {% for lecon in lecons %}
         <li>
-            <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
-                <div>
-                    <h2 class="text-gray-700 font-semibold">Titre : {{ lecon.titre }}</h2>
+            <a href="{{ path('show_lecon', {'id': lecon.id}) }}">
+                <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
+                    <div>
+                        <h2 class="text-gray-700 font-semibold"> {{ lecon.titre }}</h2>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-gray-600">Description : {{ lecon.description }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
-                </div>
-            </div>
+            </a>
         </li>
         {% endfor %}
     </ul>
