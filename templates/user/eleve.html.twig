@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Profil Élève {% endblock %}
+
+{% block body %}
+
+{# Je définis un titre pour indiquer le rôle de l'élève #}
+<h2>Profil Élève</h2>
+
+{# J'affiche le nom et l'email de l'utilisateur élève #}
+<p>Nom : {{ user.nom }}</p>
+<p>Email : {{ user.email }}</p>
+
+<br>
+
+{# Je crée un lien pour permettre à l'élève de modifier ses informations #}
+<a href="{{ path('app_user_edit', { id: user.id }) }}" class="btn btn-primary">Modifier le profil</a>
+{% endblock %}

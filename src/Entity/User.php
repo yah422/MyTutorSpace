@@ -88,9 +88,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    #[ORM\Column(type: 'string', length: 255)]  // Colonne password en base de données
+    /**
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
+     */
     private ?string $password = null;
-
     /**
      * Mot de passe en clair non mappé à la base de données, utilisé uniquement pour l'encodage.
      */
