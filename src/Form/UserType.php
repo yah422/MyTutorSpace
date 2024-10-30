@@ -29,6 +29,11 @@ class UserType extends AbstractType
                 'attr' => [ 
                     'class' => 'cutomLabel' 
                 ]])
+            ->add('aboutMe', null, [
+                'label' => 'About Me   ',
+                'attr' => [ 
+                    'class' => 'cutomLabel' 
+                ]])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe   ',
                 'required' => false, // Rendre le champ facultatif
