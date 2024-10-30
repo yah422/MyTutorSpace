@@ -4,6 +4,8 @@
 
 {% block body %}
 
+<div class="listEditUser">
+    
 {# J'affiche un titre indiquant qu'il s'agit du profil du parent #}
 <h2 class="text-gray-300"> Profil {{ user.nom }} {{ user.prenom }} </h2>
 
@@ -17,4 +19,6 @@
 
 {# J'ajoute un bouton pour permettre au parent de modifier son profil #}
 <a class="text-gray-300" href="{{ path('app_user_edit', { id: user.id }) }}" class="btn">Modifier le profil</a>
+
+</div>
 {% endblock %}

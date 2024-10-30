@@ -4,6 +4,8 @@
 
 {% block body %}
 
+<div class="listEditUser">
+    
     {% if is_granted('ROLE_ADMIN') %}
         {# J'affiche un titre pour le profil de l'administrateur #}
         <h2 class="text-gray-300">Profil Administrateur</h2>
@@ -20,5 +22,9 @@
         <h2 class="text-gray-300">Accès interdit</h2>
         <p class="text-gray-300">Vous n'avez pas les droits nécessaires pour accéder à cette page.</p>
     {% endif %}
+
+</div>
+
+    
 {% endblock %}
 
