@@ -54,8 +54,9 @@ Encore
     })
 
     // enables Sass/SCSS support
-    // .enableSassLoader()
+    .enableSassLoader()
     .enablePostCssLoader()
+    .enableVersioning(!!process.env.WEBPACK_VERSIONING)
 ;
 
     // uncomment if you use TypeScript
