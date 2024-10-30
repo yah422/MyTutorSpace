@@ -52,6 +52,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
+     */
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+    
+    /**
      * Retourne les rôles de l'utilisateur, en ajoutant ROLE_USER s'il n'est pas déjà présent.
      */
     public function getRoles(): array
@@ -88,10 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
-     */
-    private ?string $password = null;
     /**
      * Mot de passe en clair non mappé à la base de données, utilisé uniquement pour l'encodage.
      */
