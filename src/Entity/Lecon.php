@@ -78,6 +78,9 @@ class Lecon
      */
     private $users;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Contenu = null;
+
     public function getUsers(): Collection
     {
         return $this->users;
@@ -168,6 +171,18 @@ class Lecon
             $this->niveaux->removeElement($niveau);
             $niveau->removeLecon($this);
         }
+
+        return $this;
+    }
+
+    public function getContenu(): ?string
+    {
+        return $this->Contenu;
+    }
+
+    public function setContenu(string $Contenu): static
+    {
+        $this->Contenu = $Contenu;
 
         return $this;
     }

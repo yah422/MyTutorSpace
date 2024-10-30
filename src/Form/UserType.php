@@ -15,19 +15,27 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Email',
-            ])
+                'label' => 'Email   ',
+                'attr' => [ 
+                    'class' => 'cutomLabel' 
+                ]])
             ->add('nom', null, [
-                'label' => 'Nom',
-            ])
+                'label' => 'Nom   ',
+                'attr' => [ 
+                    'class' => 'cutomLabel' 
+                ]])
             ->add('prenom', null, [
-                'label' => 'Prénom',
-            ])
+                'label' => 'Prénom   ',
+                'attr' => [ 
+                    'class' => 'cutomLabel' 
+                ]])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe',
+                'label' => 'Mot de passe   ',
                 'required' => false, // Rendre le champ facultatif
                 'empty_data' => '',
-            ]);
+                'attr' => [ 
+                    'class' => 'cutomLabel' 
+                ]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

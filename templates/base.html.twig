@@ -37,29 +37,9 @@
                         </svg>
                     </button>
                 </div>
-                <!-- Dropdown Matières -->
-                <ul class="divide-y divide-gray-200 rounded-lg">
-                    <li class="relative group">
-                        <!-- Bouton pour ouvrir le dropdown -->
-                        <a href="{{ path('app_matiere') }}">
-                            <button class="text-gray-300 hover:text-white focus:outline-none">Matières</button>
-                        </a>
-
-                        <!-- Liste des matières affichées dans le dropdown -->
-                        <ul
-                            class="absolute left-0 mt-2 w-48 bg-gray-900 text-gray-300 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300">
-                            <!-- Boucle pour afficher chaque matière dans le même ul -->
-                            {% for matiere in matieres %}
-                            <li>
-                                <a href="{{ path('show_matiere', {'id': matiere.id }) }}"
-                                    class="block px-4 py-2 hover:bg-gray-700">{{ matiere.nom }}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                </ul>
-
+                   
                 <!-- Autres liens -->
+                <li> <a href="{{ path('app_matiere') }}" class="text-gray-300 hover:text-white"> Matières </a> </li>
                 <li><a href="{{ path('app_ressource') }}" class="text-gray-300 hover:text-white"> Ressources </a></li>
                 <li><a href="{{ path('app_exercice') }}" class="text-gray-300 hover:text-white"> Exercices </a></li>
                 <li><a href="{{ path('app_niveau') }}" class="text-gray-300 hover:text-white"> Niveaux </a></li>
@@ -91,7 +71,6 @@
 
         </div>
     </nav>
-
 
     {% block body %}
     {% endblock %}

@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Profil Parent {% endblock %}
+{% block title %} Mon profil {% endblock %}
 
 {% block body %}
 
 {# J'affiche un titre indiquant qu'il s'agit du profil du parent #}
-<h2>Profil Parent</h2>
+<h2 class="text-gray-300"> Profil {{ user.nom }} {{ user.prenom }} </h2>
 
 {# J'affiche le nom et l'email de l'utilisateur #}
-<p>Nom : {{ user.nom }}</p>
-<p>Email : {{ user.email }}</p>
+<p class="text-gray-300">Nom : {{ user.nom }}</p>
+<p class="text-gray-300">Email : {{ user.email }}</p>
 
 <br>
 
 {# J'ajoute un bouton pour permettre au parent de modifier son profil #}
-<a href="{{ path('app_user_edit', { id: user.id }) }}" class="btn btn-primary">Modifier le profil</a>
+<a class="text-gray-300" href="{{ path('app_user_edit', { id: user.id }) }}" class="btn">Modifier le profil</a>
 {% endblock %}
