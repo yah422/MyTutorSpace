@@ -51,6 +51,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
     private array $roles = [];
 
+    #[ORM\Column(type:'text')]
+    private ?string $AboutMe = null;
+    
     /**
      * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
      */
@@ -112,6 +115,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
     private Collection $lecons;
+
+
 
     public function getPassword(): ?string
     {
@@ -242,5 +247,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getLecons(): Collection
     {
         return $this->lecons;
+    }
+
+    public function getAboutMe(): ?string
+    {
+        return $this->AboutMe;
+    }
+
+    public function setAboutMe(string $AboutMe): static
+    {
+        $this->AboutMe = $AboutMe;
+
+        return $this;
     }
 }

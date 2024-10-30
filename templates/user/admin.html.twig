@@ -11,6 +11,7 @@
         {# J'affiche les informations spécifiques de l'administrateur #}
         <p class="text-gray-300">Nom : {{ user.nom }}</p>
         <p class="text-gray-300">Email : {{ user.email }}</p>
+        <p class="text-gray-300">About Me : {{ user.aboutMe }}</p>
 
         {# Je fournis un lien pour modifier le profil de l'utilisateur en utilisant son ID #}
         <a class="text-gray-300" href="{{ path('app_user_edit', { id: user.id }) }}" class="btn"> Modifier le profil </a>
