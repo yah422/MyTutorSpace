@@ -6,19 +6,38 @@
 
 <div class="listLecon">
 
-    {# {% for niveau in leconsParNiveau %}
-    <h2>{{ niveau.titre }}</h2>
-    <ul>
-        {% for lecon in niveau.lecons %}
-        <li class="px-4 py-2">
-            <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="text-gray-200">
-                {{ lecon.titre }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endfor %} #}
-    {% for lecon in lecons %}
+{# {% dump(matieres) %} pour récup dans la barre de symfony #}
+{# {{ dump(array) }} pour recup et afficher dans la vue #}
+    {% for matiere in matieres %}
+        <ul class="divide-y divide-gray-200 rounded-lg">   
+            <li class="px-4 py-2"> 
+                <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
+                    <a href="{{ path('lecons_par_matiere',{'id': matiere.id })}}" class="text-black"> 
+                        <strong> {{ matiere.nom }} </strong> 
+                    </a>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post" onsubmit="return confirm('Etes-vous sûre ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
+                            <button type="submit" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+                                Supprimer
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </li>
+        </ul> <br>            
+    {% endfor %}
+
+    <br>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('add_matiere') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+            Ajouter une matière
+        </a>
+    {% endif %}
+
+    {# {% for lecon in lecons %}
     <ul class="divide-y divide-gray-200 rounded-lg">
         <li class="px-4 py-2">
             <a href="{{ path('show_lecon',{'id': lecon.id })}}" class="text-gray-200">
@@ -26,7 +45,7 @@
             </a>
         </li>
     </ul> <br>
-    {% endfor %}
+    {% endfor %} #}
 
 
     <br>

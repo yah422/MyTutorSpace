@@ -1,45 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Détails Leçon {% endblock %}
+{% block title %} {{ matiere.nom }}  {% endblock %}
 
 {% block body %}
 
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold text-center mb-4"> {{ lecon.titre }} </h1>
+    <h1 class="text-2xl font-bold text-center mb-4"> {{ matiere.nom }} </h1>
 </div>
 
-<div class="p-6 rounded-lg">
-    <div>
-        <p class="text-gray-300">
-            <strong class="font-semibold">Description: </strong> {{ lecon.description }} <br>
-        </p>
-    </div>
-    <div>
-        <p class="text-gray-300">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
-    </div>
+<div class=" text-gray-300 content mt-12">
 
-    {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
-    {# <div class="mt-6">
-        <h2 class="text-xl font-semibold">Exercices associés</h2>
-
-        {% if exercices is not empty %}
-        <ul class="mt-4">
-            {% for exercice in exercices %}
-            <li class="mb-2">
-                <a href="{{ path('show_exercice', {'id': exercice.id }) }}" class="text-blue-500 underline">
-                    {{ exercice.titre }}
-                </a>
-                <p class="text-gray-400">Date de création : {{ exercice.dateCreation|date('d/m/Y') }}</p>
-            </li>
-            {% endfor %}
-        </ul>
+    <ul>
+        {% for lecon in lecons %}
+            <a href="{{ path('show_lecon',{'id': lecon.id })}}"> <li>{{ lecon.titre }}</li> </a>
         {% else %}
-        <p class="text-gray-400">Aucun exercice disponible pour cette leçon.</p>
-        {% endif %}
-    </div> #}
+            <li>Aucune leçon trouvée.</li>
+        {% endfor %}
+    </ul>
 
 </div>
-
-<br>
 
 {% endblock %}

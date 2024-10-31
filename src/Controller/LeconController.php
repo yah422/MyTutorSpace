@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use id;
 use App\Entity\Lecon;
 use App\Entity\Niveau;
+use App\Entity\Matiere;
 use App\Form\LeconType;
 use App\Repository\LeconRepository;
 use App\Repository\MatiereRepository;
@@ -39,6 +41,7 @@ class LeconController extends AbstractController
             'leconsParNiveau' => $leconsParNiveau,
         ]);
     }
+
 
     #[Route('/lecon/ajouter', name: 'add_lecon')]
     // #[IsGranted('ROLE_ADMIN')]
@@ -96,16 +99,44 @@ class LeconController extends AbstractController
         throw $this->createAccessDeniedException('Token CSRF invalide.');
     }
 
+    #[Route('/lecon/matiere/{id}', name: 'lecons_par_matiere')]
+    public function leconsParMatiere(Matiere $matiere, MatiereRepository $matiereRepository, int $id, EntityManagerInterface $entityManager, Lecon $lecon): Response
+    {
+        // Récupération des matières triées par nom
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+
+        // Récupération des leçons par matière
+        $query = $entityManager->createQuery(
+            'SELECT l
+            FROM App\Entity\Lecon l
+            JOIN l.matiere m
+            WHERE m.id = :id'
+        )->setParameter('id', $id);
+    
+        // Exécution de la requête
+        $lecons = $query->getResult();
+    
+        // Rendu du template
+        return $this->render('lecon/show.html.twig', [
+            'lecons' => $lecons, // Liste des leçons
+            'lecon' => $lecon,
+            'matieres' => $matieres,
+            'matiere' => $matiere,
+
+        ]);
+    }
+
     #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Lecon $lecon, ExerciceRepository $exerciceRepository, MatiereRepository $matiereRepository): Response
+    public function show(Matiere $matiere, Lecon $lecon, ExerciceRepository $exerciceRepository, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $exercices = $exerciceRepository->findBy([], ["titre" => "ASC"]);
 
-        return $this->render('lecon/show.html.twig', [
+        return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $exercices,
             'matieres' => $matieres,
+            'matiere' => $matiere,
         ]);
     }
 }

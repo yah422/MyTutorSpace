@@ -1,0 +1,40 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %} Détails de la leçon   {% endblock %}
+
+{% block body %}
+
+<div class="p-6 rounded-lg">
+
+    <div>
+        <p class="text-gray-300">
+            <strong class="font-semibold">Description: </strong> {{ lecon.description }} <br>
+        </p>
+    </div>
+    <div>
+        <p class="text-gray-300">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
+    </div>
+
+    {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
+    {# <div class="mt-6">
+        <h2 class="text-xl font-semibold">Exercices associés</h2>
+
+        {% if exercices is not empty %}
+        <ul class="mt-4">
+            {% for exercice in exercices %}
+            <li class="mb-2">
+                <a href="{{ path('show_exercice', {'id': exercice.id }) }}" class="text-blue-500 underline">
+                    {{ exercice.titre }}
+                </a>
+                <p class="text-gray-400">Date de création : {{ exercice.dateCreation|date('d/m/Y') }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-400">Aucun exercice disponible pour cette leçon.</p>
+        {% endif %}
+    </div> #}
+
+</div>
+{% endblock %}
