@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,9 +29,15 @@ class MatiereController extends AbstractController
 
     // Méthode pour ajouter une Matière
     #[Route('/matiere/ajouter', name: 'add_matiere')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function add(MatiereRepository $matiereRepository, Matiere $matiere, Request $request, EntityManagerInterface $entityManager): Response
+    // #[IsGranted('ROLE_ADMIN')]
+    public function add(MatiereRepository $matiereRepository, Matiere $matiere, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Vérification des rôles 'ROLE_ADMIN' ou 'ROLE_TUTEUR'
+        if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
+            // Rediriger vers une page d'erreur si l'utilisateur n'a pas les rôles requis
+            return $this->render('user/errorPage.html.twig');     
+        }
+
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         // Création d'une nouvelle instance de Matiere
         $matiere = new Matiere();

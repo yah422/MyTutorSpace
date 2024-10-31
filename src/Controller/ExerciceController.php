@@ -7,6 +7,7 @@ use App\Form\ExerciceType;
 use App\Repository\MatiereRepository;
 use App\Repository\ExerciceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,9 +32,15 @@ class ExerciceController extends AbstractController
 
     // Méthode pour ajouter un Exercice
     #[Route('/exercice/ajouter', name: 'add_exercice')]
-    #[IsGranted('ROLE_TUTEUR')]
-    public function add(exercice $exercice, Request $request, EntityManagerInterface $entityManager): Response
+    // #[IsGranted('ROLE_TUTEUR')]
+    public function add(exercice $exercice, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Vérification des rôles 'ROLE_ADMIN' ou 'ROLE_TUTEUR'
+        if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
+            // Rediriger vers une page d'erreur si l'utilisateur n'a pas les rôles requis
+            return $this->render('user/errorPage.html.twig');     
+        }
+
         // Création d'une nouvelle instance de Matiere
         $categorie = new Exercice();
 

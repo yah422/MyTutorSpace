@@ -10,6 +10,7 @@ use App\Repository\LeconRepository;
 use App\Repository\NiveauRepository;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,9 +34,15 @@ class NiveauController extends AbstractController
 
     // Méthode pour ajouter un Niveau
     #[Route('/niveau/ajouter', name: 'add_niveau')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function add(NiveauRepository $niveauRepository, Niveau $niveau, Request $request, EntityManagerInterface $entityManager, MatiereRepository $matiereRepository): Response
+    // #[IsGranted('ROLE_ADMIN')]
+    public function add(NiveauRepository $niveauRepository, Niveau $niveau, Request $request, EntityManagerInterface $entityManager, MatiereRepository $matiereRepository, Security $security): Response
     {
+        // Vérification des rôles 'ROLE_ADMIN'
+        if (!$security->isGranted('ROLE_ADMIN')) {
+            // Rediriger vers une page d'erreur si l'utilisateur n'a pas les rôles requis
+            return $this->render('user/errorPage.html.twig');     
+        }
+
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
         // Création d'une nouvelle instance de Niveau
