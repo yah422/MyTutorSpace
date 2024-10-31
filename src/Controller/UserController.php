@@ -36,6 +36,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/parent/{id}', name: 'app_user_parent')]
+    #[IsGranted('ROLE_PARENT')]
     public function parentProfile(User $user,MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
@@ -46,6 +47,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/eleve/{id}', name: 'app_user_eleve')]
+    #[IsGranted('ROLE_ELEVE')]
     public function eleveProfile(User $user,MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
@@ -56,6 +58,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/tuteur/{id}', name: 'app_user_tuteur')]
+    #[IsGranted('ROLE_TUTEUR')]
     public function tuteurProfile(User $user,MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
