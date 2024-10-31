@@ -53,6 +53,19 @@ h2{
     align-items: center;
 }
 
+
+/* -------------------------------  NavBar ------------------------------- */
+.profilNavBar{
+    display: flex;
+    flex-direction: row;
+
+}
+.pProfil {
+    display: flex;
+    align-items: flex-end;
+
+}
+
 /* -------------------------------  Register/Role ------------------------------- */
 .RoleChoix{
     display: flex;
