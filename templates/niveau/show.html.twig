@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Leçons pour le niveau {{ niveau.titre }}{% endblock %}
+{% block title %} Cours {{ niveau.titre }} {% endblock %}
 
 {% block body %}
 <div class="listLecon1">
 
-    <h1>Leçons pour le niveau : {{ niveau.titre }}</h1>
+    <h1> Cours {{ niveau.titre }}</h1>
 
     {% if lecons is empty %}
     <p class="text-gray-300">Aucune leçon trouvée pour ce niveau.</p>
