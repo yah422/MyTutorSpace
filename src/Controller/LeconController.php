@@ -127,11 +127,12 @@ class LeconController extends AbstractController
     }
 
     #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Matiere $matiere, Lecon $lecon, ExerciceRepository $exerciceRepository, MatiereRepository $matiereRepository): Response
+    public function show(Lecon $lecon, MatiereRepository $matiereRepository, ExerciceRepository $exerciceRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $exercices = $exerciceRepository->findBy([], ["titre" => "ASC"]);
-
+        $matiere = $lecon->getMatiere(); // Assumes there's a method in Lecon to get its Matiere
+    
         return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $exercices,
@@ -139,4 +140,5 @@ class LeconController extends AbstractController
             'matiere' => $matiere,
         ]);
     }
+    
 }
