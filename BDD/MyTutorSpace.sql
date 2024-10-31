@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `exercice` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.exercice : ~6 rows (environ)
+DELETE FROM `exercice`;
 INSERT INTO `exercice` (`id`, `lecon_id`, `type_id`, `titre`, `description`, `date_creation`) VALUES
 	(1, 12, 1, 'équation polynôme', 'Cet exercice vise à développer des compétences en résolution d\'équations polynomiales de degré 3, en utilisant des techniques telles que le théorème de la racine évidente, la division polynomiale, et la résolution d\'équations quadratiques.', '2024-10-16 15:55:24'),
 	(2, 12, 1, 'Résolution d\'équations différentielle', 'Résoudre l’équation différentielle suivante :', '2024-10-16 16:10:27'),
@@ -59,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `lecon` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.lecon : ~12 rows (environ)
+DELETE FROM `lecon`;
 INSERT INTO `lecon` (`id`, `matiere_id`, `user_id`, `titre`, `description`, `contenu`) VALUES
 	(1, 2, 21, 'Emission et perception d\'un son', '', ''),
 	(2, 1, 23, 'Les suites', '', ''),
@@ -81,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `lien` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.lien : ~3 rows (environ)
+DELETE FROM `lien`;
 INSERT INTO `lien` (`id`, `valeur`) VALUES
 	(1, 'https://www.youtube.com/watch?v=3wuPvNDLNjY'),
 	(2, 'https://www.youtube.com/@dave-hollingworth'),
@@ -95,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `matiere` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.matiere : ~6 rows (environ)
+DELETE FROM `matiere`;
 INSERT INTO `matiere` (`id`, `nom`, `description`) VALUES
 	(1, 'Mathématiques', 'Étude des nombres, des structures et des relations entre les quantités.'),
 	(2, 'Physique', 'Exploration des lois régissant la matière, l\'énergie et l\'univers.'),
@@ -119,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.messenger_messages : ~0 rows (environ)
+DELETE FROM `messenger_messages`;
 
 -- Listage de la structure de table mytutorspace2. niveau
 CREATE TABLE IF NOT EXISTS `niveau` (
@@ -128,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `niveau` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.niveau : ~7 rows (environ)
+DELETE FROM `niveau`;
 INSERT INTO `niveau` (`id`, `titre`) VALUES
 	(1, 'Première'),
 	(2, 'Seconde'),
@@ -149,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `niveau_lecon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.niveau_lecon : ~10 rows (environ)
+DELETE FROM `niveau_lecon`;
 INSERT INTO `niveau_lecon` (`niveau_id`, `lecon_id`) VALUES
 	(1, 1),
 	(2, 2),
@@ -173,6 +180,7 @@ CREATE TABLE IF NOT EXISTS `ressource` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.ressource : ~2 rows (environ)
+DELETE FROM `ressource`;
 INSERT INTO `ressource` (`id`, `exercice_id`, `titre`, `contenu`) VALUES
 	(1, 4, 'Introduction à la logique philosophique  ', 'Ce document offre une introduction aux principes de base de la logique philosophique, un domaine essentiel pour structurer les arguments rationnels.'),
 	(2, 6, 'Introduction à la programmation orientée objet (POO)', 'Un tutoriel sur les concepts clés de la programmation orientée objet, y compris les classes, les objets, l\'héritage et l\'encapsulation, avec des exemples en PHP et en Java. Des exercices pratiques permettent de renforcer l\'apprentissage.');
@@ -189,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `ressource_lien` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.ressource_lien : ~3 rows (environ)
+DELETE FROM `ressource_lien`;
 INSERT INTO `ressource_lien` (`ressource_id`, `lien_id`) VALUES
 	(1, 1),
 	(2, 2),
@@ -202,6 +211,7 @@ CREATE TABLE IF NOT EXISTS `type` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.type : ~3 rows (environ)
+DELETE FROM `type`;
 INSERT INTO `type` (`id`, `nom`) VALUES
 	(1, 'Problème'),
 	(2, 'Question ouverte'),
@@ -219,23 +229,25 @@ CREATE TABLE IF NOT EXISTS `user` (
   `about_me` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table mytutorspace2.user : ~13 rows (environ)
+-- Listage des données de la table mytutorspace2.user : ~14 rows (environ)
+DELETE FROM `user`;
 INSERT INTO `user` (`id`, `email`, `nom`, `prenom`, `is_verified`, `roles`, `password`, `about_me`) VALUES
-	(1, 'boreki@mailinator.com', 'Elit minim eu nisi', 'Occaecat aut ipsa u', 0, '["ROLE_TUTEUR"]', '$2y$13$oN31yrC5RxdHdaOSy9anN.a1DMqaAPKpq2dnWs1WmFec.AzkdL2EC', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(2, 'bubodosu@mailinator.com', 'eleve2', 'Dolore enim quisquam', 0, '["ROLE_ELEVE"]', '$2y$13$dI3E7lJx2ThmDLR4OOYqgug2bEM2wA8a6xbdEKaKqHu6rd0ms.OZG', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(3, 'nujuc@mailinator.com', 'Libero esse in ut o', 'Quo quis mollitia ei', 0, '["ROLE_PARENT"]', '$2y$13$mDdX/KtiOhPzXTdTvyGXd.MnNxIX4ApSSSMvHrcSWAP1vnDAVjSKG', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(4, 'asmi@mailinator.com', 'Velit sit et delen', 'Minima ut aliquid ad', 0, '["ROLE_USER"]', '$2y$13$FDqceW80TQQDBWVWQTGiZe9BR79maMxeOaoFzO84BM7cfYccyN4HG', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(5, 'vulyl@mailinator.com', 'Amet in voluptatibu', 'Autem consequatur N', 0, '["ROLE_USER"]', '$2y$13$Ii/YLXynBLA4iuDh0Q5QKuiO3h4Wak8Pb5T3XEWUcLU0B0p6baS6O', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(6, 'casorucaja@mailinator.com', 'Voluptas dolore elig', 'Ut doloremque volupt', 0, '["ROLE_USER"]', '$2y$13$GTlZYDnRlI5Y9nGNf6dTxeDyLmGqU3Mf8beRjV2Ua1LgSg4pgA5hi', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(7, 'mynip@mailinator.com', 'Qui non ipsam odit n', 'Eiusmod reprehenderi', 0, '["ROLE_ADMIN"]', '$2y$13$yxhaVICHFRtBZD5RXIPY1.b6WFNCvOm5n14y2IE9goL3Te0l0dG86', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(8, 'puxy@mailinator.com', 'eleve1', 'Porro aut fugiat se', 0, '["ROLE_ELEVE"]', '$2y$13$RZOgfjxThSpFiCYPcH6GkOwOMz6knYt5rfil8o5V8m5ohuzelY9xe', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(9, 'zacorer@mailinator.com', 'tuteur1', 'Asperiores quo ut do', 0, '["ROLE_TUTEUR"]', '$2y$13$sqmRr9NZmr9t1sqj9YKSg.Q0jFZlomhZMkYKa1POgrilwmtYQAlNG', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(10, 'movujawasa@mailinator.com', 'Quia illo error sequ', 'Eaque qui dolor offi', 0, '["ROLE_PARENT"]', '$2y$13$EzlX22zrJE5gc4tlRzBzU.JXkSEGvvMkctG0qf1ijtiRDoK90qUE.', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(11, 'rykybu@mailinator.com', 'tuteur2', 'Architecto quia quis', 0, '["ROLE_TUTEUR"]', '$2y$13$Ub7F.E7xJkTI4pspjIx36uajm3JlDqlW/zwu61oRB9w1d1ZL4vxY.', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(12, 'yami@mailinator.com', 'Vel excepteur velit', 'Optio eos perspici', 0, '["ROLE_ELEVE"]', '$2y$13$oSRquj/ATE5o4gRI5wYPWuM7Wz/0.FJrBZOj0Yj80Vrtez/aV0r1u', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.'),
-	(13, 'pefev@mailinator.com', 'Voluptatum similique', 'Non a ipsum dolorib', 0, '["ROLE_PARENT"]', '$2y$13$P.ihuRkfZOYqaqIo9olmO.jljjWfGcqZgMWtbfWvjChIXyz2RUOsO', 'Lorem ipsum odor amet, consectetuer adipiscing elit. Penatibus netus purus ridiculus natoque facilisis felis ullamcorper. Montes rhoncus condimentum integer risus sed nisi. Aliquet ante vestibulum lobortis ligula enim mauris. Neque morbi faucibus non nec conubia scelerisque augue nibh enim. Auctor eros potenti vestibulum conubia nam ut justo. Id ac netus dui litora suscipit ridiculus egestas. Phasellus pharetra taciti tempor sit facilisis nec lobortis.');
+	(1, 'boreki@mailinator.com', 'Elit minim eu nisi', 'Occaecat aut ipsa u', 0, '["ROLE_TUTEUR"]', '$2y$13$oN31yrC5RxdHdaOSy9anN.a1DMqaAPKpq2dnWs1WmFec.AzkdL2EC', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(2, 'bubodosu@mailinator.com', 'eleve2', 'Dolore enim quisquam', 0, '["ROLE_ELEVE"]', '$2y$13$dI3E7lJx2ThmDLR4OOYqgug2bEM2wA8a6xbdEKaKqHu6rd0ms.OZG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(3, 'nujuc@mailinator.com', 'Libero esse in ut o', 'Quo quis mollitia ei', 0, '["ROLE_PARENT"]', '$2y$13$mDdX/KtiOhPzXTdTvyGXd.MnNxIX4ApSSSMvHrcSWAP1vnDAVjSKG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(4, 'asmi@mailinator.com', 'Velit sit et delen', 'Minima ut aliquid ad', 0, '["ROLE_USER"]', '$2y$13$FDqceW80TQQDBWVWQTGiZe9BR79maMxeOaoFzO84BM7cfYccyN4HG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(5, 'vulyl@mailinator.com', 'Amet in voluptatibu', 'Autem consequatur N', 0, '["ROLE_USER"]', '$2y$13$Ii/YLXynBLA4iuDh0Q5QKuiO3h4Wak8Pb5T3XEWUcLU0B0p6baS6O', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(6, 'casorucaja@mailinator.com', 'Voluptas dolore elig', 'Ut doloremque volupt', 0, '["ROLE_USER"]', '$2y$13$GTlZYDnRlI5Y9nGNf6dTxeDyLmGqU3Mf8beRjV2Ua1LgSg4pgA5hi', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(7, 'mynip@mailinator.com', 'Qui non ipsam odit n', 'Eiusmod reprehenderi', 0, '["ROLE_ADMIN"]', '$2y$13$yxhaVICHFRtBZD5RXIPY1.b6WFNCvOm5n14y2IE9goL3Te0l0dG86', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(8, 'puxy@mailinator.com', 'eleve1', 'Porro aut fugiat se', 0, '["ROLE_ELEVE"]', '$2y$13$RZOgfjxThSpFiCYPcH6GkOwOMz6knYt5rfil8o5V8m5ohuzelY9xe', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(9, 'zacorer@mailinator.com', 'tuteur1', 'Asperiores quo ut do', 0, '["ROLE_TUTEUR"]', '$2y$13$sqmRr9NZmr9t1sqj9YKSg.Q0jFZlomhZMkYKa1POgrilwmtYQAlNG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(10, 'movujawasa@mailinator.com', 'Quia illo error sequ', 'Eaque qui dolor offi', 0, '["ROLE_PARENT"]', '$2y$13$EzlX22zrJE5gc4tlRzBzU.JXkSEGvvMkctG0qf1ijtiRDoK90qUE.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(11, 'rykybu@mailinator.com', 'tuteur2', 'Architecto quia quis', 0, '["ROLE_TUTEUR"]', '$2y$13$Ub7F.E7xJkTI4pspjIx36uajm3JlDqlW/zwu61oRB9w1d1ZL4vxY.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(12, 'yami@mailinator.com', 'Vel excepteur velit', 'Optio eos perspici', 0, '["ROLE_ELEVE"]', '$2y$13$oSRquj/ATE5o4gRI5wYPWuM7Wz/0.FJrBZOj0Yj80Vrtez/aV0r1u', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(13, 'pefev@mailinator.com', 'Voluptatum similique', 'Non a ipsum dolorib', 0, '["ROLE_PARENT"]', '$2y$13$P.ihuRkfZOYqaqIo9olmO.jljjWfGcqZgMWtbfWvjChIXyz2RUOsO', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
+	(14, 'dezaben@mailinator.com', 'Non voluptates atque', 'malak', 0, '["ROLE_ELEVE"]', '$2y$13$jcjp99kNgYjSlEWUTASwCO17ifE8ld1PzVG9ga8QttzqjRsozS0qy', 'Bonjour ! Je suis Malak, un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.\n\nJe crois fermement que chaque élève est unique et mérite une attention personnalisée. Mon approche consiste à créer un environnement d\'apprentissage positif et stimulant, où chacun peut s\'épanouir. J\'aime utiliser des méthodes interactives, comme des jeux éducatifs et des projets pratiques, tout en intégrant des outils numériques pour rendre l\'apprentissage plus dynamique.\n\nEn dehors de l\'enseignement, je suis passionnée par la musique et le jardinage, ce qui me permet de rester équilibrée et inspirée. J\'ai hâte de travailler avec vous et de vous aider à atteindre vos objectifs académiques !');
 
 -- Listage de la structure de table mytutorspace2. user_lecon
 CREATE TABLE IF NOT EXISTS `user_lecon` (
@@ -249,6 +261,7 @@ CREATE TABLE IF NOT EXISTS `user_lecon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.user_lecon : ~3 rows (environ)
+DELETE FROM `user_lecon`;
 INSERT INTO `user_lecon` (`user_id`, `lecon_id`) VALUES
 	(1, 7),
 	(21, 12),
@@ -266,6 +279,7 @@ CREATE TABLE IF NOT EXISTS `user_matiere` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.user_matiere : ~8 rows (environ)
+DELETE FROM `user_matiere`;
 INSERT INTO `user_matiere` (`user_id`, `matiere_id`) VALUES
 	(1, 1),
 	(1, 2),
