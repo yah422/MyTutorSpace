@@ -18,7 +18,6 @@ class UserController extends AbstractController
     public function index(MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
-        // Cette vue pourrait lister tous les utilisateurs ou permettre d'accéder aux profils par rôle -- à voir ?
         return $this->render('user/index.html.twig', [
             'matieres' => $matieres,
         ]);
@@ -26,7 +25,7 @@ class UserController extends AbstractController
 
     #[Route('/user/admin/{id}', name: 'app_user_admin')]
     #[IsGranted('ROLE_ADMIN')]
-    public function adminProfile(User $user,MatiereRepository $matiereRepository): Response
+    public function adminProfile(User $user, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('user/admin.html.twig', [
@@ -37,7 +36,7 @@ class UserController extends AbstractController
 
     #[Route('/user/parent/{id}', name: 'app_user_parent')]
     #[IsGranted('ROLE_PARENT')]
-    public function parentProfile(User $user,MatiereRepository $matiereRepository): Response
+    public function parentProfile(User $user, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('user/parent.html.twig', [
@@ -48,7 +47,7 @@ class UserController extends AbstractController
 
     #[Route('/user/eleve/{id}', name: 'app_user_eleve')]
     #[IsGranted('ROLE_ELEVE')]
-    public function eleveProfile(User $user,MatiereRepository $matiereRepository): Response
+    public function eleveProfile(User $user, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('user/eleve.html.twig', [
@@ -59,7 +58,7 @@ class UserController extends AbstractController
 
     #[Route('/user/tuteur/{id}', name: 'app_user_tuteur')]
     #[IsGranted('ROLE_TUTEUR')]
-    public function tuteurProfile(User $user,MatiereRepository $matiereRepository): Response
+    public function tuteurProfile(User $user, MatiereRepository $matiereRepository): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         return $this->render('user/tuteur.html.twig', [
@@ -78,21 +77,22 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Traiter le mot de passe uniquement s'il a été changé
-            if ($form->get('password')->getData()) {
+            $plainPassword = $form->get('password')->getData();
+            if ($plainPassword) {
                 $user->setPassword(
-                    password_hash($form->get('password')->getData(), PASSWORD_BCRYPT)
+                    password_hash($plainPassword, PASSWORD_BCRYPT)
                 );
             }
 
             $em->flush();
 
-            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]); // Correction du nom de route
         }
 
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'matieres' => $matieres,
-
         ]);
     }
+
 }

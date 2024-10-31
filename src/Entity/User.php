@@ -51,6 +51,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
     private array $roles = [];
 
+           /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     #[ORM\Column(type:'text')]
     private ?string $AboutMe = null;
     
