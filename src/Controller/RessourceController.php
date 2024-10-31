@@ -7,6 +7,7 @@ use App\Form\RessourceType;
 use App\Repository\MatiereRepository;
 use App\Repository\RessourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,9 +32,15 @@ class RessourceController extends AbstractController
 
     // Méthode pour ajouter une Ressource
     #[Route('/ressource/ajouter', name: 'add_ressource')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function add(MatiereRepository $matiereRepository, Ressource $ressource, Request $request, EntityManagerInterface $entityManager): Response
+    // #[IsGranted('ROLE_ADMIN')]
+    public function add(MatiereRepository $matiereRepository, Ressource $ressource, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Vérification des rôles 'ROLE_ADMIN' ou 'ROLE_TUTEUR'
+        if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
+            // Rediriger vers une page d'erreur si l'utilisateur n'a pas les rôles requis
+            return $this->render('user/errorPage.html.twig');     
+        }
+
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         // Création d'une nouvelle instance de Ressource
         $ressource = new Ressource();

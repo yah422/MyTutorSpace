@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accès refusé{% endblock %}
+
+{% block body %}
+<div id="errorText" class="flex items-center justify-center min-h-screen">
+    <div class="p-6 rounded-lg shadow-md text-center">
+        <h1 class="text-4xl font-bold text-red-600">403</h1>
+        <h2 class="text-2xl mt-4">Accès refusé</h2>
+        <p class="mt-2 text-gray-300">
+            Désolé, vous n'avez pas les autorisations nécessaires pour accéder à cette page.
+        </p>
+        <br>
+        <a href="{{ path('home') }}" style="background-color: #FFD700;" class="mt-4 inline-block text-black py-2 px-4 rounded hover:bg-blue-600 transition">
+            Retourner à l'accueil
+        </a>
+    </div>
+</div>
+
+{% endblock %}

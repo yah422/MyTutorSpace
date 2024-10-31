@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,9 +28,15 @@ class UserController extends AbstractController
 
     // Méthode pour ajouter une Ressource
     #[Route('/user/ajouter', name: 'add_user')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function add(MatiereRepository $matiereRepository, User $user, Request $request, EntityManagerInterface $entityManager): Response
+    // #[IsGranted('ROLE_ADMIN')]
+    public function add(MatiereRepository $matiereRepository, User $user, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Vérification du rôle 'ROLE_ADMIN'
+        if (!$security->isGranted('ROLE_ADMIN')) {
+        // Rediriger vers une page d'erreur si l'utilisateur n'a pas le rôle 'ROLE_ADMIN'
+        return $this->render('user/errorPage.html.twig');     
+        }
+        
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         // Création d'une nouvelle instance de User
         $user = new User();

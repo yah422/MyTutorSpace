@@ -243,3 +243,9 @@ label{
 #editForm{
     width: 90%;
 }
+
+#errorText{
+    display: flex;
+    justify-content: center;
+    margin: 60px;
+}
