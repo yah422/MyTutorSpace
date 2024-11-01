@@ -233,6 +233,12 @@ h2{
     font-size: larger;
 }
 
+.leconSection{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 
 /* ----------------------- Niveau --------------------------------- */
 .listNiveau{

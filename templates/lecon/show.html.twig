@@ -10,12 +10,28 @@
 
 <div class=" text-gray-300 content mt-12">
 
-    <ul>
+    <ul class="leconSection">
         {% for lecon in lecons %}
-            <a href="{{ path('show_lecon',{'id': lecon.id })}}"> <li>{{ lecon.titre }}</li> </a>
-        {% else %}
-            <li>Aucune leçon trouvée.</li>
-        {% endfor %}
+            <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
+                <a class="text-black" href="{{ path('show_lecon',{'id': lecon.id })}}">
+                    <li>
+                       <strong> {{ lecon.titre }} </strong>
+                   </li> 
+               </a>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <form action="{{ path('delete_lecon', {'id': lecon.id}) }}" method="post" onsubmit="return confirm('Etes-vous sûre ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_lecon') }}">
+                        <button type="submit" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+                            Supprimer
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+            {% else %}
+                <li>Aucune leçon trouvée.</li>
+            {% endfor %}
     </ul>
 
 </div>
