@@ -37,7 +37,7 @@
                         </svg>
                     </button>
                 </div>
-                   
+
                 <!-- Autres liens -->
                 <li> <a href="{{ path('app_lecon') }}" class="text-gray-300 hover:text-white"> Cours </a> </li>
                 <li><a href="{{ path('app_ressource') }}" class="text-gray-300 hover:text-white"> Ressources </a></li>
@@ -47,19 +47,20 @@
                 <!-- Vérifier si l'utilisateur est connecté -->
                 {% if app.user %}
                 <li>
-                    <a style="color:#FFD700;" class="hover:text-white" href="{{ path('app_show_user', { 'id': app.user.id }) }}">
+                    <a style="color:#FFD700;" class="hover:text-white"
+                        href="{{ path('app_show_user', { 'id': app.user.id }) }}">
                         <div class="profilNavBar">
                             <div>
                                 <img src="{{ asset('img/user.png') }}" alt="iconProfil">
-                            </div> 
+                            </div>
                             <div class="pProfil">
-                                <p > {{ app.user.nom }} </p> 
+                                <p> {{ app.user.nom }} </p>
                             </div>
                         </div>
-                    </a>                    
-                </li>                
+                    </a>
+                </li>
                 <li>
-                    <a  href="{{ path('app_logout') }}" style="background-color: #ECECEC; color: black;"
+                    <a href="{{ path('app_logout') }}" style="background-color: #ECECEC; color: black;"
                         class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
                         <strong>Se déconnecter</strong>
                     </a>
