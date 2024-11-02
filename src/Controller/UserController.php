@@ -12,9 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
+
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }  
+    
     #[Route('/user', name: 'app_user')]
     public function index(MatiereRepository $matiereRepository): Response
     {
@@ -23,8 +32,6 @@ class UserController extends AbstractController
             'matieres' => $matieres,
         ]);
     }
-
-    
 
     // Méthode pour ajouter une Ressource
     #[Route('/user/ajouter', name: 'add_user')]
@@ -68,33 +75,33 @@ class UserController extends AbstractController
     }
     
 
-    #[Route('/user/edit/{id}', name: 'app_user_edit')]
-    public function edit(User $user, Request $request, EntityManagerInterface $em, MatiereRepository $matiereRepository): Response
+    #[Route('/user/edit/{id}', name: 'edit_user')]
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Traiter le mot de passe uniquement s'il a été changé
-            $plainPassword = $form->get('password')->getData();
+            // Vérifiez si un nouveau mot de passe a été fourni
+            $plainPassword = $form->get('plainPassword')->getData();
             if ($plainPassword) {
-                $user->setPassword(
-                    password_hash($plainPassword, PASSWORD_BCRYPT)
-                );
+                $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
             }
 
-            $em->flush();
+            $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]); // Correction du nom de route
+            $this->addFlash('success', 'Utilisateur modifié avec succès !');
+            return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
         }
 
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
-            'matieres' => $matieres,
         ]);
     }
+    
+    
+
+
     #[Route('/user/{id}', name: 'app_show_user')]
     public function profile(User $user, MatiereRepository $matiereRepository): Response
     {

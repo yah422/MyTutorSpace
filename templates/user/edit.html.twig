@@ -3,24 +3,28 @@
 {% block title %}Modifier l'utilisateur{% endblock %}
 
 {% block body %}
-<h1 class="text-2xl font-bold mb-4">Modifier l'utilisateur</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6 text-center">Modifier l'utilisateur</h1>
 
-{{ form_start(form, { 'attr': { 'class': 'space-y-4' } }) }}
+    {{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
 
-{# Champs du formulaire #}
-<div class="listEditUser space-y-4">
-    {% for field in form %}
-        <div class="flex flex-col" id="editForm">
-            <label for="{{ field.vars.id }}" class="font-semibold mb-1">{{ field.vars.label }}</label>
-            {{ form_widget(field, { 'attr': { 'class': 'border border-gray-300 rounded-lg p-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500' } }) }}
-            {{ form_errors(field) }}
-        </div>
-    {% endfor %}
+    {# Champs du formulaire #}
+    <div class="space-y-4">
+        {% for field in form %}
+            <div class="mb-4">
+                {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
+                {{ form_widget(field, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50'}}) }}
+                {{ form_errors(field) }}
+            </div>
+        {% endfor %}
+    </div>
 
-    <button type="submit" style="background:#FFD700;" class=" text-black font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+    <br>
+
+    <button type="submit" style="background-color: #FFD700;" class="hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded transition duration-200">
         Enregistrer les modifications
     </button>
-</div>
 
-{{ form_end(form) }}
+    {{ form_end(form) }}
+</div>
 {% endblock %}
