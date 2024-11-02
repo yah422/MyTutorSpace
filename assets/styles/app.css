@@ -244,6 +244,16 @@ h2{
     margin: 60px;
 }
 
+.acceeDetail{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.editLecon{
+    margin: 60px;
+}
 
 /* ----------------------- Niveau --------------------------------- */
 .listNiveau{

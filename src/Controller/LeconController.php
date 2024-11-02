@@ -6,6 +6,7 @@ use App\Entity\Lecon;
 use App\Entity\Niveau;
 use App\Entity\Matiere;
 use App\Form\LeconType;
+use App\Repository\UserRepository;
 use App\Repository\LeconRepository;
 use App\Repository\MatiereRepository;
 use App\Repository\ExerciceRepository;
@@ -15,9 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class LeconController extends AbstractController
 {
@@ -81,6 +82,53 @@ class LeconController extends AbstractController
         return $this->render('lecon/add.html.twig', [
             'form' => $form->createView(),
             'matieres' => $matieres,
+        ]);
+    }
+
+    #[Route('/lecon/edit/{id}', name: 'edit_lecon')]
+    public function edit(UserRepository $userRepository,Lecon $lecon, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    {
+        if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
+            return $this->render('user/errorPage.html.twig');     
+        }
+        $user = $lecon->getUser();
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+
+        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
+        
+        $form = $this->createForm(LeconType::class, $lecon);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pdfFile = $form->get('pdfFile')->getData();
+
+            if ($pdfFile) {
+                $newFilename = uniqid().'.'.$pdfFile->guessExtension();
+
+                try {
+                    $pdfFile->move(
+                        $this->getParameter('pdf_directory'),
+                        $newFilename
+                    );
+                    $lecon->setPdfPath($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement du fichier PDF');
+                    return $this->redirectToRoute('edit_lecon', ['id' => $lecon->getId()]);
+                }
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Leçon modifiée avec succès !');
+            return $this->redirectToRoute('app_lecon');
+        }
+
+        return $this->render('lecon/edit.html.twig', [
+            'form' => $form->createView(),
+            'matieres' => $matieres,
+            'lecon' => $lecon,
         ]);
     }
 

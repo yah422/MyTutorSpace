@@ -1,11 +1,10 @@
-<?php
+<?php 
 
 namespace App\Entity;
 
 use App\Repository\LeconRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LeconRepository::class)]
@@ -19,6 +18,12 @@ class Lecon
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
+    #[ORM\Column(type: "string", length: 255)]
+    private ?string $description = null;
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $pdfPath = null;
+
     #[ORM\ManyToMany(targetEntity: Niveau::class, mappedBy: 'lecons')]
     private Collection $niveaux;
 
@@ -30,47 +35,12 @@ class Lecon
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private ?string $description = null;
-
-    
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $pdfPath = null;   
-    
-    public function getPdfPath(): ?string 
-    {
-        return $this->pdfPath;
-    }
-
-    public function setPdfPath(?string $pdfPath): self
-    {
-        $this->pdfPath = $pdfPath;
-        return $this;
-    }
-
-    /**
+        /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $dateCreation;
 
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function __construct()
-    {
-        $this->niveaux = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
-    /**
+        /**
      * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="lecons")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -87,32 +57,17 @@ class Lecon
 
         return $this;
     }
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lecons")
-     * @ORM\JoinTable(name="lecon_user")
-     */
-    private $users;
 
-    public function getUsers(): Collection
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'lecons')]
+    #[ORM\JoinTable(name: "lecon_user")]
+    private Collection $users;
+
+    public function __construct()
     {
-        return $this->users;
+        $this->niveaux = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->users->removeElement($user);
-
-        return $this;
-    }
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +81,62 @@ class Lecon
     public function setTitre(string $titre): self
     {
         $this->titre = $titre;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getPdfPath(): ?string
+    {
+        return $this->pdfPath;
+    }
+
+    public function setPdfPath(?string $pdfPath): self
+    {
+        $this->pdfPath = $pdfPath;
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+        return $this;
+    }
+
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+            $niveau->addLecon($this);
+        }
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveaux->contains($niveau)) {
+            $this->niveaux->removeElement($niveau);
+            $niveau->removeLecon($this);
+        }
         return $this;
     }
 
@@ -151,40 +162,22 @@ class Lecon
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getUsers(): Collection
     {
-        return $this->description;
+        return $this->users;
     }
 
-    public function setDescription(string $description): self
+    public function addUser(User $user): self
     {
-        $this->description = $description;
-        return $this;
-    }
-
-    public function getNiveaux(): Collection
-    {
-        return $this->niveaux;
-    }
-
-    public function addNiveau(Niveau $niveau): self
-    {
-        if (!$this->niveaux->contains($niveau)) {
-            $this->niveaux[] = $niveau;
-            $niveau->addLecon($this);
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
         }
-
         return $this;
     }
 
-    public function removeNiveau(Niveau $niveau): self
+    public function removeUser(User $user): self
     {
-        if ($this->niveaux->contains($niveau)) {
-            $this->niveaux->removeElement($niveau);
-            $niveau->removeLecon($this);
-        }
-
+        $this->users->removeElement($user);
         return $this;
     }
-
 }

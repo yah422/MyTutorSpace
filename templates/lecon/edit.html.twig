@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modifier un cours {% endblock %}
+
+{% block body %}
+<div class="editLecon">
+    <h1> Modifier le cours </h1>
+
+    {{ form_start(form) }}
+
+    <div class="mb-4">
+        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.titre) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.dateCreation, 'Date de création', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.dateCreation, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.dateCreation) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.matiere, 'Matière', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.matiere, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.matiere) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.niveau, 'Niveau', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.niveau, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.niveau) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.user, 'Auteur', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.user, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.user) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.users, 'Élèves', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.users, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.users) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.pdfFile, 'Document PDF', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.pdfFile, {'attr': {'class': 'form-select mt-1 block w-full text-gray-300'}}) }}
+        {{ form_errors(form.pdfFile) }}
+    </div>
+
+    <div class="mt-6">
+        <button type="submit" style="background-color: #FFD700;" class="hover:bg-gray-700 text-black font-bold py-2 px-4 rounded">
+            Enregistrer les modifications
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+
+    <br>
+
+    <a class="text-gray-300" href="{{ path('app_lecon') }}">Retour à la liste des leçons</a>
+</div>
+{% endblock %}

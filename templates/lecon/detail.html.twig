@@ -26,14 +26,15 @@
     </div>
 
     <br>
-
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TUTEUR') %}
-    <a href="{{ path('add_lecon') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-        Ajouter un cours
-    </a>
-    {% endif %}
-
-
+    <div class="acceeDetail">
+        <div>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TUTEUR') %}
+            <a href="{{ path('edit_lecon', {'id': lecon.id} ) }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+                Modifier un cours
+            </a>
+            {% endif %}
+        </div>
+    </div>
     {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
     {# <div class="mt-6">
         <h2 class="text-xl font-semibold">Exercices associés</h2>
