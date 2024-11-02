@@ -33,6 +33,21 @@ class Lecon
     #[ORM\Column(type: "string", length: 255)]
     private ?string $description = null;
 
+    
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $pdfPath = null;   
+    
+    public function getPdfPath(): ?string 
+    {
+        return $this->pdfPath;
+    }
+
+    public function setPdfPath(?string $pdfPath): self
+    {
+        $this->pdfPath = $pdfPath;
+        return $this;
+    }
+
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
@@ -77,9 +92,6 @@ class Lecon
      * @ORM\JoinTable(name="lecon_user")
      */
     private $users;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Contenu = null;
 
     public function getUsers(): Collection
     {
@@ -171,18 +183,6 @@ class Lecon
             $this->niveaux->removeElement($niveau);
             $niveau->removeLecon($this);
         }
-
-        return $this;
-    }
-
-    public function getContenu(): ?string
-    {
-        return $this->Contenu;
-    }
-
-    public function setContenu(string $Contenu): static
-    {
-        $this->Contenu = $Contenu;
 
         return $this;
     }

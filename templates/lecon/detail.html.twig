@@ -1,11 +1,14 @@
-
 {% extends 'base.html.twig' %}
 
-{% block title %} Détails de la leçon   {% endblock %}
+{% block title %} Détails de la leçon {% endblock %}
 
 {% block body %}
 
-<div class="p-6 rounded-lg">
+<div class="detailLecon">
+
+    <div>
+        <h1> Détail {{ lecon.titre }} </h1>
+    </div>
 
     <div>
         <p class="text-gray-300">
@@ -15,6 +18,21 @@
     <div>
         <p class="text-gray-300">Date de création : {{ lecon.dateCreation|date('d/m/Y') }}</p>
     </div>
+    <br>
+    <div>
+        {% if lecon.pdfPath %}
+        <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;" href="{{ asset('uploads/pdfs/' ~ lecon.pdfPath) }}">Télécharger le PDF</a>
+        {% endif %}
+    </div>
+
+    <br>
+
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TUTEUR') %}
+    <a href="{{ path('add_lecon') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+        Ajouter un cours
+    </a>
+    {% endif %}
+
 
     {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
     {# <div class="mt-6">

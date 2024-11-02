@@ -240,6 +240,10 @@ h2{
     flex-wrap: wrap;
 }
 
+.detailLecon{
+    margin: 60px;
+}
+
 
 /* ----------------------- Niveau --------------------------------- */
 .listNiveau{

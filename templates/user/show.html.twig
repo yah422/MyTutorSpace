@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Profil  {% endblock %}
+{% block title %} Profil {% endblock %}
 
 {% block body %}
 
 <div class="listEditUser">
-    
+
         {# J'affiche un titre pour le profil de l'user#}
         <h2 class="text-gray-300"> Profil {{ user.prenom }} </h2>
 
@@ -16,10 +16,10 @@
         <p class="text-gray-300">About Me : {{ user.aboutMe }}</p>
 
         {# Je fournis un lien pour modifier le profil de l'utilisateur en utilisant son ID #}
-        <a class="text-gray-300" href="{{ path('app_user_edit', { id: user.id }) }}" class="btn"> Modifier le profil </a>
+        <a class="text-gray-300" href="{{ path('app_user_edit', { id: user.id }) }}" class="btn"> Modifier le profil
+        </a>
 
 </div>
 
-    
-{% endblock %}
 
+{% endblock %}

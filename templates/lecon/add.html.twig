@@ -50,6 +50,12 @@
         {{ form_errors(form.users) }}
     </div>
 
+    <div class="mb-4">
+        {{ form_label(form.pdfFile, 'Document PDF', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
+        {{ form_widget(form.pdfFile, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
+        {{ form_errors(form.pdfFile) }}
+    </div>
+
     <div class="mt-6">
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Enregistrer

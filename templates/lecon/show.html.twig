@@ -13,13 +13,10 @@
     <ul class="leconSection">
         {% for lecon in lecons %}
         <a class="text-black" href="{{ path('show_lecon',{'id': lecon.id })}}">
-
             <div class="InfoLecon flex flex-col p-4 mb-4 bg-gray-100 rounded-lg">
                 <li>
                     <strong> {{ lecon.titre }} </strong>
                 </li>
-
-
                 {% if is_granted('ROLE_ADMIN') %}
                 <form action="{{ path('delete_lecon', {'id': lecon.id}) }}" method="post"
                     onsubmit="return confirm('Etes-vous sûre ?');">
