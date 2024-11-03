@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Matiere;
+use App\Entity\Niveau;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,27 @@ class MatiereRepository extends ServiceEntityRepository
         parent::__construct($registry, Matiere::class);
     }
 
-    //    /**
-    //     * @return Matiere[] Returns an array of Matiere objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findMatieresWithNiveaux()
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.lecons', 'l')
+            ->leftJoin('l.niveaux', 'n')
+            ->select('m', 'n')
+            ->orderBy('m.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Matiere
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findMatieresByNiveau(Niveau $niveau)
+    {
+        return $this->createQueryBuilder('m')
+            ->innerJoin('m.lecons', 'l')
+            ->innerJoin('l.niveaux', 'n')
+            ->where('n.id = :niveauId')
+            ->setParameter('niveauId', $niveau->getId())
+            ->orderBy('m.nom', 'ASC')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+    }
 }

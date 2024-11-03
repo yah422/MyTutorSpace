@@ -206,6 +206,16 @@ h2{
     flex-wrap: wrap;
 }
 
+.AddLecon{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 60px;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-content: center;
+}
 .listLecon1{
     display: flex;
     flex-direction: column;

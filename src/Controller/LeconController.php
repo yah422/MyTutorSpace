@@ -23,18 +23,34 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class LeconController extends AbstractController
 {
     #[Route('/lecon', name: 'app_lecon')]
-    public function index(LeconRepository $leconRepository, MatiereRepository $matiereRepository, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, LeconRepository $leconRepository, MatiereRepository $matiereRepository, EntityManagerInterface $entityManager): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveauRepository = $entityManager->getRepository(Niveau::class);
-        $leconsParNiveau = $niveauRepository->findAll();
-        $lecons = $leconRepository->findBy([], ["titre" => "ASC"]);
+        $niveaux = $niveauRepository->findAll();
+        
+        $matiereId = $request->query->get('matiere');
+        $niveauId = $request->query->get('niveau');
+        
+        $selectedMatiere = null;
+        $selectedNiveau = null;
+        
+        if ($matiereId) {
+            $selectedMatiere = $matiereRepository->find($matiereId);
+        }
+        
+        if ($niveauId) {
+            $selectedNiveau = $niveauRepository->find($niveauId);
+        }
+        
+        $lecons = $leconRepository->findLeconsByFilters($selectedMatiere, $selectedNiveau);
 
         return $this->render('lecon/index.html.twig', [
-            'lecon' => 'lecon',
             'lecons' => $lecons,
             'matieres' => $matieres,
-            'leconsParNiveau' => $leconsParNiveau,
+            'niveaux' => $niveaux,
+            'selectedMatiere' => $selectedMatiere,
+            'selectedNiveau' => $selectedNiveau
         ]);
     }
 
@@ -48,7 +64,6 @@ class LeconController extends AbstractController
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $lecon = new Lecon();
         
-        // Initialiser la date de création
         $lecon->setDateCreation(new \DateTime());
 
         $form = $this->createForm(LeconType::class, $lecon);
@@ -86,7 +101,7 @@ class LeconController extends AbstractController
     }
 
     #[Route('/lecon/edit/{id}', name: 'edit_lecon')]
-    public function edit(UserRepository $userRepository,Lecon $lecon, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    public function edit(UserRepository $userRepository, Lecon $lecon, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
             return $this->render('user/errorPage.html.twig');     
@@ -122,7 +137,7 @@ class LeconController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Leçon modifiée avec succès !');
-            return $this->redirectToRoute('app_lecon');
+            return $this->redirectToRoute('show_lecon', ['id' => $lecon->getId()]);
         }
 
         return $this->render('lecon/edit.html.twig', [
@@ -155,7 +170,6 @@ class LeconController extends AbstractController
     public function leconsParMatiere(Matiere $matiere, MatiereRepository $matiereRepository, EntityManagerInterface $entityManager): Response
     {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
-        
         $lecons = $entityManager->getRepository(Lecon::class)->findBy(['matiere' => $matiere]);
 
         return $this->render('lecon/show.html.twig', [
