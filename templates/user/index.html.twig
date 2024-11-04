@@ -52,6 +52,7 @@
 
         <div class="space-y-4">
             {% for tuteur in tuteurs %}
+            <a href="{{ path('app_show_user', {'id': tuteur.id}) }}">
                 <div class="p-6 rounded-lg shadow-md flex justify-between items-start">
                     <div>
                         <h2 class="text-2xl font-bold mb-2">{{ tuteur.nom }} {{ tuteur.prenom }}</h2>
@@ -59,6 +60,7 @@
                         {# <p class="text-gray-700 mb-4">{{ tuteur.aboutMe }}</p> #}
                     </div>
                 </div>
+            </a>
             {% else %}
                 <div class="text-center text-gray-500 py-8">
                     Aucun tuteur ne correspond à vos critères.

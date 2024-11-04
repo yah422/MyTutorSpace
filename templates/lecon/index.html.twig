@@ -58,12 +58,10 @@
                                 </span>
                             {% endfor %}
                         </div>
-                        {% if lecon.description %}
-                            <p class="text-gray-600 mb-4 line-clamp-2">{{ lecon.description }}</p> {# Description de la leçon, limitée à deux lignes. #}
-                        {% endif %}
+                
                         <div class="mt-4 flex justify-between items-center">
                             <span class="text-sm text-black">
-                                {{ lecon.dateCreation|date('d/m/Y') }} {# Date de création de la leçon, formatée en 'jour/mois/année'. #}
+                                {# {{ lecon.dateCreation|date('d/m/Y') }} Date de création de la leçon, formatée en 'jour/mois/année'. #}
                             </span>
                             <span class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
                                 Voir le détail {# Texte pour indiquer qu'il y a plus d'informations sur la leçon. #}
