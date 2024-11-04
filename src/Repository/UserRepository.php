@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Matiere;
+use App\Entity\Niveau;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -45,6 +46,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+public function findTutorsByFilters(?Matiere $matiere = null, ?Niveau $niveau = null)
+{
+    $qb = $this->createQueryBuilder('u')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('role', '%"ROLE_TUTEUR"%');
+
+    if ($matiere) {
+        $qb->leftJoin('u.matieres', 'm')
+        ->andWhere('m = :matiere')
+        ->setParameter('matiere', $matiere);
+    }
+
+    if ($niveau) {
+        $qb->leftJoin('u.niveaux', 'n')
+        ->andWhere('n = :niveau')
+        ->setParameter('niveau', $niveau);
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
+
 
     //    /**
     //     * @return User[] Returns an array of User objects

@@ -22,6 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lecon = new ArrayCollection();
         $this->lecons = new ArrayCollection();
         $this->matieres = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
 
     }
 
@@ -48,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: Niveau::class, inversedBy: "users")]
+    private Collection $niveaux;
+
     #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
     private array $roles = [];
 
@@ -56,13 +60,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type:'text')]
     private ?string $AboutMe = null;
-    
+
     /**
      * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
      */
     #[ORM\Column(length: 255)]
     private ?string $password = null;
     
+    #[ORM\ManyToOne(targetEntity: Niveau::class)]
+    private ?Niveau $niveau = null;
+
+    public function getNiveau(): ?Niveau
+    {
+        return $this->niveau;
+    }
+
+    public function setNiveau(?Niveau $niveau): self
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        $this->niveaux->removeElement($niveau);
+
+        return $this;
+    }
+
     /**
      * Retourne les rôles de l'utilisateur, en ajoutant ROLE_USER s'il n'est pas déjà présent.
      */
