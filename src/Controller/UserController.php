@@ -96,6 +96,14 @@ class UserController extends AbstractController
         MatiereRepository $matiereRepository,
         NiveauRepository $niveauRepository
     ): Response {
+        // Vérification des droits d'accès
+        $currentUser = $this->getUser();
+
+        // On vérifie si l'utilisateur est connecté et autorisé à modifier l'utilisateur
+        if ($currentUser === null || ($currentUser->getId() !== $user->getId() && !$security->isGranted('ROLE_ADMIN'))) {
+            return $this->render('user/errorPage.html.twig');
+        }
+
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
         

@@ -1,34 +1,45 @@
-{% extends 'base.html.twig' %} {# Ici, j'étends le template de base pour que cette page hérite de la structure de 'base.html.twig'. #}
+{% extends 'base.html.twig' %}
 
-{% block title %}Liste des Cours{% endblock %} {# Je définis le titre de la page ici, qui sera affiché dans l'onglet du navigateur. #}
+{% block title %}Liste des Cours{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 py-8"> {# J'ajoute un conteneur pour centrer le contenu de la page avec des marges et un espacement. #}
-        <h1 class="text-3xl font-bold mb-8">Liste des leçons</h1> {# Le titre principal de la page indique qu'il s'agit de la liste des leçons disponibles. #}
+    <div class="min-h-screen mx-auto p-8">
+        <div class="mb-8 p-10">
+            <h1 class="flex items-start justify-start content-start text-5xl font-bold mb-4">Des cours privés adaptés à votre emploi du temps</h1>
+            <p class="text-xl text-gray-300 mb-8">
+                Trouvez votre cours idéal et profitez d'une leçon d'essai gratuite en vidéo. Ensuite, réservez des sessions en ligne qui s’adaptent à votre planning.
+            </p>
+        </div>
 
-        <div class="mb-8 bg-[#ECECEC] rounded-lg shadow-md p-6"> {# Cette section est le conteneur des filtres pour trier les leçons par matière ou niveau. #}
-            <h2 class="text-2xl font-bold mb-4">Filtres</h2> {# Le sous-titre introduit la section des filtres pour faciliter la recherche. #}
-            <form method="get" action="{{ path('app_lecon') }}" class="space-y-4"> {# J'utilise une méthode GET pour soumettre les filtres sans affecter les données, et j'ajoute de l'espacement entre les éléments. #}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> {# J'utilise une grille pour aligner les filtres de manière réactive en fonction de la taille de l'écran. #}
+        <br>
+
+        <div class="mb-8 bg-[#ECECEC] rounded-lg shadow-md p-6">
+            <form method="get" action="{{ path('app_lecon') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="matiere" class="block text-sm font-medium text-gray-300">Matière</label> {# Ici, j'ajoute une étiquette pour le filtre de la matière. #}
-                        <select name="matiere" id="matiere" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> {# J'ajoute un menu déroulant pour sélectionner une matière, avec des styles pour l'accessibilité. #}
-                            <option value="">Toutes les matières</option> {# Cette option permet de voir toutes les matières si aucun filtre n'est sélectionné. #}
+                        <label for="matiere" class="block text-sm font-medium text-gray-300">Matière</label>
+                        <select name="matiere" id="matiere" class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                            <option value="">Toutes les matières</option>
                             {% for matiere in matieres %}
-                                <option value="{{ matiere.id }}" 
-                                    {% if selectedMatiere is not null and selectedMatiere.id == matiere.id %}selected{% endif %}> {# Je vérifie si une matière est sélectionnée et je l'affiche comme "selected" dans le menu déroulant. #}
+                                <option value="{{ matiere.id }}"
+                                    {% if selectedMatiere is not null and selectedMatiere.id == matiere.id %}selected{% endif %}>
                                     {{ matiere.nom }}
                                 </option>
                             {% endfor %}
                         </select>
                     </div>
                     <div>
-                        <label for="niveau" class="block text-sm font-medium text-gray-300">Niveau</label> {# L'étiquette pour le filtre de niveau. #}
-                        <select name="niveau" id="niveau" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> {# Un autre menu déroulant pour filtrer par niveau, avec des styles similaires au filtre de matière. #}
-                            <option value="">Tous les niveaux</option> {# Option pour afficher tous les niveaux. #}
+                        <label for="niveau" class="block text-sm font-medium text-gray-300">Niveau</label>
+                        <select name="niveau" id="niveau" class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                            <option value="">Tous les niveaux</option>
                             {% for niveau in niveaux %}
                                 <option value="{{ niveau.id }}"
-                                    {% if selectedNiveau is not null and selectedNiveau.id == niveau.id %}selected{% endif %}> {# Ici aussi, je marque comme "selected" le niveau correspondant si un niveau est déjà choisi. #}
+                                    {% if selectedNiveau is not null and selectedNiveau.id == niveau.id %}selected{% endif %}>
                                     {{ niveau.titre }}
                                 </option>
                             {% endfor %}
@@ -36,51 +47,50 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button style="background-color: #FFD700;" type="submit" class="text-black px-4 py-2 rounded hover:bg-indigo-700 transition"> {# Bouton de soumission pour appliquer les filtres avec un style distinctif. #}
+                    <button style="background-color: #FFD700;" type="submit" class="text-black px-4 py-2 rounded hover:bg-indigo-700 transition">
                         Filtrer
                     </button>
                 </div>
             </form>
         </div>
         <br>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> {# J'affiche les leçons sous forme de grille responsive avec un espacement entre les éléments. #}
+        
+        <div class="flex flex-col gap-6 items-center"> {# Utilisation de flex-col pour empiler les éléments verticalement avec gap-6 #}
             {% for lecon in lecons %}
-                <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"> {# Chaque leçon est dans une carte avec un style et un effet de survol pour la mettre en évidence. #}
-                    <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="block"> {# J'ajoute un lien vers la page de détail de chaque leçon. #}
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3 hover:text-indigo-600"><strong> {{ lecon.titre }} </strong> </h3> {# Titre de la leçon avec un effet de survol. #}
-                        <div class="mb-4">
-                            <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                {{ lecon.matiere.nom }} {# Affichage de la matière associée à la leçon sous forme d'étiquette. #}
+                <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition w-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 hover:text-indigo-600">{{ lecon.titre }}</h3>
+                    <div class="mb-4">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            {{ lecon.matiere.nom }}
+                        </span>
+                        {% for niveau in lecon.niveaux %}
+                            <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm ml-2">
+                                {{ niveau.titre }}
                             </span>
-                            {% for niveau in lecon.niveaux %}
-                                <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm ml-2">
-                                    {{ niveau.titre }} {# Affichage de chaque niveau associé à la leçon sous forme d'étiquette. #}
-                                </span>
-                            {% endfor %}
-                        </div>
-                
-                        <div class="mt-4 flex justify-between items-center">
-                            <span class="text-sm text-black">
-                                {# {{ lecon.dateCreation|date('d/m/Y') }} Date de création de la leçon, formatée en 'jour/mois/année'. #}
-                            </span>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-sm text-black">
+                            {# {{ lecon.dateCreation|date('d/m/Y') }} #}
+                        </span>
+                        <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="block">
                             <span class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
-                                Voir le détail {# Texte pour indiquer qu'il y a plus d'informations sur la leçon. #}
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"> {# Icône de flèche indiquant un lien vers plus de détails. #}
+                                Voir le détail
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
                             </span>
-                        </div>
-                        <br>
-                    </a>
+                        </a>
+                    </div>
+                    <br>
                 </div>
-                <br>
             {% else %}
-                <div class="col-span-full text-center py-8">
-                    <p class="text-gray-600">Aucune leçon trouvée</p> {# Message affiché lorsque la liste des leçons est vide. #}
+                <div class="w-full text-center py-8">
+                    <p class="text-gray-600">Aucune leçon trouvée</p>
                 </div>
             {% endfor %}
-            <br>
         </div>
+
         <br>
     </div>
     <br>

@@ -6,21 +6,23 @@
 
 <div class="listEditUser">
 
-        {# J'affiche un titre pour le profil de l'user#}
+        {# J'affiche un titre pour le profil de l'utilisateur #}
         <h2 class="text-gray-300"> Profil {{ user.prenom }} </h2>
 
-        {# J'affiche les informations spécifiques de l'use #}
+        {# J'affiche les informations spécifiques de l'utilisateur #}
         <p class="text-gray-300">Nom : {{ user.nom }}</p>
         <p class="text-gray-300">Prénom : {{ user.prenom }}</p>
         <p class="text-gray-300">Email : {{ user.email }}</p>
         <p class="text-gray-300">About Me : {{ user.aboutMe }}</p>
 
-        {# Je fournis un lien pour modifier le profil de l'utilisateur en utilisant son ID #}
+        {# Lien pour modifier le profil de l'utilisateur en utilisant son ID #}
+        {# Afficher le bouton seulement pour l'utilisateur connecté ou l'administrateur #}
+        {% if app.user is not null and (app.user.id == user.id or 'ROLE_ADMIN' in app.user.roles) %}
         <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;" href="{{ path('edit_user', { id: user.id }) }}">
                 Modifier le profil
         </a>
+        {% endif %}
 
 </div>
-
 
 {% endblock %}

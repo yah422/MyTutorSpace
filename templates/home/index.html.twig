@@ -1,24 +1,92 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Accueil {% endblock %}
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-    <div id="homePage1Part" class="container mx-auto px-4 py-8">
-        {% if app.user %}
-            <div class="text-gray-300 p-4 mb-4 rounded">
-                <p class="text-xl">Bienvenue, {{ app.user.prenom }} {{ app.user.nom }} !</p>
-            </div>
-        {% endif %}
 
-        <div class="PicTitle">
-            <div class="TextTitle">
-                <h1 style="justify-content: flex-start; text-align: left;" class="text-3xl font-bold mb-4">My Tutor Space</h1>
-                <p class="pHomePage">Donner aux tuteurs privés les outils pour façonner l’avenir, une leçon à la fois.</p>
-            </div>
-            <div>
-                <img src="/img/photoelearning.png" alt="photoElearning">
+    <div class="container mx-auto px-4 py-8">
+
+        <div style="margin: 0px; height:100vh;" id="homePage1Part" class="h-screen px-4 py-8 flex flex-col">
+            {% if app.user %}
+                <div class="text-gray-300 p-4 mb-4 rounded">
+                    <p class="text-xl">Bienvenue, {{ app.user.prenom }} {{ app.user.nom }} !</p>
+                </div>
+            {% endif %}
+            
+            <div class="PicTitle flex flex-col md:flex-row items-center justify-between">
+                <div class="TextTitle text-left w-1/2">
+                    <h1 class="flex items-start justify-start content-start text-3xl font-bold mb-4 font-bold mb-4">My Tutor Space</h1>
+                    <p class="pHomePage">Donner aux tuteurs privés les outils pour façonner l’avenir, une leçon à la fois.</p>
+                </div>
+                <div class="w-1/2">
+                    <img src="/img/photoelearning.png" alt="photoElearning" class="max-w-full h-auto">
+                </div>
             </div>
         </div>
 
+        <!-- Section Choisir Une Matière -->
+        <div style="margin-top: 30px; margin-bottom:30px;" class="text-center mb-8">
+            <h2 style="color: #70F9D9;" class="text-4xl font-bold">Choisi Une Matière</h1>
+            <div class="flex flex-wrap justify-center gap-3 mt-4">
+                <!-- Boucle pour générer les boutons de matières -->
+                {% for matiere in matieres %}
+                <a href="{{ path('show_matiere', { 'id': matiere.id }) }}">
+                    <button style="background: #70F9D9;" class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
+                        {{ matiere.nom ?? 'Nom non défini' }}
+                    </button>
+                </a>
+                {% endfor %}
+                <a href="{{ path('app_matiere') }}">
+                    <button class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
+                        Toutes les matières
+                    </button>
+                </a>
+            </div>
+        </div>
+        <br>
+        <!-- Section Simple et Efficace -->
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-bold text-[#FFD700]">Simple et Efficace</h2>
+            <div class="flex flex-wrap justify-center gap-6 mt-8">
+                <div class="bg-gold text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Fixe tes objectifs</h3>
+                    <p>Donnez aux cours privés une direction, un objectif et un but pour réussir.</p>
+                </div>
+                <div class="bg-[#F7F4A6] text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Trouve ton tuteur</h3>
+                    <p>Donnez aux tuteurs privés toutes les informations pour vous aider à réussir.</p>
+                </div>
+                <div class="bg-[#FFD700] text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Commence à apprendre</h3>
+                    <p>Donnez aux tuteurs privés les clés pour s’adapter et répondre à vos besoins.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Blocs d'Information avec Images -->
+        <div class="space-y-12">
+            {% for block in [
+                {'title': 'Fixe tes objectifs', 'text': 'Lorem ipsum dolor sit amet...', 'img': 'url-to-image-1'},
+                {'title': 'Fixe tes objectifs', 'text': 'Lorem ipsum dolor sit amet...', 'img': 'url-to-image-2'},
+                {'title': 'Fixe tes objectifs', 'text': 'Lorem ipsum dolor sit amet...', 'img': 'url-to-image-3'},
+                {'title': 'Fixe tes objectifs', 'text': 'Lorem ipsum dolor sit amet...', 'img': 'url-to-image-4'}
+            ] %}
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="text-white md:w-1/2">
+                        <h3 class="text-2xl font-bold">{{ block.title }}</h3>
+                        <p class="mt-4">{{ block.text }}</p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="{{ block.img }}" alt="{{ block.title }}" class="w-full rounded-lg shadow-lg">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
 {% endblock %}
