@@ -36,13 +36,13 @@
                 <!-- Boucle pour générer les boutons de matières -->
                 {% for matiere in matieres %}
                 <a href="{{ path('show_matiere', { 'id': matiere.id }) }}">
-                    <button style="background: #70F9D9;" class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
+                    <button style="background-color: #ECECEC;" class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
                         {{ matiere.nom ?? 'Nom non défini' }}
                     </button>
                 </a>
                 {% endfor %}
                 <a href="{{ path('app_matiere') }}">
-                    <button class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
+                    <button style="background-color:#70F9D9" class="text-black border px-4 py-2 rounded hover:bg-white transition">
                         Toutes les matières
                     </button>
                 </a>
@@ -50,23 +50,39 @@
         </div>
         <br>
         <!-- Section Simple et Efficace -->
-        <div class="text-center mb-10">
-            <h2 class="text-4xl font-bold text-[#FFD700]">Simple et Efficace</h2>
+        <div class="text-center mb-10 w-full">
+            <h2 class="text-5xl font-bold text-[#FFD700]">Simple et Efficace</h2>
+            <br>
+            <!-- Wrapper centré pour les cartes -->
             <div class="flex flex-wrap justify-center gap-6 mt-8">
-                <div class="bg-gold text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                
+                <!-- Première carte -->
+                <div style="background-color: #FFD700;" class="text-black p-6 py-10 rounded-lg shadow-lg w-full sm:w-1/3 text-center flex flex-col items-center">
+                    <img src="/img/objectif.png" alt="Icône cible" class="mb-4">
                     <h3 class="text-2xl font-semibold mb-4">Fixe tes objectifs</h3>
                     <p>Donnez aux cours privés une direction, un objectif et un but pour réussir.</p>
                 </div>
-                <div class="bg-[#F7F4A6] text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                
+                <!-- Deuxième carte -->
+                <div style="background-color: #FFD700;" class="text-black p-6 py-10 rounded-lg shadow-lg w-full sm:w-1/3 text-center flex flex-col items-center">
+                    <img src="/img/search.png" alt="icône loupe" class="mb-4">
                     <h3 class="text-2xl font-semibold mb-4">Trouve ton tuteur</h3>
                     <p>Donnez aux tuteurs privés toutes les informations pour vous aider à réussir.</p>
                 </div>
-                <div class="bg-[#FFD700] text-black p-6 rounded-lg shadow-lg w-full sm:w-1/3 text-center">
+                
+                <!-- Troisième carte -->
+                <div style="background-color: #FFD700;" class="text-black p-6 py-10 rounded-lg shadow-lg w-full sm:w-1/3 text-center flex flex-col items-center">
+                    <img src="/img/learn.png" alt="icône livre" class="mb-4">
                     <h3 class="text-2xl font-semibold mb-4">Commence à apprendre</h3>
                     <p>Donnez aux tuteurs privés les clés pour s’adapter et répondre à vos besoins.</p>
                 </div>
+                
             </div>
         </div>
+        
+        
+        
+        
 
         <!-- Section Blocs d'Information avec Images -->
         <div class="space-y-12">
