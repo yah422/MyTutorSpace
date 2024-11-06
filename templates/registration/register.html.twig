@@ -57,6 +57,13 @@
                         }) }}
                     </div>
 
+                    <div class="mb-6">
+                        {{ form_row(registrationForm.aboutMe, {
+                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
+                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
+                        }) }}
+                    </div>
+
                     <div style="display: flex;justify-content: space-between;" class="mb-6">
                         {{ form_row(registrationForm.agreeTerms, {
                             'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},

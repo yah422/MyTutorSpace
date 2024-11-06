@@ -31,48 +31,47 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/tuteur', name: 'app_register_tuteur')]
-    public function registerTuteur(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function registerTuteur(Request $request): Response
     {
-        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_TUTEUR');
+        return $this->registerWithRole($request, 'ROLE_TUTEUR');
     }
 
     #[Route('/register/eleve', name: 'app_register_eleve')]
-    public function registerEleve(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function registerEleve(Request $request): Response
     {
-        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_ELEVE');
+        return $this->registerWithRole($request, 'ROLE_ELEVE');
     }
 
     #[Route('/register/parent', name: 'app_register_parent')]
-    public function registerParent(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function registerParent(Request $request): Response
     {
-        return $this->registerWithRole($request, $passwordHasher, $entityManager, 'ROLE_PARENT');
+        return $this->registerWithRole($request, 'ROLE_PARENT');
     }
-    
 
-    // Commun a tous les roles
-    private function registerWithRole(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, string $role): Response
+    // Méthode commune pour tous les rôles
+    private function registerWithRole(Request $request, string $role): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hash password
+            // Hash du mot de passe
             $user->setPassword(
-                $passwordHasher->hashPassword(
+                $this->passwordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
 
-            // Assign the role based on the route
+            // Attribution du rôle selon la route
             $user->setRoles([$role]);
 
-            // Save user to the database
-            $entityManager->persist($user);
-            $entityManager->flush();
+            // Sauvegarde de l'utilisateur dans la base de données
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
-            // Redirect to login or any other page
+            // Redirection vers la page de connexion
             return $this->redirectToRoute('app_login');
         }
 
@@ -86,7 +85,6 @@ class RegistrationController extends AbstractController
     {
         return $this->render('registration/role_choice.html.twig');
     }
-
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
