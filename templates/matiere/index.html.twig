@@ -1,37 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Matières {% endblock %}
+{# Je définis le titre de la page #}
+{% block title %}Mes Matières{% endblock %}
 
 {% block body %}
+{# Je crée un conteneur principal avec un fond subtil et un padding approprié #}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    {# J'ajoute un header élégant pour la page #}
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Liste de mes matières</h1>
 
-<div class="listMatieres">
-{# {% dump(matieres) %} pour récup dans la barre de symfony #}
-{# {{ dump(array) }} pour recup et afficher dans la vue #}
-    {% for matiere in matieres %}
-        <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li class="px-4 py-2"> 
-                <a href="{{ path('show_matiere',{'id': matiere.id })}}" class="text-gray-200"> 
-                    {{ matiere.nom }} 
-                </a>
+        {# Je crée une grille responsive pour afficher mes matières #}
+        <div style="background-color: #ECECEC;" class="shadow-xl rounded-lg overflow-hidden">
+            {% for matiere in matieres %}
+            <div class="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors duration-150">
+                <div class="p-4 flex items-center justify-between">
+                    {# Je crée un lien pour chaque matière #}
+                    <a href="{{ path('show_matiere', {'id': matiere.id }) }}"
+                        class="text-lg font-medium text-gray-900 hover:text-indigo-600 transition-colors duration-150">
+                        {{ matiere.nom }}
+                    </a>
 
-                {% if is_granted('ROLE_ADMIN') %}
-                    <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post" onsubmit="return confirm('Etes-vous sûre ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
-                        <button type="submit" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-                            Supprimer
-                        </button>
-                    </form>
-                {% endif %}
-                
-            </li>
-        </ul> <br>            
-    {% endfor %}
-    <br>
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('add_matiere') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-            Ajouter une matière
-        </a>
-    {% endif %}
+                    {# J'ajoute les contrôles d'administration si l'utilisateur est admin #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="flex items-center space-x-2">
+                        <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post"
+                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette matière ?');"
+                            class="inline-block">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-150 text-sm">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            {# J'ajoute un message si aucune matière n'est trouvée #}
+            <div class="p-8 text-center text-gray-500">
+                Aucune matière n'est disponible pour le moment.
+            </div>
+            {% endfor %}
+        </div>
 
+        {# Je place le bouton d'ajout en bas si l'utilisateur est admin #}
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="mt-8 text-center">
+            <a href="{{ path('add_matiere') }}"
+                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150">
+                Ajouter une matière
+            </a>
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
