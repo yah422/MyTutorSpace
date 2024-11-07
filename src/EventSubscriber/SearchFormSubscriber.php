@@ -3,7 +3,6 @@
 namespace App\EventSubscriber;
 
 use App\Form\SearchType;
-use App\Form\ProspectType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,13 +37,8 @@ class SearchFormSubscriber implements EventSubscriberInterface
         $searchForm = $this->formFactory->create(SearchType::class);
         $searchForm->handleRequest($request);
 
-        // Création et traitement du formulaire de newsletter
-        $formNewsletter = $this->formFactory->create(ProspectType::class);
-        $formNewsletter->handleRequest($request);
-
         // Ajoute les formulaires en tant que variables globales Twig
         $this->twig->addGlobal('searchForm', $searchForm->createView());
-        $this->twig->addGlobal('formNewsletter', $formNewsletter->createView());
     }
 
     public static function getSubscribedEvents(): array
