@@ -41,6 +41,31 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     }
 
     /**
+     * Find resources by lesson.
+     * Cette méthode permet de trouver les ressources associées aux exercices d'une leçon.
+     * @param Lecon $lecon La leçon dont on cherche les ressources
+     * @return array Les ressources trouvées
+     */
+    public function findRessourcesByLecon(Lecon $lecon)
+    {
+        // Récupération du gestionnaire d'entités
+        $em = $this->getEntityManager();
+        // Récupération du repository des ressources
+        $ressourceRepository = $em->getRepository('App\Entity\Ressource');
+        // Construction d'une requête pour récupérer les ressources
+        $queryBuilder = $ressourceRepository->createQueryBuilder('r');
+        // Ajout d'une condition pour filtrer par exercice associé à la leçon
+        $queryBuilder->where('r.exercice = :exercice')
+            ->setParameter('exercice', $lecon->getExercice());
+        // Tri des résultats par titre de ressource
+        $queryBuilder->orderBy('r.titre', 'ASC');
+        // Obtention de la requête
+        $query = $queryBuilder->getQuery();
+        // Exécution de la requête et obtention des résultats
+        return $query->getResult();
+    }
+
+    /**
      * Find lessons by level.
      * Cette méthode permet de trouver les leçons associées à un niveau donné.
      */
