@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ReservationController extends AbstractController
 {
     #[Route('/', name: 'app_reservation_index')]
-    #[IsGranted('ROLE_USER')]
+    // #[IsGranted('ROLE_USER')]
     public function index(ReservationRepository $reservationRepository): Response
     {
         $user = $this->getUser();
@@ -34,7 +34,7 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/new/{id}', name: 'app_reservation_new')]
-    #[IsGranted('ROLE_USER')]
+    // #[IsGranted('ROLE_USER')]
     public function new(Request $request, Lecon $lecon, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
         $user = $this->getUser();
@@ -53,7 +53,7 @@ class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier les conflits de réservation
+            // On vérifie les conflits de réservation
             $conflits = $reservationRepository->findConflictingReservations(
                 $lecon,
                 $reservation->getDateDebut(),
@@ -82,7 +82,7 @@ class ReservationController extends AbstractController
     #[Route('/{id}/edit', name: 'app_reservation_edit')]
     public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier que l'utilisateur est soit le tuteur soit l'élève
+        // On vérifie que l'utilisateur est soit le tuteur soit l'élève
         if ($this->getUser() !== $reservation->getEleve() && 
             $this->getUser() !== $reservation->getLecon()->getUser()) {
             throw $this->createAccessDeniedException();
@@ -106,7 +106,7 @@ class ReservationController extends AbstractController
     #[IsGranted('ROLE_TUTEUR')]
     public function updateStatus(Reservation $reservation, string $newStatus, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier que le tuteur est bien celui qui donne le cours
+        // On vérifie que le tuteur est bien celui qui donne le cours
         if ($this->getUser() !== $reservation->getLecon()->getUser()) {
             throw $this->createAccessDeniedException();
         }
