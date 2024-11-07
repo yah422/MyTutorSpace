@@ -182,15 +182,18 @@ class LeconController extends AbstractController
     }
 
     #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Exercice $exercice,Lecon $lecon, LeconRepository $leconRepository, ExerciceRepository $exerciceRepository): Response
+    public function show(Lecon $lecon, LeconRepository $leconRepository, ExerciceRepository $exerciceRepository): Response
     {
         $exercices = $exerciceRepository->findBy([], ['titre' => 'ASC']);
         $leconExercices = $leconRepository->findExercicesByLecon($lecon);
-        // $leconRessources = $leconRepository->findRessourcesByLecon($lecon);
+    
+        // Récupérer l'exercice associé à la leçon
+        $exercice = $lecon->getExercice();
+    
         return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $leconExercices,
-            'exercice' => $exercice->getId(),
+            'exercice' => $exercice,
             'exercice_list' => $exercices,
         ]);
     }
