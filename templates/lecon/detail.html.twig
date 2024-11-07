@@ -35,6 +35,19 @@
             {% endif %}
         </div>
     </div>
+
+    <br>
+
+    <div class="exerciceSection">
+        <h2> Exercices </h2>
+        {% for exercice in lecon.exercice %}
+            <a class="text-gray-300" href="{{ path('show_exercice',{'id': exercice.id })}}">
+                {{ exercice.titre }}
+            </a>
+        {% endfor %}
+
+    </div>
+
     {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
     {# <div class="mt-6">
         <h2 class="text-xl font-semibold">Exercices associés</h2>

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Lecon; // Importation de l'entité Lecon
+use App\Entity\Lecon;
 use App\Entity\Niveau; // Importation de l'entité Niveau
 use App\Entity\Matiere; // Importation de l'entité Matiere
 use Doctrine\Persistence\ManagerRegistry; // Importation de ManagerRegistry pour la gestion des entités
@@ -16,6 +16,28 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Lecon::class); // Appel du constructeur parent avec le registre et l'entité Lecon
+    }
+    
+    /**
+     * Find exercises by lesson.
+     * Cette méthode permet de trouver les exercices associés à une leçon via la matière.
+     * @param Lecon $lecon La leçon dont on cherche les exercices
+     * @return array Les exercices trouvés
+     */
+    public function findExercicesByLecon(Lecon $lecon)
+    {
+        // Récupération du gestionnaire d'entités
+        $em = $this->getEntityManager();
+        // Récupération du repository des exercices
+        $exerciceRepository = $em->getRepository('App\Entity\Exercice');
+        // Construction d'une requête pour récupérer les exercices
+        $queryBuilder = $exerciceRepository->createQueryBuilder('e');
+        // Tri des résultats par titre d'exercice
+        $queryBuilder->orderBy('e.titre', 'ASC');
+        // Obtention de la requête
+        $query = $queryBuilder->getQuery();
+        // Exécution de la requête et obtention des résultats
+        return $query->getResult();
     }
 
     /**

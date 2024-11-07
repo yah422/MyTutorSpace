@@ -26,9 +26,6 @@ class Exercice
     private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\ManyToOne(inversedBy: 'exercice')]
-    private ?Lecon $lecon = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exercice')]
     private ?Type $type = null;
 
     /**
@@ -36,6 +33,9 @@ class Exercice
      */
     #[ORM\OneToMany(targetEntity: Ressource::class, mappedBy: 'exercice')]
     private Collection $ressource;
+
+    #[ORM\ManyToOne(inversedBy: 'exercice')]
+    private ?Lecon $lecon = null;
 
     public function __construct()
     {
@@ -83,18 +83,6 @@ class Exercice
         return $this;
     }
 
-    public function getLecon(): ?Lecon
-    {
-        return $this->lecon;
-    }
-
-    public function setLecon(?Lecon $lecon): static
-    {
-        $this->lecon = $lecon;
-
-        return $this;
-    }
-
     public function getType(): ?Type
     {
         return $this->type;
@@ -133,6 +121,18 @@ class Exercice
                 $ressource->setExercice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLecon(): ?Lecon
+    {
+        return $this->lecon;
+    }
+
+    public function setLecon(?Lecon $lecon): static
+    {
+        $this->lecon = $lecon;
 
         return $this;
     }

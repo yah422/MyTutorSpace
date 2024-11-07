@@ -62,10 +62,17 @@ class Lecon
     #[ORM\JoinTable(name: "lecon_user")]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
+    private Collection $exercice;
+
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->exercice = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +185,36 @@ class Lecon
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercice(): Collection
+    {
+        return $this->exercice;
+    }
+
+    public function addExercice(Exercice $exercice): static
+    {
+        if (!$this->exercice->contains($exercice)) {
+            $this->exercice->add($exercice);
+            $exercice->setLecon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): static
+    {
+        if ($this->exercice->removeElement($exercice)) {
+            // set the owning side to null (unless already changed)
+            if ($exercice->getLecon() === $this) {
+                $exercice->setLecon(null);
+            }
+        }
+
         return $this;
     }
 }
