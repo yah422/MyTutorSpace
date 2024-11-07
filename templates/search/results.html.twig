@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Résultats de recherche{% endblock %}
+{% block title %} Résultats de recherche {% endblock %}
 
 {% block body %}
 <div class="container mx-auto px-4 py-8">
@@ -29,7 +29,7 @@
 
     {% if results.tuteurs|length > 0 %}
     <div>
-        <h2 class="text-2xl font-semibold mb-4">Tuteurs</h2>
+        <h2 class="text-2xl font-semibold mb-4"> Tuteurs </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for tuteur in results.tuteurs %}
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -38,7 +38,7 @@
                     <h3 class="text-xl font-semibold">{{ tuteur.prenom }} {{ tuteur.nom }}</h3>
                 </div>
                 <a href="{{ path('app_show_user', {'id': tuteur.id}) }}"
-                    class="inline-block bg-[#FFD700] text-black px-4 py-2 rounded hover:bg-[#FFE44D] transition-colors">
+                    style="background-color:#FFD700;" class="inline-block text-black px-4 py-2 rounded hover:bg-[#FFE44D] transition-colors">
                     Voir le profil
                 </a>
             </div>
@@ -48,7 +48,7 @@
     {% endif %}
     {% else %}
     <div class="bg-white rounded-lg shadow-md p-8 text-center">
-        <p class="text-xl text-gray-600">Aucun résultat trouvé pour votre recherche.</p>
+        <p class="text-xl text-white">Aucun résultat trouvé pour votre recherche.</p>
     </div>
     {% endif %}
 </div>
