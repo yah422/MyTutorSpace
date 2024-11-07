@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS `lecon` (
   `user_id` int NOT NULL,
   `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contenu` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_94E6242EF46CD258` (`matiere_id`),
   KEY `IDX_94E6242EA76ED395` (`user_id`),
@@ -61,19 +60,19 @@ CREATE TABLE IF NOT EXISTS `lecon` (
 
 -- Listage des données de la table mytutorspace2.lecon : ~12 rows (environ)
 DELETE FROM `lecon`;
-INSERT INTO `lecon` (`id`, `matiere_id`, `user_id`, `titre`, `description`, `contenu`) VALUES
-	(1, 2, 21, 'Emission et perception d\'un son', '', ''),
-	(2, 1, 23, 'Les suites', '', ''),
-	(3, 1, 12, 'Propriétés des angles et triangles', '', ''),
-	(4, 1, 21, 'Calcul des probabilités', '', ''),
-	(5, 2, 23, 'Réactions acido-basiques', '', ''),
-	(6, 5, 21, 'Analyse du genre narratif', 'az', ''),
-	(7, 5, 23, 'L’argumentation et les figures de style', 'az', ''),
-	(8, 6, 21, 'La révolution française et ses conséquences', 'az', ''),
-	(9, 6, 23, 'La Seconde Guerre mondiale', 'az', ''),
-	(11, 4, 23, 'Officia sunt delenit', 'az', ''),
-	(12, 8, 15, 'Fugit aliquam nostr', 'Dignissimos necessit', ''),
-	(13, 2, 17, 'Hic sequi quo dolore', 'Maiores deleniti ull', '');
+INSERT INTO `lecon` (`id`, `matiere_id`, `user_id`, `titre`, `description`) VALUES
+	(1, 2, 21, 'Emission et perception d\'un son', ''),
+	(2, 1, 23, 'Les suites', ''),
+	(3, 1, 12, 'Propriétés des angles et triangles', ''),
+	(4, 1, 21, 'Calcul des probabilités', ''),
+	(5, 2, 23, 'Réactions acido-basiques', ''),
+	(6, 5, 21, 'Analyse du genre narratif', 'az'),
+	(7, 5, 23, 'L’argumentation et les figures de style', 'az'),
+	(8, 6, 21, 'La révolution française et ses conséquences', 'az'),
+	(9, 6, 23, 'La Seconde Guerre mondiale', 'az'),
+	(11, 4, 23, 'Officia sunt delenit', 'az'),
+	(12, 8, 15, 'Fugit aliquam nostr', 'Dignissimos necessit'),
+	(13, 2, 17, 'Hic sequi quo dolore', 'Maiores deleniti ull');
 
 -- Listage de la structure de table mytutorspace2. lien
 CREATE TABLE IF NOT EXISTS `lien` (
