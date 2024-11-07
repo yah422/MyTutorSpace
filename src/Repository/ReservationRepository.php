@@ -3,12 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use App\Entity\User;
+use App\Entity\Lecon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Reservation>
- */
 class ReservationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +15,44 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
-    //    /**
-    //     * @return Reservation[] Returns an array of Reservation objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findConflictingReservations(Lecon $lecon, \DateTime $dateDebut, \DateTime $dateFin): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.lecon = :lecon')
+            ->andWhere('r.statut = :statut')
+            ->andWhere(
+                '(r.dateDebut BETWEEN :debut AND :fin) OR
+                (r.dateFin BETWEEN :debut AND :fin) OR
+                (:debut BETWEEN r.dateDebut AND r.dateFin)'
+            )
+            ->setParameters([
+                'lecon' => $lecon,
+                'statut' => 'confirmee',
+                'debut' => $dateDebut,
+                'fin' => $dateFin
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Reservation
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByEleve(User $eleve): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.eleve = :eleve')
+            ->setParameter('eleve', $eleve)
+            ->orderBy('r.dateDebut', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByTuteur(User $tuteur): array
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.lecon', 'l')
+            ->where('l.user = :tuteur')
+            ->setParameter('tuteur', $tuteur)
+            ->orderBy('r.dateDebut', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

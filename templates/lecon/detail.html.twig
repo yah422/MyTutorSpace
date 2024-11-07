@@ -3,14 +3,21 @@
 {% block title %} Détails de la leçon {% endblock %}
 
 {% block body %}
-
 <div class="detailLecon">
     <div>
         <h1> {{ lecon.titre }} </h1>
+        {% if is_granted('ROLE_USER') and not is_granted('ROLE_TUTEUR') and app.user != lecon.user %}
+        <div class="mt-4">
+            <a href="{{ path('app_reservation_new', {'id': lecon.id}) }}" class="text-black font-bold py-2 px-4 rounded"
+                style="background-color: #70F9D9;">
+                Réserver ce cours
+            </a>
+        </div>
+        <br>
+        {% endif %}
     </div>
 
     <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
-
         <div>
             <p class="text-black">
                 <strong class="font-semibold">Description: </strong> {{ lecon.description }} <br>
@@ -22,7 +29,8 @@
         <br>
         <div>
             {% if lecon.pdfPath %}
-            <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;" href="{{ asset('uploads/pdfs/' ~ lecon.pdfPath) }}">Télécharger le PDF</a>
+            <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;"
+                href="{{ asset('uploads/pdfs/' ~ lecon.pdfPath) }}">Télécharger le PDF</a>
             {% endif %}
         </div>
 
@@ -30,7 +38,8 @@
         <div class="acceeDetail">
             <div>
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TUTEUR') %}
-                <a href="{{ path('edit_lecon', {'id': lecon.id} ) }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
+                <a href="{{ path('edit_lecon', {'id': lecon.id} ) }}" class="text-black font-bold py-2 px-4 rounded"
+                    style="background-color: #FFD700;">
                     Modifier un cours
                 </a>
                 {% endif %}
@@ -41,48 +50,56 @@
     <br>
 
     <div class="exerciceSection">
-        {% for exercice in lecon.exercice %}                
-            <a  class="text-black" href="{{ path('show_exercice',{'id': exercice.id })}}">
-                <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        Exercice : {{ exercice.titre }}
-                </div>
-            </a>
-            <br>  
-            
-            {% for ressource in exercice.ressource %}
+        {% for exercice in lecon.exercice %}
+        <a class="text-black" href="{{ path('show_exercice',{'id': exercice.id })}}">
+            <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                Exercice : {{ exercice.titre }}
+            </div>
+        </a>
+        <br>
 
-                <a  class="text-black" href="{{ path('show_ressource',{'id': ressource.id })}}">
-                    <div style="background-color:#ECECEC;" class="text-blue-800 rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                            Ressources : {{ ressource.titre }}
-                    </div>
-                </a>
-                <br>
-            {% endfor %}
+        {% for ressource in exercice.ressource %}
+        <a class="text-black" href="{{ path('show_ressource',{'id': ressource.id })}}">
+            <div style="background-color:#ECECEC;"
+                class="text-blue-800 rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                Ressources : {{ ressource.titre }}
+            </div>
+        </a>
+        <br>
         {% endfor %}
-            <br>
+        {% endfor %}
+        <br>
     </div>
     <br>
-    
 
-    {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
-    {# <div class="mt-6">
-        <h2 class="text-xl font-semibold">Exercices associés</h2>
-
-        {% if exercices is not empty %}
-        <ul class="mt-4">
-            {% for exercice in exercices %}
-            <li class="mb-2">
-                <a href="{{ path('show_exercice', {'id': exercice.id }) }}" class="text-blue-500 underline">
-                    {{ exercice.titre }}
+    {% if is_granted('ROLE_TUTEUR') and app.user == lecon.user %}
+    <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
+        <h2 class="text-xl font-bold mb-4">Réservations en attente</h2>
+        {% set hasReservations = false %}
+        {% for reservation in lecon.reservations %}
+        {% if reservation.statut == 'en_attente' %}
+        {% set hasReservations = true %}
+        <div class="mb-4 p-4 border-b">
+            <p>Élève : {{ reservation.eleve.prenom }} {{ reservation.eleve.nom }}</p>
+            <p>Du : {{ reservation.dateDebut|date('d/m/Y H:i') }}</p>
+            <p>Au : {{ reservation.dateFin|date('d/m/Y H:i') }}</p>
+            <div class="mt-2">
+                <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'confirmee'}) }}"
+                    class="text-black font-bold py-2 px-4 rounded mr-2" style="background-color: #FFD700;">
+                    Confirmer
                 </a>
-                <p class="text-gray-400">Date de création : {{ exercice.dateCreation|date('d/m/Y') }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p class="text-gray-400">Aucun exercice disponible pour cette leçon.</p>
+                <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'annulee'}) }}"
+                    class="text-white font-bold py-2 px-4 rounded" style="background-color: #FF0000;">
+                    Refuser
+                </a>
+            </div>
+        </div>
         {% endif %}
-    </div> #}
-
+        {% endfor %}
+        {% if not hasReservations %}
+        <p class="text-gray-500">Aucune réservation en attente.</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
