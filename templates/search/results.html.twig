@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Résultats de recherche pour "{{ query }}"</h1>
+
+    {% if results.lecons|length > 0 or results.tuteurs|length > 0 %}
+    {% if results.lecons|length > 0 %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4"> Cours </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for lecon in results.lecons %}
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold mb-2">{{ lecon.titre }}</h3>
+                {% if lecon.description %}
+                <p class="text-gray-600 mb-4">{{ lecon.description|slice(0, 150) }}...</p>
+                {% endif %}
+                <a href="{{ path('show_lecon', {'id': lecon.id}) }}"
+                    class="inline-block bg-[#1B4255] text-white px-4 py-2 rounded hover:bg-[#2C5A6E] transition-colors">
+                    Voir la leçon
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if results.tuteurs|length > 0 %}
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Tuteurs</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for tuteur in results.tuteurs %}
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <img src="{{ asset('img/user.png') }}" alt="Photo de profil" class="w-12 h-12 rounded-full mr-4">
+                    <h3 class="text-xl font-semibold">{{ tuteur.prenom }} {{ tuteur.nom }}</h3>
+                </div>
+                <a href="{{ path('app_show_user', {'id': tuteur.id}) }}"
+                    class="inline-block bg-[#FFD700] text-black px-4 py-2 rounded hover:bg-[#FFE44D] transition-colors">
+                    Voir le profil
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+        <p class="text-xl text-gray-600">Aucun résultat trouvé pour votre recherche.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
