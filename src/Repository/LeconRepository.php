@@ -21,6 +21,8 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     /**
      * Find exercises by lesson.
      * Cette méthode permet de trouver les exercices associés à une leçon via la matière.
+     * La méthode utilise Doctrine pour construire une requête qui récupère les exercices
+     * liés à la leçon passée en paramètre via le gestionnaire d'entités.
      * @param Lecon $lecon La leçon dont on cherche les exercices
      * @return array Les exercices trouvés
      */
@@ -28,42 +30,40 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     {
         // Récupération du gestionnaire d'entités
         $em = $this->getEntityManager();
+        
         // Récupération du repository des exercices
         $exerciceRepository = $em->getRepository('App\Entity\Exercice');
-        // Construction d'une requête pour récupérer les exercices
-        $queryBuilder = $exerciceRepository->createQueryBuilder('e');
-        // Tri des résultats par titre d'exercice
-        $queryBuilder->orderBy('e.titre', 'ASC');
-        // Obtention de la requête
-        $query = $queryBuilder->getQuery();
+        
+        // Construction d'une requête qui permet de trouver les exercices liés
+        // à la leçon passée en paramètre
+        $queryBuilder = $exerciceRepository->createQueryBuilder('e')
+            ->where('e.lecon = :lecon')
+            ->setParameter('lecon', $lecon)
+            ->orderBy('e.titre', 'ASC');
+        
         // Exécution de la requête et obtention des résultats
-        return $query->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
+    
 
-    /**
-     * Find resources by lesson.
-     * Cette méthode permet de trouver les ressources associées aux exercices d'une leçon.
-     * @param Lecon $lecon La leçon dont on cherche les ressources
-     * @return array Les ressources trouvées
-     */
-    public function findRessourcesByLecon(Lecon $lecon)
-    {
-        // Récupération du gestionnaire d'entités
-        $em = $this->getEntityManager();
-        // Récupération du repository des ressources
-        $ressourceRepository = $em->getRepository('App\Entity\Ressource');
-        // Construction d'une requête pour récupérer les ressources
-        $queryBuilder = $ressourceRepository->createQueryBuilder('r');
-        // Ajout d'une condition pour filtrer par exercice associé à la leçon
-        $queryBuilder->where('r.exercice = :exercice')
-            ->setParameter('exercice', $lecon->getExercice());
-        // Tri des résultats par titre de ressource
-        $queryBuilder->orderBy('r.titre', 'ASC');
-        // Obtention de la requête
-        $query = $queryBuilder->getQuery();
-        // Exécution de la requête et obtention des résultats
-        return $query->getResult();
-    }
+
+    // /**
+    //  * Find resources by lesson.
+    //  * @param Lecon $lecon
+    //  * @return array
+    //  */
+    // public function findRessourcesByLecon(Lecon $lecon)
+    // {
+    //     return $this->createQueryBuilder('r')
+    //         ->select('r')
+    //         ->join('r.exercice', 'e')
+    //         ->where('e.lecon = :lecon')
+    //         ->setParameter('lecon', $lecon)
+    //         ->orderBy('r.titre', 'ASC')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+    
 
     /**
      * Find lessons by level.

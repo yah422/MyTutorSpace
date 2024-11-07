@@ -41,26 +41,28 @@
     <br>
 
     <div class="exerciceSection">
-        <h2 class="flex-start"> Exercices </h2>
         {% for exercice in lecon.exercice %}                
-        <a  class="text-black" href="{{ path('show_exercice',{'id': exercice.id })}}">
-            <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                    {{ exercice.titre }}
-            </div>
-        </a>
-
-        <h2 class="flex-start"> Ressources </h2>
-            {% for ressource in exercice.ressource %}
-            <a  class="text-black" href="{{ path('show_ressource',{'id': ressource.id })}}">
+            <a  class="text-black" href="{{ path('show_exercice',{'id': exercice.id })}}">
                 <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        {{ ressource.titre }}
+                        Exercice : {{ exercice.titre }}
                 </div>
             </a>
+            <br>  
+            
+            {% for ressource in exercice.ressource %}
+
+                <a  class="text-black" href="{{ path('show_ressource',{'id': ressource.id })}}">
+                    <div style="background-color:#ECECEC;" class="text-blue-800 rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                            Ressource : {{ ressource.titre }}
+                    </div>
+                </a>
+                <br>
             {% endfor %}
-
         {% endfor %}
-
+            <br>
     </div>
+    <br>
+    
 
     {# -------------------------------- Affichage des exercices associés à la leçon ----------------------------- #}
     {# <div class="mt-6">

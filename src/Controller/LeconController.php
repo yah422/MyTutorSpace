@@ -6,6 +6,7 @@ use App\Entity\Lecon;
 use App\Entity\Niveau;
 use App\Entity\Matiere;
 use App\Form\LeconType;
+use App\Entity\Exercice;
 use App\Entity\Ressource;
 use App\Repository\UserRepository;
 use App\Repository\LeconRepository;
@@ -181,16 +182,15 @@ class LeconController extends AbstractController
     }
 
     #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Lecon $lecon, LeconRepository $leconRepository, ExerciceRepository $exerciceRepository): Response
+    public function show(Exercice $exercice,Lecon $lecon, LeconRepository $leconRepository, ExerciceRepository $exerciceRepository): Response
     {
         $exercices = $exerciceRepository->findBy([], ['titre' => 'ASC']);
         $leconExercices = $leconRepository->findExercicesByLecon($lecon);
-        $leconRessources = $leconRepository->findRessourcesByLecon($lecon);
-
+        // $leconRessources = $leconRepository->findRessourcesByLecon($lecon);
         return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $leconExercices,
-            'ressource' => $leconRessources,
+            'exercice' => $exercice->getId(),
             'exercice_list' => $exercices,
         ]);
     }
