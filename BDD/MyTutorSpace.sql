@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `lecon` (
   `user_id` int NOT NULL,
   `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contenu` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pdf_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_94E6242EF46CD258` (`matiere_id`),
   KEY `IDX_94E6242EA76ED395` (`user_id`),
@@ -61,19 +61,33 @@ CREATE TABLE IF NOT EXISTS `lecon` (
 
 -- Listage des données de la table mytutorspace2.lecon : ~12 rows (environ)
 DELETE FROM `lecon`;
-INSERT INTO `lecon` (`id`, `matiere_id`, `user_id`, `titre`, `description`, `contenu`) VALUES
-	(1, 2, 21, 'Emission et perception d\'un son', '', ''),
-	(2, 1, 23, 'Les suites', '', ''),
-	(3, 1, 12, 'Propriétés des angles et triangles', '', ''),
-	(4, 1, 21, 'Calcul des probabilités', '', ''),
-	(5, 2, 23, 'Réactions acido-basiques', '', ''),
-	(6, 5, 21, 'Analyse du genre narratif', 'az', ''),
-	(7, 5, 23, 'L’argumentation et les figures de style', 'az', ''),
-	(8, 6, 21, 'La révolution française et ses conséquences', 'az', ''),
-	(9, 6, 23, 'La Seconde Guerre mondiale', 'az', ''),
-	(11, 4, 23, 'Officia sunt delenit', 'az', ''),
-	(12, 8, 15, 'Fugit aliquam nostr', 'Dignissimos necessit', ''),
-	(13, 2, 17, 'Hic sequi quo dolore', 'Maiores deleniti ull', '');
+INSERT INTO `lecon` (`id`, `matiere_id`, `user_id`, `titre`, `description`, `pdf_path`) VALUES
+	(1, 2, 21, 'Emission et perception d\'un son', '', NULL),
+	(2, 1, 23, 'Les suites', '', NULL),
+	(3, 1, 12, 'Propriétés des angles et triangles', '', NULL),
+	(4, 1, 21, 'Calcul des probabilités', '', NULL),
+	(5, 2, 23, 'Réactions acido-basiques', '', NULL),
+	(6, 5, 21, 'Analyse du genre narratif', 'az', NULL),
+	(7, 5, 23, 'L’argumentation et les figures de style', 'az', NULL),
+	(8, 6, 21, 'La révolution française et ses conséquences', 'az', NULL),
+	(9, 6, 23, 'La Seconde Guerre mondiale', 'az', NULL),
+	(11, 4, 23, 'Officia sunt delenit', 'az', NULL),
+	(12, 8, 15, 'Fugit aliquam nostr', 'Dignissimos necessit', NULL),
+	(13, 2, 17, 'Hic sequi quo dolore', 'Maiores deleniti ull', NULL);
+
+-- Listage de la structure de table mytutorspace2. lecon_user
+CREATE TABLE IF NOT EXISTS `lecon_user` (
+  `lecon_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`lecon_id`,`user_id`),
+  KEY `IDX_3955EC52EC1308A5` (`lecon_id`),
+  KEY `IDX_3955EC52A76ED395` (`user_id`),
+  CONSTRAINT `FK_3955EC52A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_3955EC52EC1308A5` FOREIGN KEY (`lecon_id`) REFERENCES `lecon` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table mytutorspace2.lecon_user : ~0 rows (environ)
+DELETE FROM `lecon_user`;
 
 -- Listage de la structure de table mytutorspace2. lien
 CREATE TABLE IF NOT EXISTS `lien` (
@@ -154,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `niveau_lecon` (
   CONSTRAINT `FK_7181D648EC1308A5` FOREIGN KEY (`lecon_id`) REFERENCES `lecon` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table mytutorspace2.niveau_lecon : ~10 rows (environ)
+-- Listage des données de la table mytutorspace2.niveau_lecon : ~9 rows (environ)
 DELETE FROM `niveau_lecon`;
 INSERT INTO `niveau_lecon` (`niveau_id`, `lecon_id`) VALUES
 	(1, 1),
@@ -227,27 +241,31 @@ CREATE TABLE IF NOT EXISTS `user` (
   `roles` json NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `about_me` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `niveau_id` int DEFAULT NULL,
+  `plain_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`)
+  UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`),
+  KEY `IDX_8D93D649B3E9C81` (`niveau_id`),
+  CONSTRAINT `FK_8D93D649B3E9C81` FOREIGN KEY (`niveau_id`) REFERENCES `niveau` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table mytutorspace2.user : ~14 rows (environ)
 DELETE FROM `user`;
-INSERT INTO `user` (`id`, `email`, `nom`, `prenom`, `is_verified`, `roles`, `password`, `about_me`) VALUES
-	(1, 'boreki@mailinator.com', 'Elit minim eu nisi', 'Occaecat aut ipsa u', 0, '["ROLE_TUTEUR"]', '$2y$13$oN31yrC5RxdHdaOSy9anN.a1DMqaAPKpq2dnWs1WmFec.AzkdL2EC', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(2, 'bubodosu@mailinator.com', 'eleve2', 'Dolore enim quisquam', 0, '["ROLE_ELEVE"]', '$2y$13$dI3E7lJx2ThmDLR4OOYqgug2bEM2wA8a6xbdEKaKqHu6rd0ms.OZG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(3, 'nujuc@mailinator.com', 'Libero esse in ut o', 'Quo quis mollitia ei', 0, '["ROLE_PARENT"]', '$2y$13$mDdX/KtiOhPzXTdTvyGXd.MnNxIX4ApSSSMvHrcSWAP1vnDAVjSKG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(4, 'asmi@mailinator.com', 'Velit sit et delen', 'Minima ut aliquid ad', 0, '["ROLE_USER"]', '$2y$13$FDqceW80TQQDBWVWQTGiZe9BR79maMxeOaoFzO84BM7cfYccyN4HG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(5, 'vulyl@mailinator.com', 'Amet in voluptatibu', 'Autem consequatur N', 0, '["ROLE_USER"]', '$2y$13$Ii/YLXynBLA4iuDh0Q5QKuiO3h4Wak8Pb5T3XEWUcLU0B0p6baS6O', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(6, 'casorucaja@mailinator.com', 'Voluptas dolore elig', 'Ut doloremque volupt', 0, '["ROLE_USER"]', '$2y$13$GTlZYDnRlI5Y9nGNf6dTxeDyLmGqU3Mf8beRjV2Ua1LgSg4pgA5hi', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(7, 'mynip@mailinator.com', 'Qui non ipsam odit n', 'Eiusmod reprehenderi', 0, '["ROLE_ADMIN"]', '$2y$13$yxhaVICHFRtBZD5RXIPY1.b6WFNCvOm5n14y2IE9goL3Te0l0dG86', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(8, 'puxy@mailinator.com', 'eleve1', 'Porro aut fugiat se', 0, '["ROLE_ELEVE"]', '$2y$13$RZOgfjxThSpFiCYPcH6GkOwOMz6knYt5rfil8o5V8m5ohuzelY9xe', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(9, 'zacorer@mailinator.com', 'tuteur1', 'Asperiores quo ut do', 0, '["ROLE_TUTEUR"]', '$2y$13$sqmRr9NZmr9t1sqj9YKSg.Q0jFZlomhZMkYKa1POgrilwmtYQAlNG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(10, 'movujawasa@mailinator.com', 'Quia illo error sequ', 'Eaque qui dolor offi', 0, '["ROLE_PARENT"]', '$2y$13$EzlX22zrJE5gc4tlRzBzU.JXkSEGvvMkctG0qf1ijtiRDoK90qUE.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(11, 'rykybu@mailinator.com', 'tuteur2', 'Architecto quia quis', 0, '["ROLE_TUTEUR"]', '$2y$13$Ub7F.E7xJkTI4pspjIx36uajm3JlDqlW/zwu61oRB9w1d1ZL4vxY.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(12, 'yami@mailinator.com', 'Vel excepteur velit', 'Optio eos perspici', 0, '["ROLE_ELEVE"]', '$2y$13$oSRquj/ATE5o4gRI5wYPWuM7Wz/0.FJrBZOj0Yj80Vrtez/aV0r1u', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(13, 'pefev@mailinator.com', 'Voluptatum similique', 'Non a ipsum dolorib', 0, '["ROLE_PARENT"]', '$2y$13$P.ihuRkfZOYqaqIo9olmO.jljjWfGcqZgMWtbfWvjChIXyz2RUOsO', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.'),
-	(14, 'dezaben@mailinator.com', 'Non voluptates atque', 'malak', 0, '["ROLE_ELEVE"]', '$2y$13$jcjp99kNgYjSlEWUTASwCO17ifE8ld1PzVG9ga8QttzqjRsozS0qy', 'Bonjour ! Je suis Malak, un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.\n\nJe crois fermement que chaque élève est unique et mérite une attention personnalisée. Mon approche consiste à créer un environnement d\'apprentissage positif et stimulant, où chacun peut s\'épanouir. J\'aime utiliser des méthodes interactives, comme des jeux éducatifs et des projets pratiques, tout en intégrant des outils numériques pour rendre l\'apprentissage plus dynamique.\n\nEn dehors de l\'enseignement, je suis passionnée par la musique et le jardinage, ce qui me permet de rester équilibrée et inspirée. J\'ai hâte de travailler avec vous et de vous aider à atteindre vos objectifs académiques !');
+INSERT INTO `user` (`id`, `email`, `nom`, `prenom`, `is_verified`, `roles`, `password`, `about_me`, `niveau_id`, `plain_password`) VALUES
+	(1, 'boreki@mailinator.com', 'Elit minim eu nisi', 'Occaecat aut ipsa u', 0, '["ROLE_TUTEUR"]', '$2y$13$oN31yrC5RxdHdaOSy9anN.a1DMqaAPKpq2dnWs1WmFec.AzkdL2EC', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(2, 'bubodosu@mailinator.com', 'eleve2', 'Dolore enim quisquam', 0, '["ROLE_ELEVE"]', '$2y$13$dI3E7lJx2ThmDLR4OOYqgug2bEM2wA8a6xbdEKaKqHu6rd0ms.OZG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(3, 'nujuc@mailinator.com', 'Libero esse in ut o', 'Quo quis mollitia ei', 0, '["ROLE_PARENT"]', '$2y$13$mDdX/KtiOhPzXTdTvyGXd.MnNxIX4ApSSSMvHrcSWAP1vnDAVjSKG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(4, 'asmi@mailinator.com', 'Velit sit et delen', 'Minima ut aliquid ad', 0, '["ROLE_USER"]', '$2y$13$FDqceW80TQQDBWVWQTGiZe9BR79maMxeOaoFzO84BM7cfYccyN4HG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(5, 'vulyl@mailinator.com', 'Amet in voluptatibu', 'Autem consequatur N', 0, '["ROLE_USER"]', '$2y$13$Ii/YLXynBLA4iuDh0Q5QKuiO3h4Wak8Pb5T3XEWUcLU0B0p6baS6O', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(6, 'casorucaja@mailinator.com', 'Voluptas dolore elig', 'Ut doloremque volupt', 0, '["ROLE_USER"]', '$2y$13$GTlZYDnRlI5Y9nGNf6dTxeDyLmGqU3Mf8beRjV2Ua1LgSg4pgA5hi', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(7, 'mynip@mailinator.com', 'Qui non ipsam odit n', 'Eiusmod reprehenderi', 0, '["ROLE_ADMIN"]', '$2y$13$yxhaVICHFRtBZD5RXIPY1.b6WFNCvOm5n14y2IE9goL3Te0l0dG86', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(8, 'puxy@mailinator.com', 'eleve1', 'Porro aut fugiat se', 0, '["ROLE_ELEVE"]', '$2y$13$RZOgfjxThSpFiCYPcH6GkOwOMz6knYt5rfil8o5V8m5ohuzelY9xe', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(9, 'zacorer@mailinator.com', 'tuteur1', 'Asperiores quo ut do', 0, '["ROLE_TUTEUR"]', '$2y$13$sqmRr9NZmr9t1sqj9YKSg.Q0jFZlomhZMkYKa1POgrilwmtYQAlNG', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(10, 'movujawasa@mailinator.com', 'Quia illo error sequ', 'Eaque qui dolor offi', 0, '["ROLE_PARENT"]', '$2y$13$EzlX22zrJE5gc4tlRzBzU.JXkSEGvvMkctG0qf1ijtiRDoK90qUE.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(11, 'rykybu@mailinator.com', 'tuteur2', 'Architecto quia quis', 0, '["ROLE_TUTEUR"]', '$2y$13$Ub7F.E7xJkTI4pspjIx36uajm3JlDqlW/zwu61oRB9w1d1ZL4vxY.', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(12, 'yami@mailinator.com', 'Vel excepteur velit', 'Optio eos perspici', 0, '["ROLE_ELEVE"]', '$2y$13$oSRquj/ATE5o4gRI5wYPWuM7Wz/0.FJrBZOj0Yj80Vrtez/aV0r1u', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(13, 'pefev@mailinator.com', 'Voluptatum similique', 'Non a ipsum dolorib', 0, '["ROLE_PARENT"]', '$2y$13$P.ihuRkfZOYqaqIo9olmO.jljjWfGcqZgMWtbfWvjChIXyz2RUOsO', 'un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.', NULL, NULL),
+	(14, 'dezaben@mailinator.com', 'Non voluptates atque', 'malak', 0, '["ROLE_ELEVE"]', '$2y$13$jcjp99kNgYjSlEWUTASwCO17ifE8ld1PzVG9ga8QttzqjRsozS0qy', 'Bonjour ! Je suis Malak, un tuteur passionné par l\'éducation et l\'accompagnement des élèves dans leur parcours scolaire. Avec une expérience de plus de 5 ans dans l\'enseignement, j\'ai eu l\'occasion d\'aider des élèves de tous niveaux à développer leurs compétences en mathématiques et en sciences.\n\nJe crois fermement que chaque élève est unique et mérite une attention personnalisée. Mon approche consiste à créer un environnement d\'apprentissage positif et stimulant, où chacun peut s\'épanouir. J\'aime utiliser des méthodes interactives, comme des jeux éducatifs et des projets pratiques, tout en intégrant des outils numériques pour rendre l\'apprentissage plus dynamique.\n\nEn dehors de l\'enseignement, je suis passionnée par la musique et le jardinage, ce qui me permet de rester équilibrée et inspirée. J\'ai hâte de travailler avec vous et de vous aider à atteindre vos objectifs académiques !', NULL, NULL);
 
 -- Listage de la structure de table mytutorspace2. user_lecon
 CREATE TABLE IF NOT EXISTS `user_lecon` (
@@ -260,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `user_lecon` (
   CONSTRAINT `FK_7624DF76EC1308A5` FOREIGN KEY (`lecon_id`) REFERENCES `lecon` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table mytutorspace2.user_lecon : ~3 rows (environ)
+-- Listage des données de la table mytutorspace2.user_lecon : ~2 rows (environ)
 DELETE FROM `user_lecon`;
 INSERT INTO `user_lecon` (`user_id`, `lecon_id`) VALUES
 	(1, 7),
@@ -289,6 +307,20 @@ INSERT INTO `user_matiere` (`user_id`, `matiere_id`) VALUES
 	(1, 8),
 	(21, 5),
 	(23, 1);
+
+-- Listage de la structure de table mytutorspace2. user_niveau
+CREATE TABLE IF NOT EXISTS `user_niveau` (
+  `user_id` int NOT NULL,
+  `niveau_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`niveau_id`),
+  KEY `IDX_2E8DE856A76ED395` (`user_id`),
+  KEY `IDX_2E8DE856B3E9C81` (`niveau_id`),
+  CONSTRAINT `FK_2E8DE856A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_2E8DE856B3E9C81` FOREIGN KEY (`niveau_id`) REFERENCES `niveau` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table mytutorspace2.user_niveau : ~0 rows (environ)
+DELETE FROM `user_niveau`;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
