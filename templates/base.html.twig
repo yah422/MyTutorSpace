@@ -20,7 +20,10 @@
     <nav class="bg-[#1B4255] p-4">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo de la navbar -->
-            <a href="{{ path('home') }}" style="color:#FFD700;" class=" text-xl font-bold">MyTutorSpace</a>
+            <a href="{{ path('home') }}" style="color:#FFD700;" class="flex flex-rowtext-xl font-bold items-center">
+                <img src="{{ asset('img/iconTitle.png') }}" alt="Logo">
+                <span> MyTutorSpace </span>
+            </a>
 
             <!-- Menu principal -->
             <ul class="flex items-center space-x-6">
