@@ -17,19 +17,19 @@
     </div>
 
     <div style="background-color: #ECECEC;" class="container mx-auto p-6 rounded-lg shadow-lg max-w-3xl mb-6">
-        <p class="text-[#1D1D1D]">
-            <strong class="font-semibold text-[#D4AF37]"> Description : </strong><br> {{ matiere.description | default('Aucune description disponible.') }}
+        <p>
+            <strong class="font-semibold text-black"> Description : </strong><br> {{ matiere.description | default('Aucune description disponible.') }}
         </p>
     </div>
 
     <div class="container mx-auto px-4 py-8 text-center">
-        <h1 class="text-4xl font-bold text-[#D4AF37] mb-4"> Tuteurs </h1>
+        <h1 class="text-4xl font-bold mb-4"> Tuteurs </h1>
     </div>
 
     <div style="background-color: #ECECEC;" class="container mx-auto p-6 rounded-lg shadow-lg max-w-3xl">
         <div class="space-y-2">
             {% for tuteur in tuteurs %}
-                <a href="{{ path('app_show_user', {'id': tuteur.id }) }}" class="block text-lg text-gold transition">
+                <a href="{{ path('app_show_user', {'id': tuteur.id }) }}" class="block text-lg text-black transition">
                     {{ tuteur.nom }} {{ tuteur.prenom }}
                 </a>
             {% else %}
