@@ -9,7 +9,7 @@
     {% if results.lecons|length > 0 or results.tuteurs|length > 0 %}
     {% if results.lecons|length > 0 %}
     <div class="mb-8">
-        <h2 class="text-2xl font-semibold mb-4"> Cours </h2>
+        <h2 class="text-3xl font-semibold mb-4"> Cours </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for lecon in results.lecons %}
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -29,12 +29,12 @@
 
     {% if results.tuteurs|length > 0 %}
     <div>
-        <h2 class="text-2xl font-semibold mb-4"> Tuteurs </h2>
+        <h2 class="text-3xl font-semibold mb-4"> Tuteurs </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for tuteur in results.tuteurs %}
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center mb-4">
-                    <img src="{{ asset('img/user.png') }}" alt="Photo de profil" class="w-12 h-12 rounded-full mr-4">
+                    <img src="{{ asset('img/userMini.png') }}" alt="Photo de profil" class="w-16 h-16 mr-4">
                     <h3 class="text-xl font-semibold">{{ tuteur.prenom }} {{ tuteur.nom }}</h3>
                 </div>
                 <a href="{{ path('app_show_user', {'id': tuteur.id}) }}"
