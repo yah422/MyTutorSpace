@@ -11,7 +11,7 @@
 
     <div class="container mx-auto px-4 py-8">
 
-        <div style="margin: 0px; height:100vh;" id="homePage1Part" class="h-screen px-4 py-8 flex flex-col">
+        <div style="margin: 0px; height:100vh; justify-content: flex-start;" id="homePage1Part" class="h-screen px-4 py-8 flex flex-col ">
             {% if app.user %}
                 <div class="text-gray-300 p-4 mb-4 rounded">
                     <p class="text-xl">Bienvenue, {{ app.user.prenom }} {{ app.user.nom }} !</p>
