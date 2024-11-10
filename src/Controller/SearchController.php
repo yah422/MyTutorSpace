@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
-use App\Repository\LeconRepository;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\LeconRepository;
+use App\Repository\MatiereRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SearchController extends AbstractController
 {
     #[Route('/search', name: 'app_search')]
-    public function search(Request $request, LeconRepository $leconRepository, UserRepository $userRepository): Response
+    public function search(Request $request,MatiereRepository $matiereRepository, LeconRepository $leconRepository, UserRepository $userRepository): Response
     {
         $query = $request->query->get('q');
         $results = [];
@@ -22,6 +23,14 @@ class SearchController extends AbstractController
             $lecons = $leconRepository->createQueryBuilder('l')
                 ->where('l.titre LIKE :query')
                 ->orWhere('l.description LIKE :query')
+                ->setParameter('query', '%' . $query . '%')
+                ->getQuery()
+                ->getResult();
+
+            // Recherche dans les matières
+            $matieres = $matiereRepository->createQueryBuilder('m')
+                ->where('m.nom LIKE :query')
+                ->orWhere('m.description LIKE :query')
                 ->setParameter('query', '%' . $query . '%')
                 ->getQuery()
                 ->getResult();
@@ -38,7 +47,8 @@ class SearchController extends AbstractController
 
             $results = [
                 'lecons' => $lecons,
-                'tuteurs' => $tuteurs
+                'tuteurs' => $tuteurs,
+                'matieres' => $matieres
             ];
         }
 
