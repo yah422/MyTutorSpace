@@ -111,6 +111,9 @@ h2{
 
 /* -------------------------------  HomePage ------------------------------- */
 
+li {
+    list-style: none;
+}
 #homePage1Part{
     display: flex;
     flex-direction: row;
