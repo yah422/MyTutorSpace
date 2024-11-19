@@ -33,7 +33,7 @@ Pour installer et exécuter le projet localement, suivez ces étapes :
    npm install
    ```
 3. Configurez votre environnement :
-   - Renommez `.env.example` en `.env` et configurez les variables d'environnement.
+    Renommez `.env.example` en `.env` et configurez les variables d'environnement.
 4. Exécutez les migrations de la base de données :
    ```bash
    php bin/console doctrine:migrations:migrate
