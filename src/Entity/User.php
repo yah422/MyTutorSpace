@@ -70,6 +70,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Niveau::class)]
     private ?Niveau $niveau = null;
 
+    #[Vich\UploadableField(mapping: 'user_photos', fileNameProperty: 'photo')]
+    private ?File $photoFile = null;
+
+    private ?string $photo = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
+    // Getters et Setters
+    public function setPhotoFile(?File $photoFile = null): void
+    {
+        $this->photoFile = $photoFile;
+
+        if ($photoFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhoto(?string $photo): void
+    {
+        $this->photo = $photo;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
     public function getNiveau(): ?Niveau
     {
         return $this->niveau;

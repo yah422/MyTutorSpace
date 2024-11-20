@@ -3,38 +3,43 @@
 {% block title %} Détail {{ matiere.nom }} {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{{ parent() }}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-<div class="content mt-12 min-h-screen">
+<div class="min-h-screen bg-[#1B4255] text-white py-12">
 
-    {# -------------------------------- Affichage détails matière ----------------------------- #}
+    {# ------------------------- Affichage des détails de la matière ------------------------- #}
+    <div class="container p-8 max-w-3xl mx-auto">
+        <h1 class="flex flex-start justify-start content-start text-4xl font-bold text-center mb-8">Détail de la matière
+        </h1>
 
-    <div class="container mx-auto px-4 py-8 text-center">
-        <h1 class="text-4xl font-bold mb-4"> {{ matiere.nom }} </h1>
-    </div>
+        <div style="color:#1B4255;" class="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
+            <h2 style="color:#1B4255;" class="flex flex-start justify-start content-start text-2xl font-semibold mb-4">
+                {{ matiere.nom }}</h2>
+            <p>
+                <span class="font-medium">Description :</span><br>
+                {{ matiere.description | default('Aucune description disponible.') }}
+            </p>
+        </div>
 
-    <div style="background-color: #ECECEC;" class="container mx-auto p-6 rounded-lg shadow-lg max-w-3xl mb-6">
-        <p>
-            <strong class="font-semibold text-black"> Description : </strong><br> {{ matiere.description | default('Aucune description disponible.') }}
-        </p>
-    </div>
+        {# --------------------------- Liste des tuteurs associés ---------------------------- #}
+        <h2 class="flex flex-start justify-start content-start text-3xl font-bold text-center mb-6">Liste des tuteurs</h2>
 
-    <div class="container mx-auto px-4 py-8 text-center">
-        <h1 class="text-4xl font-bold mb-4"> Tuteurs </h1>
-    </div>
-
-    <div style="background-color: #ECECEC;" class="container mx-auto p-6 rounded-lg shadow-lg max-w-3xl">
-        <div class="space-y-2">
-            {% for tuteur in tuteurs %}
-                <a href="{{ path('app_show_user', {'id': tuteur.id }) }}" class="block text-lg text-black transition">
-                    {{ tuteur.nom }} {{ tuteur.prenom }}
-                </a>
-            {% else %}
-                <p class="text-center text-[#1D1D1D]">Aucun tuteur associé pour cette matière.</p>
-            {% endfor %}
+        <div class="bg-white text-[#1B4255] shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
+            <div class="divide-y divide-gray-200">
+                {% for tuteur in tuteurs %}
+                <div class="py-4">
+                    <a href="{{ path('app_show_user', {'id': tuteur.id }) }}" style="color:#1B4255;"
+                        class="text-lg font-medium hover:text-[#154a5e] transition">
+                        {{ tuteur.nom }} {{ tuteur.prenom }}
+                    </a>
+                </div>
+                {% else %}
+                <p class="text-center py-4">Aucun tuteur associé pour cette matière.</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

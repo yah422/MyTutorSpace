@@ -8,15 +8,33 @@
 
     {{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
 
-    {# Champs du formulaire #}
     <div class="space-y-4">
+        {# Boucle pour les champs standards, sauf "photoFile" #}
         {% for field in form %}
-            <div class="mb-4">
-                {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
-                {{ form_widget(field, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50'}}) }}
-                {{ form_errors(field) }}
-            </div>
+            {% if field.vars.name != 'photoFile' %}
+                <div class="mb-4">
+                    {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
+                    {{ form_widget(field, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50'}}) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endif %}
         {% endfor %}
+
+        {# Champ "photoFile" pour la gestion de l'image #}
+        <div class="mb-4">
+            {{ form_row(form.photoFile, {
+                'label': 'Photo de profil',
+                'label_attr': {'class': 'block font-semibold text-gray-300'},
+                'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm'}
+            }) }}
+        </div>
+
+        {# Affichage de l'image actuelle si elle existe #}
+        {% if user.photo %}
+            <div class="mb-4">
+                <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de profil" class="h-32 w-32 object-cover rounded-full mx-auto">
+            </div>
+        {% endif %}
     </div>
 
     <br>

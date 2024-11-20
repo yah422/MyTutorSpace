@@ -6,6 +6,10 @@
 parameters:
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     pdf_directory: '%kernel.project_dir%/public/uploads/pdfs'
+    uploads_directory: '%kernel.project_dir%/public/uploads/photos'
+    photos_directory: '%kernel.project_dir%/public/uploads/photos'
+
+
 
 
 services:

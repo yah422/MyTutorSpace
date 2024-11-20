@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use App\Repository\MatiereRepository;
 use App\Repository\NiveauRepository;
+use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -88,46 +89,41 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/edit/{id}', name: 'edit_user')]
-    public function edit(
-        User $user,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        MatiereRepository $matiereRepository,
-        NiveauRepository $niveauRepository
-    ): Response {
-        // Vérification des droits d'accès
-        $currentUser = $this->getUser();
-
-        // On vérifie si l'utilisateur est connecté et autorisé à modifier l'utilisateur
-        if ($currentUser === null || ($currentUser->getId() !== $user->getId() && !$security->isGranted('ROLE_ADMIN'))) {
-            return $this->render('user/errorPage.html.twig');
+    #[Route('/user/edit/{id}', name: 'edit_user', methods: ['GET', 'POST'])]
+    public function edit(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $user = $entityManager->getRepository(User::class)->find($id);
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur introuvable.');
         }
-
-        $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
-        $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
-        
+    
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            if ($plainPassword) {
-                $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+            $photoFile = $form->get('photo')->getData();
+    
+            if ($photoFile) {
+                $photoFilename = uniqid() . '.' . $photoFile->guessExtension();
+                $photoFile->move(
+                    $this->getParameter('photos_directory'),
+                    $photoFilename
+                );
+                $user->setPhoto($photoFilename);
             }
-
+    
             $entityManager->flush();
-
-            $this->addFlash('success', 'Utilisateur modifié avec succès !');
+    
+            $this->addFlash('success', 'Utilisateur modifié avec succès.');
             return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
         }
-
+    
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
-            'matieres' => $matieres,
-            'niveaux' => $niveaux,
+            'user' => $user,
         ]);
     }
+    
 
     #[Route('/user/{id}', name: 'app_show_user')]
     public function profile(
