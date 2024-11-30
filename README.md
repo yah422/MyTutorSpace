@@ -7,6 +7,7 @@
 
 ## Fonctionnalités
 
+
 - **Accès à des cours variés** : Explorez une large gamme de cours couvrant de nombreuses matières.
 - **Exercices** : Testez vos connaissances et améliorez vos compétences avec des exercices pratiques.
 - **Recherche de tuteurs** : Trouvez facilement des tuteurs disponibles dans la matière de votre choix.
