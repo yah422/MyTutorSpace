@@ -23,5 +23,8 @@
         "watch": "encore dev --watch",
         "build": "encore production --progress",
         "build:css": "npx tailwindcss -i ./assets/styles/app.css -o ./public/styles/output.css --watch"
+    },
+    "dependencies": {
+        "flatpickr": "^4.6.13"
     }
 }

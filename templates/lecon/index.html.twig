@@ -3,99 +3,109 @@
 {% block title %}Liste des Cours{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{{ parent() }}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-    <div class="min-h-screen mx-auto p-8">
-        <div class="mb-8 p-10">
-            <h1 class="flex items-start justify-start content-start text-5xl font-bold mb-4">Des cours privés adaptés à votre emploi du temps</h1>
-            <p class="text-xl text-gray-300 mb-8">
-                Trouvez votre cours idéal et profitez d'une leçon d'essai gratuite en vidéo. Ensuite, réservez des sessions en ligne qui s’adaptent à votre planning.
-            </p>
-        </div>
+<div class="min-h-screen mx-auto p-8">
+    <div class="mb-8 p-10">
+        <h1 class="flex items-start justify-start content-start text-5xl font-bold mb-4">Des cours privés adaptés à
+            votre emploi du temps</h1>
+        <p class="text-xl text-gray-300 mb-8">
+            Trouvez votre cours idéal et profitez d'une leçon d'essai gratuite en vidéo. Ensuite, réservez des sessions
+            en ligne qui s’adaptent à votre planning.
+        </p>
+    </div>
+    <a href="{{ path('app_reservation') }}">
+        <button class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
+            Réserver un cours
+        </button>
+    </a>
+    <br>
 
-        <br>
-
-        <div class="mb-8 bg-[#ECECEC] rounded-lg shadow-md p-6">
-            <form method="get" action="{{ path('app_lecon') }}" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="matiere" class="block text-sm font-medium text-gray-700">Matière</label>
-                        <select name="matiere" id="matiere" class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
-                            <option value="">Toutes les matières</option>
-                            {% for matiere in matieres %}
-                                <option value="{{ matiere.id }}"
-                                    {% if selectedMatiere is not null and selectedMatiere.id == matiere.id %}selected{% endif %}>
-                                    {{ matiere.nom }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="niveau" class="block text-sm font-medium text-gray-700">Niveau</label>
-                        <select name="niveau" id="niveau" class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
-                            <option value="">Tous les niveaux</option>
-                            {% for niveau in niveaux %}
-                                <option value="{{ niveau.id }}"
-                                    {% if selectedNiveau is not null and selectedNiveau.id == niveau.id %}selected{% endif %}>
-                                    {{ niveau.titre }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <button style="background-color: #FFD700;" type="submit" class="text-black px-4 py-2 rounded hover:bg-indigo-700 transition">
-                        Filtrer
-                    </button>
-                </div>
-            </form>
-        </div>
-        <br>
-        
-        <div class="flex flex-col gap-6 items-center"> {# Utilisation de flex-col pour empiler les éléments verticalement avec gap-6 #}
-            {% for lecon in lecons %}
-                <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition w-full">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3 hover:text-indigo-600">{{ lecon.titre }}</h3>
-                    <div class="mb-4">
-                        <a href="{{ path('app_matiere') }}">
-                            <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                {{ lecon.matiere.nom }}
-                            </span>
-                        </a>
-                        {% for niveau in lecon.niveaux %}
-                        <a href="{{ path('app_niveau') }}">
-                            <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm ml-2">
-                                {{ niveau.titre }}
-                            </span>
-                        </a> 
+    <div class="mb-8 bg-[#ECECEC] rounded-lg shadow-md p-6">
+        <form method="get" action="{{ path('app_lecon') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="matiere" class="block text-sm font-medium text-gray-700">Matière</label>
+                    <select name="matiere" id="matiere"
+                        class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                        <option value="">Toutes les matières</option>
+                        {% for matiere in matieres %}
+                        <option value="{{ matiere.id }}" {% if selectedMatiere is not null and
+                            selectedMatiere.id==matiere.id %}selected{% endif %}>
+                            {{ matiere.nom }}
+                        </option>
                         {% endfor %}
-                    </div>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-sm text-black">
-                            {# {{ lecon.dateCreation|date('d/m/Y') }} #}
-                        </span>
-                        <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="block">
-                            <span class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
-                                Voir le détail
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </span>
-                        </a>
-                    </div>
-                    <br>
+                    </select>
                 </div>
-            {% else %}
-                <div class="w-full text-center py-8">
-                    <p class="text-white">Aucune leçon trouvée</p>
+                <div>
+                    <label for="niveau" class="block text-sm font-medium text-gray-700">Niveau</label>
+                    <select name="niveau" id="niveau"
+                        class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                        <option value="">Tous les niveaux</option>
+                        {% for niveau in niveaux %}
+                        <option value="{{ niveau.id }}" {% if selectedNiveau is not null and
+                            selectedNiveau.id==niveau.id %}selected{% endif %}>
+                            {{ niveau.titre }}
+                        </option>
+                        {% endfor %}
+                    </select>
                 </div>
-            {% endfor %}
-        </div>
-
-        <br>
+            </div>
+            <div class="mt-4">
+                <button style="background-color: #FFD700;" type="submit"
+                    class="text-black px-4 py-2 rounded hover:bg-indigo-700 transition">
+                    Filtrer
+                </button>
+            </div>
+        </form>
     </div>
     <br>
+
+    <div class="flex flex-col gap-6 items-center"> {# Utilisation de flex-col pour empiler les éléments verticalement
+        avec gap-6 #}
+        {% for lecon in lecons %}
+        <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition w-full">
+            <h3 class="text-xl font-semibold text-gray-800 mb-3 hover:text-indigo-600">{{ lecon.titre }}</h3>
+            <div class="mb-4">
+                <a href="{{ path('app_matiere') }}">
+                    <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                        {{ lecon.matiere.nom }}
+                    </span>
+                </a>
+                {% for niveau in lecon.niveaux %}
+                <a href="{{ path('app_niveau') }}">
+                    <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm ml-2">
+                        {{ niveau.titre }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+                <span class="text-sm text-black">
+                    {# {{ lecon.dateCreation|date('d/m/Y') }} #}
+                </span>
+                <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="block">
+                    <span class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
+                        Voir le détail
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <br>
+        </div>
+        {% else %}
+        <div class="w-full text-center py-8">
+            <p class="text-white">Aucune leçon trouvée</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br>
+</div>
+<br>
 {% endblock %}
