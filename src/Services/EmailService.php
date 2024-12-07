@@ -58,18 +58,20 @@ class EmailService extends AbstractController
 
 
     // confirmation du contact à l'user
-    public function sendConfirmationEmail(MailerInterface $mailer, string $emailAddress, Contact $contact): void
+    public function sendConfirmationEmail(MailerInterface $mailer, string $to, Contact $contact): void
     {
-        $emailContent = $this->renderView('emails/contact_confirmation.html.twig');
-
         $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@mytutorspace.com', 'MyTutorSpace'))
-            ->to($emailAddress)
-            ->subject('Confirmation de prise de contact')
-            ->html($emailContent);
+            ->from('noreply@mytutorspace.com')
+            ->to($to)
+            ->subject('Confirmation de votre message')
+            ->htmlTemplate('emails/contact_confirmation.html.twig')
+            ->context([
+                'contact' => $contact
+            ]);
 
         $mailer->send($email);
     }
+
 
 
     // notification à l'administrateur de la prise de contact

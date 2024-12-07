@@ -33,12 +33,8 @@ class Contact
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Length(
-        min: 2,
-        max: 255,
-    )]
-    #[Assert\NotBlank(message: "Le message ne peut pas être vide.")]
-    #[ORM\Column(length: 255, nullable: true)]
+    // #[Assert\NotBlank(message: 'Le sujet ne peut pas être vide')]
+    #[Assert\Length(min: 2, max: 100)]
     private ?string $sujet = null;
 
 
@@ -51,18 +47,21 @@ class Contact
     private ?string $message = null;
 
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    // #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    // private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'contacts')]
     private ?User $user = null;
 
-    public function __construct()
-    {
-        //initialise la date et l'heure du RDV
-        $timezone = new \DateTimeZone('Europe/Paris');
-        $this->createdAt = new \DateTime('now', $timezone);
-    }
+    // #[ORM\Column(length: 255)]
+    // private ?string $prenom = null;
+
+    // public function __construct()
+    // {
+    //     //initialise la date et l'heure du RDV lors de la création de l'objet
+    //     $timezone = new \DateTimeZone('Europe/Paris');
+    //     $this->createdAt = new \DateTime('now', $timezone);
+    // }
 
     public function getId(): ?int
     {
@@ -100,7 +99,7 @@ class Contact
 
     public function setSujet(?string $sujet): static
     {
-        $this->sujet = $sujet;
+        $this->subject = $sujet;
 
         return $this;
     }
@@ -117,17 +116,17 @@ class Contact
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
+    // public function getCreatedAt(): ?\DateTimeImmutable
+    // {
+    //     return $this->createdAt;
+    // }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
+    // public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    // {
+    //     $this->createdAt = $createdAt;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getUser(): ?User
     {
@@ -140,4 +139,16 @@ class Contact
 
         return $this;
     }
+
+    // public function getPrenom(): ?string
+    // {
+    //     return $this->prenom;
+    // }
+
+    // public function setPrenom(string $prenom): static
+    // {
+    //     $this->prenom = $prenom;
+
+    //     return $this;
+    // }
 }

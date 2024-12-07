@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Confirmation de votre message</h1>
+        
+        <p>Bonjour,</p>
+        
+        <p>Nous avons bien reçu votre message avec les informations suivantes :</p>
+        
+        <ul>
+            <li>Nom : {{ contact.nom }}</li>
+            <li>Email : {{ contact.email }}</li>
+            <li>Sujet : {{ contact.sujet }}</li>
+            <li>Message : {{ contact.message }}</li>
+        </ul>
+        
+        <p>Nous vous répondrons dans les plus brefs délais.</p>
+        
+        <p>Cordialement,<br>
+        L'équipe MyTutorSpace</p>
+    </body>
+</html>
