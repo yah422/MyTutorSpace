@@ -1,90 +1,86 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}S'inscrire !{% endblock %}</title>
-        <link rel="icon" href="{{ asset('img/iconTitle.png') }}">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        {% endblock %}
+<html lang="fr">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
-            <div class="container mx-auto px-4 py-8">
-                <div class="w-full">
-                    <h1 class="text-2xl font-bold mb-6 text-center"> Inscription </h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S'inscrire sur MyTutorSpace</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
 
-                    {% if app.user %}
-                        <div class="text-white p-3 rounded mb-3">
-                            Vous êtes connecté en tant que {{ app.user.userIdentifier }},
-                            <a href="{{ path('app_logout') }}" class="underline text-gray-300 hover:text-blue-300"> Se déconnecter </a>
-                        </div>
-                    {% endif %}
-
-                    {{ form_start(registrationForm) }}
-
-                    <div class="mb-4">
-                        {{ form_row(registrationForm.email, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
-                        }) }}
-                    </div>
-
-                    <div class="mb-4">
-                        {{ form_row(registrationForm.nom, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
-                        }) }}
-                    </div>
-
-                    <div class="mb-4">
-                        {{ form_row(registrationForm.prenom, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
-                        }) }}
-                    </div>
-
-                    <div class="mb-6">
-                        {{ form_row(registrationForm.plainPassword, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
-                        }) }}
-                    </div>
-
-                    <div class="mb-6">
-                        {{ form_row(registrationForm.aboutMe, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}
-                        }) }}
-                    </div>
-
-                    <div style="display: flex;justify-content: space-between;" class="mb-6">
-                        {{ form_row(registrationForm.agreeTerms, {
-                            'label_attr': {'class': 'block text-gray-300 text-sm font-bold mb-2'},
-                            'attr': {'class': 'text-gray-700'}
-                        }) }}
-                    </div>
-
-                    <button type="submit" style="background-color: #FFD700" class="w-full text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        S'inscrire
-                    </button>
-
-                    {{ form_end(registrationForm) }}
-                    <br>
-
-                    <p class="text-center mt-4 text-gray-300">
-                        Vous avez déjà un compte ? 
-                        <a href="{{ path('app_login') }}" class="text-gray-300">Connectez-vous ici</a>.
-                    </p>
-                </div>
+<body style="background-color: #1B4255;" class="text-gray-300 min-h-screen flex items-center justify-center">
+    <div style="background-color: #567C8D;" class="container mx-auto max-w-5xl p-6 rounded-lg shadow-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Section gauche avec illustration -->
+            <div class="flex flex-col items-center justify-center">
+                <img src="{{ asset('img/registerImg.svg') }}" alt="Inscription Illustration" class="w-3/4 mb-4">
+                <h1 style="color: #FFD700;" class="text-3xl font-extrabold mb-2 text-center">Bienvenue sur MyTutorSpace</h1>
+                <p class="text-gray-200 text-lg text-center">
+                    Rejoignez notre communauté et commencez votre parcours avec nous.<br> C'est rapide et sécurisé !
+                </p>
             </div>
-        {% endblock %}
-        
-    </body>
+
+            <!-- Section droite avec formulaire -->
+            <div style="background-color: #1B4255;" class="p-8 rounded-lg shadow-md">
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-4'}}) }}
+
+                <!-- Email -->
+                {{ form_row(registrationForm.email, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-gray-100 rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- Nom -->
+                {{ form_row(registrationForm.nom, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-gray-100 rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- Prénom -->
+                {{ form_row(registrationForm.prenom, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-gray-100 rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- Mot de passe -->
+                {{ form_row(registrationForm.plainPassword, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-gray-100 rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- About Me -->
+                {{ form_row(registrationForm.aboutMe, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-gray-100 rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- Conditions générales -->
+                <div class="flex items-center">
+                    {{ form_row(registrationForm.agreeTerms, {
+                    'label_attr': {'class': 'text-sm text-gray-300'},
+                    'attr': {'class': 'mr-2'}
+                    }) }}
+                    <span class="text-sm">
+                        Accepter les <a href="#" style= "color: #FFD700;" class=" hover:underline">conditions générales</a>.
+                    </span>
+                </div>
+
+                <!-- Bouton -->
+                <button type="submit"
+                    style= "background-color: #FFD700; color:#1B4255;" class="w-full font-bold py-3 rounded hover:bg-yellow-500 transition">
+                    S'inscrire
+                </button>
+
+                {{ form_end(registrationForm) }}
+
+                <!-- Lien pour se connecter -->
+                <p class="text-center mt-4 text-sm">
+                    Vous avez déjà un compte ?
+                    <a href="{{ path('app_login') }}" style="color: #FFD700;" class=" hover:underline">Connectez-vous ici</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

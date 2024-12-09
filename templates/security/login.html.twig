@@ -1,71 +1,73 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Se connecter {% endblock %}</title>
-        <link rel="icon" href="{{ asset('img/iconTitle.png') }}">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        {% endblock %}
+<html lang="fr">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Se connecter{% endblock %}</title>
+    <link rel="icon" href="{{ asset('img/iconTitle.png') }}">
+    {% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {% endblock %}
+    {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
 
-            <div class="titleRegister">
-                <h1 class="h1log"> <strong> Connectez-vous </strong>  </h1>
-                <a href="{{ path('home') }}" style="width: 40PX;height: auto;margin-right: 20px;"> <img src="/img/close.png" alt="imageClose"> </a>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center">
+    {% block body %}
+    <div class="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-white">Connectez-vous</h1>
+            <a href="{{ path('home') }}" class="text-gray-400 hover:text-gray-200">
+                <img style="width: 40px; height: auto;" src="/img/close.png" alt="Fermer" class="w-6 h-6">
+            </a>
+        </div>
+
+        {% if error %}
+        <div class="bg-red-600 text-white p-4 rounded mb-4">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+        {% endif %}
+
+        {% if app.user %}
+        <div class="text-white p-3 rounded bg-green-600 mb-4">
+            Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+            <a href="{{ path('app_logout') }}" class="underline text-gray-300 hover:text-blue-300">Se déconnecter</a>.
+        </div>
+        {% endif %}
+
+        <form method="post" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium">Email</label>
+                <input type="email" id="username" name="_username" value="{{ last_username }}"
+                    class="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    required autofocus>
             </div>
 
-            <div class="container mx-auto px-4 py-8">
-            
-                <div class="form">
-                    <form class="space-y-4" method="post">
-                        {% if error %}
-                            <div class="bg-red-500 text-white p-3 rounded">
-                                {{ error.messageKey|trans(error.messageData, 'security') }}
-                            </div>
-                        {% endif %}
-                
-                        {% if app.user %}
-                            <div class="text-white p-3 rounded mb-3">
-                                Vous êtes connecté en tant que {{ app.user.userIdentifier }},
-                                <a href="{{ path('app_logout') }}" class="underline text-gray-300 hover:text-blue-300"> Se déconnecter </a>
-                            </div>
-                        {% endif %}
-                
-                        <div class="space-y-1">
-                            <label for="username" class="block text-sm font-medium text-gray-300">Email </label> 
-                            <input type="email" value="{{ last_username }}" name="_username" id="username" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus>
-                        </div>
-                        <br>
-                
-                        <div class="space-y-1">
-                            <label for="password" class="block text-sm font-medium text-gray-300">Mot de passe </label>
-                            <input type="password" name="_password" id="password" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="current-password" required>
-                        </div>
-
-                        <br>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                
-                        <button style="background-color: #FFD700;" class="w-full mt-4 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" type="submit">Se connecter</button>
-                    </form>
-            
-                </div>
-                <br>
-
-                <p class="text-center mt-4 text-gray-300">
-                    Vous n'avez pas de compte ? 
-                    <a href="{{ path('app_role_choice') }}" class="text-gray-300">Inscrivez-vous ici</a>.
-                </p>
-
+            <div>
+                <label for="password" class="block text-sm font-medium">Mot de passe</label>
+                <input type="password" id="password" name="_password"
+                    class="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    required>
             </div>
 
-        {% endblock %}
-    </body>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit"
+            style="background-color: #FFD700;" class="w-full text-black font-bold py-3 rounded hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                Se connecter
+            </button>
+        </form>
+
+        <p class="text-center text-sm mt-6 text-gray-300">
+            Vous n'avez pas de compte ?
+            <a href="{{ path('app_role_choice') }}" class="hover:underline">Inscrivez-vous ici</a>.
+        </p>
+    </div>
+    {% endblock %}
+</body>
+
 </html>
