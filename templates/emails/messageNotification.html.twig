@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau message reçu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-[#1B4255] mb-4">Nouveau message reçu</h1>
+        <p class="mb-4"><strong>Titre :</strong> {{ titreMessage }}</p>
+        <p class="mb-4"><strong>Contenu :</strong></p>
+        <blockquote class="border-l-4 border-blue-500 pl-4 text-gray-600 italic">
+            {{ contenuMessage }}
+        </blockquote>
+        <p class="mt-4"><strong>Date :</strong> {{ dateMessage }}</p>
+    </div>
+</body>
+
+</html>

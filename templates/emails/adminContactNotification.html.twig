@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle notification de contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-[#1B4255] mb-4">Nouvelle notification de contact</h1>
+        <p class="mb-4">Bonjour,</p>
+        <p class="mb-4">
+            Vous avez reçu un nouveau message via le formulaire de contact de 
+            <strong>MyTutorSpace</strong>.
+        </p>
+        <p class="mb-2"><strong>Nom :</strong> {{ contact.nom }}</p>
+        <p class="mb-2"><strong>Email :</strong> {{ contact.email }}</p>
+        <p class="mb-4"><strong>Message :</strong></p>
+        <blockquote class="border-l-4 border-blue-500 pl-4 text-gray-600 italic">
+            {{ contact.message }}
+        </blockquote>
+        <p class="mt-4">Merci de traiter cette demande rapidement.</p>
+        <p class="mt-4">Bonne journée,</p>
+        <p class="font-semibold">L'équipe <strong>MyTutorSpace</strong>.</p>
+        <div class="mt-6 text-sm text-gray-500 border-t pt-4">
+            <p>Ceci est un message généré automatiquement. Veuillez ne pas répondre à cet email.</p>
+        </div>
+    </div>
+</body>
+</html>

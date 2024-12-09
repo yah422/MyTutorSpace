@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use App\Entity\User;
 use App\Entity\Contact;
 use App\Entity\Reservation;
@@ -25,10 +26,10 @@ class EmailService extends AbstractController
 
 
     // confirmation de prise de RDV pour le client
-    public function sendConfirmationEmailTo(MailerInterface $mailer, string $emailAddress, \DateTime $startDate): void
+    public function sendConfirmationEmailTo(MailerInterface $mailer, string $emailAddress, DateTime $dateDebut): void
     {
-        $emailContent = $this->renderView('emails/appointment_confirmation.html.twig', [
-            'appointmentDate' => $startDate->format('d/m/Y à H:i')
+        $emailContent = $this->renderView('emails/reservationConfirmation.html.twig', [
+            'reservationDate' => $dateDebut->format('d/m/Y à H:i')
         ]);
 
         $email = (new TemplatedEmail())
@@ -41,10 +42,10 @@ class EmailService extends AbstractController
     }
 
     // confirmation de prise de RDV
-    public function sendConfirmationEmailFrom(MailerInterface $mailer, string $emailAddress, \DateTime $startDate): void
+    public function sendConfirmationEmailFrom(MailerInterface $mailer, string $emailAddress, \DateTime $dateDebut): void
     {
-        $emailContent = $this->renderView('emails/appointment_confirmation.html.twig', [
-            'appointmentDate' => $startDate->format('d/m/Y à H:i')
+        $emailContent = $this->renderView('emails/reservationConfirmation.html.twig', [
+            'appointmentDate' => $dateDebut->format('d/m/Y à H:i')
         ]);
 
         $email = (new TemplatedEmail())
@@ -64,7 +65,7 @@ class EmailService extends AbstractController
             ->from('noreply@mytutorspace.com')
             ->to($to)
             ->subject('Confirmation de votre message')
-            ->htmlTemplate('emails/contact_confirmation.html.twig')
+            ->htmlTemplate('emails/contactConfirmation.html.twig')
             ->context([
                 'contact' => $contact
             ]);
@@ -78,7 +79,7 @@ class EmailService extends AbstractController
     public function sendAdminNotificationEmail(MailerInterface $mailer, Contact $contact): void
     {
         $adminEmail = 'admin@mytutorspace.com';
-        $emailContent = $this->renderView('emails/admin_contact_notification.html.twig', [
+        $emailContent = $this->renderView('emails/adminContactNotification.html.twig', [
             'contact' => $contact
         ]);
 
@@ -95,7 +96,7 @@ class EmailService extends AbstractController
     // notification de réception d'un nouveau message
     public function notificationEmailToRecipient(MailerInterface $mailer, string $emailAddress, $message): void
     {
-        $emailContent = $this->renderView('emails/message_notification.html.twig', [
+        $emailContent = $this->renderView('emails/messageNotification.html.twig', [
             'titreMessage' => $message->getTitre(),
             'contenuMessage' => $message->getContenu(),
             'dateMessage' => $message->getCreatedAt()->format('d/m/Y à H:i')
@@ -114,7 +115,7 @@ class EmailService extends AbstractController
     public function sendCancellationEmail(MailerInterface $mailer, Reservation $reservation): void
     {
         $user = $reservation->getUser();
-        $emailContent = $this->renderView('emails/appointment_cancellation.html.twig', [
+        $emailContent = $this->renderView('emails/reservationCancellation.html.twig', [
             'dateReservation' => $reservation->getDateDebut()->format('d/m/Y à H:i'),
             'prenom' => $user ? $user->getPrenom() : 'Utilisateur anonyme',
         ]);
@@ -135,7 +136,7 @@ class EmailService extends AbstractController
         /**
          * @var User|null $user
          */
-        $emailContent = $this->renderView('emails/account_deletion.html.twig', [
+        $emailContent = $this->renderView('emails/accountDeletion.html.twig', [
             'prenom' => $user->getPrenom(),
             'email' => $user->getEmail(),
         ]);
