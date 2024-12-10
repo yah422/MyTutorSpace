@@ -6,20 +6,21 @@
 
 <div class="listExercice">
     {% for exercice in exercices %}
-        <ul class="divide-y divide-gray-200 rounded-lg">   
-            <li class="px-4 py-2"> 
-                <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-300"> 
-                    {{ exercice.titre }} 
-                </a>
-            </li>
-        </ul> <br>            
+    <ul class="divide-y divide-gray-200 rounded-lg">
+        <li class="px-4 py-2">
+            <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-300">
+                {{ exercice.titre }}
+            </a>
+        </li>
+    </ul> <br>
     {% endfor %}
     <br>
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('add_exercice') }}" class="text-black font-bold py-2 px-4 rounded" style="background-color: #FFD700;">
-            Ajouter un exercice
-        </a>
+    <a href="{{ path('add_exercice') }}" class="text-black font-bold py-2 px-4 rounded"
+        style="background-color: #FFD700;">
+        Ajouter un exercice
+    </a>
     {% endif %}
-   
+
 </div>
 {% endblock %}

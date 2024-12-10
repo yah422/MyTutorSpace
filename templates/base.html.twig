@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} Bienvenue {% endblock %}</title>
-    <link rel="icon" href="{{ asset('img/iconTitle.png') }}">
+    <link id="iconTitre" rel="icon" href="{{ asset('img/iconTitle.png') }}">
     {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">

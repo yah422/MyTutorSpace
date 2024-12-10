@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="{{ asset('img/iconTitle.png') }}">
+    <link id="iconTitre" rel="icon" href="{{ asset('img/iconTitle.png') }}">
     <title>{% block title %} Choix du rôle {% endblock %}</title>
     {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
@@ -32,33 +32,30 @@
 
         {# ========================== Registeur parent ============================== #}
         <div class="RoleChoix">
-            <img src="/img/family.png" alt="Image parent" class="w-24 h-24 mx-auto mb-4">
+            <img src="/img/parent.svg" alt="Image parent" class="w-24 h-24 mx-auto mb-4">
             <h3> <strong> Je suis un Parent </strong> </h3>
             <p style="text-align: center;margin: 10px;"> Manage payments or lessons for your child </p>
             <br>
-            <a href="{{ path('app_register_parent') }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
+            <a href="{{ path('app_register_parent') }}" style="background-color: #1B4255;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
         </div>
 
         {# ========================== Registeur eleve ============================== #}
         <div class="RoleChoix">
-            <img src="/img/graduated.png" alt="Image élève" class="w-24 h-24 mx-auto mb-4">
+            <img src="/img/student.svg" alt="Image élève" class="w-24 h-24 mx-auto mb-4">
             <h3> <strong> Je suis un Élève </strong> </h3>
             <p style="text-align: center;margin: 10px;"> Have lessons, message your tutor or watch your lessons back
             </p>
             <br>
-            <a href="{{ path('app_register_eleve') }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
+            <a href="{{ path('app_register_eleve') }}" style="background-color: #1B4255;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
         </div>
 
         {# ========================== Registeur tuteur ============================== #}
         <div class="RoleChoix">
-            <img src="/img/teacher.png" alt="Image tuteur" class="w-24 h-24 mx-auto mb-4">
+            <img src="/img/tutor.svg" alt="Image tuteur" class="w-24 h-24 mx-auto mb-4">
             <h3> <strong> Je suis un Tuteur </strong> </h3>
             <p style="text-align: center;margin: 10px;"> Give lessons or manage bookings with your customers </p>
             <br>
-            <a href="{{ path('app_register_tuteur') }}" style="background-color: #1B4255;
-                    color: #FFD700;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
+            <a href="{{ path('app_register_tuteur') }}" style="background-color: #1B4255;" class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700"> Je m'inscris </a>
         </div>
     </div>
 

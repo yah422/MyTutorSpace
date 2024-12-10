@@ -6,6 +6,12 @@ body {
     background-color: #1B4255;
 }
 
+.iconTitre{
+    width: 30px;
+    height: 30px
+
+}
+
 h1{
     width: 100%;
     display: flex;
