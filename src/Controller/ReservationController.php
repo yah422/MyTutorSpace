@@ -57,10 +57,7 @@ class ReservationController extends AbstractController
 
         // Vérifie si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // HoneyPot 
-            $honeypotValue = $form->get('prenom')->getData();
-
+            
             if (!empty($honeypotValue)) {
                 // Le champ a été rempli, probablement un bot
                 return $this->redirectToRoute('app_home');

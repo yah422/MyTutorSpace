@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
@@ -33,13 +34,19 @@ class ReservationType extends AbstractType
                         ->where('l.matiere IS NOT NULL');
                 },
             ])
-            ->add('dateDebut', DateType::class, [
+            ->add('dateDebut', DateTimeType::class, [
+                'label' => "Séléctionnez une date",
+                'required' => true,
                 'widget' => 'single_text',
-                'html5' => false,
-                'attr' => ['class' => 'js-datepicker'],
-                'constraints' => [
-                    new NotBlank(['message' => 'Veuillez sélectionner une date.']),
-                    new GreaterThanOrEqual(['value' => 'today']),
+                'attr' => [
+                    'class' => 'data flatpickr',
+                    'placeholder' => "Cliquez ici pour séléctionner une date",
+                ],
+                'constraints'=>[
+                    new GreaterThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'Veuillez séléctionner une date dans le présent !',
+                    ]),
                 ],
             ])
             ->add('nom', TextType::class, [
@@ -88,7 +95,14 @@ class ReservationType extends AbstractType
                 ],
                 'label' => false,
             ])
-        ;
+            ->add('dateFin', DateTimeType::class, [
+                'widget' => 'single_text',
+                'required' => true, // Indique que le champ est obligatoire
+                'label' => 'Date de fin',
+                'attr' => [
+                    'class' => 'flatpickr', // Utilisation de Flatpickr si nécessaire
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

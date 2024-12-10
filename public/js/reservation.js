@@ -1,70 +1,60 @@
 // Sélection des éléments et initialisation des variables
-var csrfToken = $('meta[name="csrf-token"]').attr('content');
+const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
 const $startDate = $("#appointment_startDate");
 const $availableRdv = $("#available-rdv");
 const $selectedSlot = $("#selectedSlot");
 const $errorMsg = $("#date_error");
 
-let dayoffDates = [];
 let selectedLabel = null;
 
-// Appele la fonction pour initialiser Flatpickr dès que la page est prête
 $(document).ready(function () {
     initFlatpickr();
-    getSelectedDate();
     handleSlotSelection();
     handleLeconSelection();
 
     // Annulation d'un RDV sur la vue profil
-    $(document).on('click', '.cancel_appointment', function(e) {
+    $(document).on('click', '.cancel_appointment', function (e) {
         e.preventDefault();
-        var appointmentId = $(this).data('id');
-        
+        const appointmentId = $(this).data('id');
+
         if (confirm("Êtes-vous sûr de vouloir annuler ce rendez-vous ?")) {
             cancelAppointment(appointmentId, csrfToken);
         }
     });
 
-    // Messages d'erreurs UI
+    // Validation et soumission du formulaire
     $("#appointment_save").on("click", function (event) {
-        $(".error_msg").text(""); // Efface les messages d'erreur
-        $(".data").removeClass("input_invalid"); // Réinitialise les champs invalides
+        $(".error_msg").text("");
+        $(".data").removeClass("input_invalid");
 
         let isValid = true;
 
-        $(".data").each(function () { // Parcours tous les champs du formulaire
-            if ($(this).val() === "") { // si le champ est vide
+        $(".data").each(function () {
+            if ($(this).val().trim() === "") {
                 $(this).addClass("input_invalid");
-                isValid = false; // invalide
+                isValid = false;
             }
         });
 
         const name = $("#appointment_name").val().trim();
-        if (name === "" || name.length < 2 || name.length > 50) {
-            $("#name_error").text("Le nom est invalide et doit contenir entre 2 et 50 caractères");
+        if (name.length < 2 || name.length > 50) {
+            $("#name_error").text("Le nom doit contenir entre 2 et 50 caractères");
             $("#appointment_name").addClass("input_invalid");
             isValid = false;
         }
 
-        const firstname = $("#appointment_firstName").val().trim();
-        if (firstname === "" || firstname.length < 2 || firstname.length > 50) {
-            $("#firstName_error").text("Le prénom est invalide et doit contenir entre 2 et 50 caractères");
-            $("#appointment_firstName").addClass("input_invalid");
-            isValid = false;
-        }
-
         const email = $("#appointment_email").val().trim();
-        if (email === "" || !validateEmail(email)) {
-            $("#email_error").text("L'email est invalide !");
+        if (!validateEmail(email)) {
+            $("#email_error").text("Adresse email invalide !");
             $("#appointment_email").addClass("input_invalid");
             isValid = false;
         }
 
-        const message = $("#appointment_message").val();
-        if (message === "" || message.length < 5) {
-            $("#message_error").text("Le message est invalide et doit contenir au minimum 5 caractères");
-            $("#appointment_message").addClass("input_invalid");
+        const startDateValue = $startDate.val().trim();
+        if (startDateValue === "") {
+            $errorMsg.text("Veuillez sélectionner une date et une heure !");
+            $startDate.addClass("input_invalid");
             isValid = false;
         }
 
@@ -72,147 +62,55 @@ $(document).ready(function () {
             $("#appointment_form").submit();
         }
     });
-
-    // gestion des couleurs aléatoire pour les lecons
-    var colors = [
-        "var(--pink-color)",
-        "var(--red-color)",
-        "var(--blue-color)",
-        "var(--green-color)",
-    ];
-
-    var stickerClasses = [
-        "stickers_pink",
-        "stickers_red",
-        "stickers_blue",
-        "stickers_green",
-    ];
-
-    var buttonClasses = [
-        "full_button_pink",
-        "full_button_red",
-        "full_button_blue",
-        "full_button_green",
-    ];
-
-    // Couleur aléatoire pour chaque élément de la classe lecon_cards_header
-    $(".lecon_cards").each(function (index) {
-        var color = colors[index % colors.length];
-        var stickerClass = stickerClasses[index % stickerClasses.length];
-        var buttonClass = buttonClasses[index % buttonClasses.length];
-
-        $(this).find(".lecon_cards_header").css("color", color); // Change la couleur du H2
-
-        $(this).find(".stickers_price").addClass(stickerClass); // Ajoute la classe de sticker
-        $(this).find(".lecon_button").addClass(buttonClass); // Ajoute la classe de button
-    });
 });
 
-//___________________________________INPUT HEURE RDV_______________________________________
-// Détecte les changements de la date de début
-function getSelectedDate() {
-    $startDate.on("change", function () { // Détecte les changements de la date de début
-        const selectedDate = $startDate.val(); // Récupère la date sélectionnée
-        $.ajax({
-            url: available_rdv_ajax,
-            contentType: "application/x-www-form-urlencoded", // Envoie les données en tant que formulaire
-            method: "POST",
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            data: {
-                startDate: selectedDate, // Envoie la date sélectionnée
-            },
-            success: function (data) {
-                if (Array.isArray(data.availabilities)) { // Vérifie si les données sont un tableau
-                    $availableRdv.empty(); // Vide le contenu de la liste des créneaux horaires
-                    const allSlots = data.availabilities[0]; // Récupère les créneaux horaires
-                    $.each(allSlots, function (index, slot) { // Parcours les créneaux horaires
-                        const $label = $("<label>");
-                        const $input = $("<input>", {
-                            type: "radio",
-                            name: "selectedSlotRadio",
-                            value: slot,
-                            class: "radioSlots",
-                        });
-                        $label.append($input).append(document.createTextNode(formatTime(slot))); // Ajoute le créneau horaire au label
-                        $availableRdv.append($label); // Ajoute le label à la liste des créneaux horaires
-                    });
-                } else {
-                    console.error("Format de données invalide !");
-                }
-            },
-        });
+// Initialisation de Flatpickr pour la sélection de date et d'heure
+function initFlatpickr() {
+    $startDate.flatpickr({
+        enableTime: true, // Activer la sélection de l'heure
+        dateFormat: "Y-m-d H:i", // Format avec date et heure
+        time_24hr: true, // Format 24 heures
+        minDate: "today", // Empêcher la sélection de dates passées
+        onChange: function (selectedDates, dateStr, instance) {
+            // Réinitialise les erreurs à chaque changement
+            $errorMsg.text("");
+            $startDate.removeClass("input_invalid");
+        },
     });
 }
-    
-// Fonction pour gérer la sélection des créneaux horaires
+
+// Gestion des créneaux horaires
 function handleSlotSelection() {
     $availableRdv.on("change", "input[type='radio']", function () {
         const $input = $(this);
-        const $label = $input.closest('label');
         const slot = $input.val();
 
         if ($input.is(":checked")) {
             if (selectedLabel) {
                 $(selectedLabel).removeClass("showRadioClass");
             }
-            $label.addClass("showRadioClass");
-            selectedLabel = $label;
+            $input.closest('label').addClass("showRadioClass");
+            selectedLabel = $input.closest('label');
             $selectedSlot.val(slot);
         }
     });
 }
 
-// Fonction pour gérer la sélection des lecons
-function handleLeconSelection() {
-    $("#appointment_lecons").on("change","input[type='checkbox']", function (e) {
-        const $input = $(this);
-        const $label = $input.next('label');
-        const lecon = $input.val();
-
-        if ($input.is(":checked")) {
-            $label.addClass("showRadioClass");
-            $("#selectedLecon").val(lecon);
-        } else {
-            $label.removeClass("showRadioClass");
-            $("#selectedLecon").val('');
-        }
-    });
-}
-
-// Fonction pour formater l'heure d'un créneau horaire en fonction de la locale 'fr-FR'
-function formatTime(dateTimeString) {
-    const dateTime = new Date(dateTimeString);
-    return dateTime.toLocaleTimeString("fr-FR", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-}
-
-//___________________________________ANNULATION RDV_______________________________________
+// Fonction pour annuler un rendez-vous
 function cancelAppointment(appointmentId, csrfToken) {
-    var url = `/profil/appointment/${appointmentId}/delete`;
-    
     $.ajax({
-        url: url,
-        method: 'DELETE', 
-        headers: {
-            'X-CSRF-TOKEN': csrfToken  // Ajout du token CSRF dans les headers
-        },
-        success: function(data) {
+        url: `/profil/appointment/${appointmentId}/delete`,
+        method: "DELETE",
+        headers: { "X-CSRF-TOKEN": csrfToken },
+        success: function (data) {
             if (data.success) {
-                // Supprimer le RDV de l'interface utilisateur
-                $('#appointment-' + appointmentId).remove();
+                $(`#appointment-${appointmentId}`).remove();
             } else {
-                alert(data.message || "Erreur lors de la suppression du rendez-vous. Veuillez réessayer.");
-                console.log(data);
+                alert(data.message || "Erreur lors de l'annulation.");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error("Erreur lors de la suppression du rendez-vous :", textStatus, errorThrown);
-            alert("Une erreur est survenue lors de la suppression du rendez-vous. Veuillez vérifier votre connexion et réessayer.");
-        }
+        error: function () {
+            alert("Une erreur est survenue.");
+        },
     });
 }

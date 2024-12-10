@@ -59,14 +59,24 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private ?User $eleve = null;
 
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank]
-    #[Assert\GreaterThan("today")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\When(
+        expression: 'this.getDateFin() != null', // Vérifie si la date de fin est renseignée
+        constraints: [
+            new Assert\LessThan(
+                propertyPath: 'dateFin',
+                message: 'La date de fin doit se situer après la date de début !'
+            )
+        ]
+    )]
+    #[Assert\NotBlank(message: 'Veuillez sélectionner une date de début')]
+    #[Assert\GreaterThanOrEqual(
+        "today",
+        message: "Veuillez sélectionner une date dans le présent !"
+    )]
     private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank]
-    #[Assert\GreaterThan(propertyPath: "dateDebut")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(type: 'string', length: 20)]

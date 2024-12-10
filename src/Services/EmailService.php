@@ -42,7 +42,7 @@ class EmailService extends AbstractController
     }
 
     // confirmation de prise de RDV
-    public function sendConfirmationEmailFrom(MailerInterface $mailer, string $emailAddress, \DateTime $dateDebut): void
+    public function sendConfirmationEmailFrom(MailerInterface $mailer, string $emailAddress, DateTime $dateDebut): void
     {
         $emailContent = $this->renderView('emails/reservationConfirmation.html.twig', [
             'appointmentDate' => $dateDebut->format('d/m/Y à H:i')
