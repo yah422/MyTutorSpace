@@ -27,7 +27,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lecons = new ArrayCollection();
         $this->matieres = new ArrayCollection();
         $this->niveaux = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -66,13 +65,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
     private array $roles = [];
 
-        /**
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type:'text')]
+    #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
 
-        /**
+    /**
      * @return Collection<int, Contact>
      */
     public function getContacts(): Collection
@@ -107,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(length: 255)]
     private ?string $password = null;
-    
+
     #[ORM\ManyToOne(targetEntity: Niveau::class)]
     private ?Niveau $niveau = null;
 
@@ -115,12 +114,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?File $photoFile = null;
 
     private ?string $photo = null;
-
-    /**
-     * @var Collection<int, Reservation>
-     */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
-    private Collection $reservations;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -157,37 +150,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNiveau(?Niveau $niveau): self
     {
         $this->niveau = $niveau;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Collection<int, Reservation>
-     */
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function addReservation(Reservation $reservation): static
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations->add($reservation);
-            $reservation->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): static
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            if ($reservation->getUser() === $this) {
-                $reservation->setUser(null);
-            }
-        }
 
         return $this;
     }

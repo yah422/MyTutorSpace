@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} Bienvenue {% endblock %}</title>
@@ -70,8 +71,10 @@
             </ul>
         </div>
     </nav>
+    <script src="{{ asset('js/leconIndex.js') }}"></script>
 
     {% block body %}
     {% endblock %}
 </body>
+
 </html>

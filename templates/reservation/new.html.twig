@@ -1,75 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Réservations{% endblock %}
+{% block title %}Nouvelle réservation{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Mes Réservations</h1>
+<div class="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-center text-blue-800 mb-6">📚 Réservez votre leçon</h1>
 
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        {% if reservations|length > 0 %}
-        <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cours
-                        </th>
-                        {% if is_granted('ROLE_TUTEUR') %}
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Élève
-                        </th>
-                        {% else %}
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tuteur</th>
-                        {% endif %}
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date
-                            début</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date
-                            fin</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Statut</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for reservation in reservations %}
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ reservation.lecon.titre }}</td>
-                        {% if is_granted('ROLE_TUTEUR') %}
-                        <td class="px-6 py-4 whitespace-nowrap">{{ reservation.eleve.prenom }} {{ reservation.eleve.nom
-                            }}</td>
-                        {% else %}
-                        <td class="px-6 py-4 whitespace-nowrap">{{ reservation.lecon.user.prenom }} {{
-                            reservation.lecon.user.nom }}</td>
-                        {% endif %}
-                        <td class="px-6 py-4 whitespace-nowrap">{{ reservation.dateDebut|date('d/m/Y H:i') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ reservation.dateFin|date('d/m/Y H:i') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {% if reservation.statut == 'confirmee' %}bg-green-100 text-green-800
-                                        {% elseif reservation.statut == 'annulee' %}bg-red-100 text-red-800
-                                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
-                                {{ reservation.statut|title }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            {% if is_granted('ROLE_TUTEUR') and reservation.statut == 'en_attente' %}
-                            <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'confirmee'}) }}"
-                                class="text-green-600 hover:text-green-900 mr-3">Confirmer</a>
-                            <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'annulee'}) }}"
-                                class="text-red-600 hover:text-red-900">Annuler</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="p-6 text-center text-gray-500">
-            Aucune réservation trouvée.
-        </div>
-        {% endif %}
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+            <div>
+                {{ form_row(form.dateDebut, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50'}}) }}
+            </div>
+            <div>
+                {{ form_row(form.dateFin, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50'}}) }}
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-black py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                🚀 Réserver maintenant
+            </button>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
