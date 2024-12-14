@@ -28,6 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->matieres = new ArrayCollection();
         $this->niveaux = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->availabilities = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     #[ORM\Id]
@@ -55,6 +57,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le prénom est obligatoire.')]
     private ?string $prenom = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $phone = null;
+
+    #[ORM\Column]
+    private ?float $hourlyRate = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutorAvailability::class, cascade: ['persist', 'remove'])]
+    private Collection $availabilities;
+
+    
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutoringBooking::class, cascade: ['persist', 'remove'])]
+    private ?Collection $tutoringBookings = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
@@ -100,6 +115,115 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+        // Getter et setter pour phone
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    // Getter et setter pour hourlyRate
+    public function getHourlyRate(): ?float
+    {
+        return $this->hourlyRate;
+    }
+
+    public function setHourlyRate(?float $hourlyRate): self
+    {
+        $this->hourlyRate = $hourlyRate;
+
+        return $this;
+    }
+
+    // Getter et setter pour availabilities
+    /**
+     * @return Collection<int, TutorAvailability>
+     */
+    public function getAvailabilities(): Collection
+    {
+        return $this->availabilities;
+    }
+
+    public function addAvailability(TutorAvailability $availability): self
+    {
+        if (!$this->availabilities->contains($availability)) {
+            $this->availabilities->add($availability);
+            $availability->setTuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvailability(TutorAvailability $availability): self
+    {
+        if ($this->availabilities->removeElement($availability)) {
+            // set the owning side to null (unless already changed)
+            if ($availability->getTuteur() === $this) {
+                $availability->setTuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTutoringBookings(): ?Collection
+    {
+        return $this->tutoringBookings;
+    }
+
+    public function setTutoringBookings(?Collection $tutoringBookings): self
+    {
+        $this->tutoringBookings = $tutoringBookings;
+
+        return $this;
+    }
+
+    public function addTutoringBooking(TutoringBooking $tutoringBooking): self
+    {
+        if (!$this->tutoringBookings->contains($tutoringBooking)) {
+            $this->tutoringBookings[] = $tutoringBooking;
+            $tutoringBooking->setTuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTutoringBooking(TutoringBooking $tutoringBooking): self
+    {
+        if ($this->tutoringBookings->contains($tutoringBooking)) {
+            $this->tutoringBookings->removeElement($tutoringBooking);
+            // set the owning side to null (unless already changed)
+            if ($tutoringBooking->getTuteur() === $this) {
+                $tutoringBooking->setTuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    // Getter et setter pour updatedAt
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+
+
 
     /**
      * @Assert\NotBlank(message="Le mot de passe est obligatoire.")

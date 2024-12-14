@@ -21,6 +21,9 @@ class Matiere
     #[ORM\Column(length: 500)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?float $hourlyRate = null;
+
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: "matieres")]
     private Collection $users;
     
@@ -42,6 +45,17 @@ class Matiere
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getHourlyRate(): ?float
+    {
+        return $this->hourlyRate;
+    }
+
+    public function setHourlyRate(float $hourlyRate): self
+    {
+        $this->hourlyRate = $hourlyRate;
+        return $this;
     }
 
     public function getNom(): ?string

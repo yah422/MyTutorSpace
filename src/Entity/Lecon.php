@@ -36,7 +36,7 @@ class Lecon
     private ?User $user = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private ?float $prix = null;
+    private ?string $prix = null;
 
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
@@ -71,15 +71,11 @@ class Lecon
     #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
     private Collection $exercice;
 
-    #[ORM\OneToMany(mappedBy: 'lecon', targetEntity: Reservation::class)]
-    private Collection $reservations;
-
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->exercice = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,25 +94,6 @@ class Lecon
         return $this;
     }
 
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): self
-    {
-        $this->reservations->removeElement($reservation);
-        return $this;
-    }
 
     public function getTitre(): ?string
     {

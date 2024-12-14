@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation de cours - Tutorat personnalisé{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">
+                Réservation de cours
+            </h1>
+            <p class="mt-2 text-lg text-gray-600">
+                Choisissez votre matière et un créneau qui vous convient pour un cours personnalisé
+            </p>
+        </div>
+
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                {# Informations personnelles #}
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">Vos informations</h3>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                        <div>
+                            {{ form_label(form.studentName, null, {'label_attr': {'class': 'block text-sm font-medium
+                            text-gray-700'}}) }}
+                            {{ form_widget(form.studentName) }}
+                            {{ form_errors(form.studentName, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                        </div>
+                        <div>
+                            {{ form_label(form.studentEmail, null, {'label_attr': {'class': 'block text-sm font-medium
+                            text-gray-700'}}) }}
+                            {{ form_widget(form.studentEmail) }}
+                            {{ form_errors(form.studentEmail, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# Choix de la matière #}
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">Matière et détails</h3>
+                    <div class="mt-4">
+                        {{ form_label(form.matiere, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-gray-700'}}) }}
+                        {{ form_widget(form.matiere) }}
+                        {{ form_errors(form.matiere, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                    <div class="mt-4">
+                        {{ form_label(form.message, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-gray-700'}}) }}
+                        {{ form_widget(form.message) }}
+                        {{ form_errors(form.message, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                </div>
+
+                {# Date et créneau horaire #}
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">Date et horaire</h3>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                        <div>
+                            {{ form_label(form.preferredDate, null, {'label_attr': {'class': 'block text-sm font-medium
+                            text-gray-700'}}) }}
+                            {{ form_widget(form.preferredDate) }}
+                            {{ form_errors(form.preferredDate, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                        </div>
+                        <div>
+                            {{ form_label(form.preferredTimeSlot, null, {'label_attr': {'class': 'block text-sm
+                            font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.preferredTimeSlot) }}
+                            {{ form_errors(form.preferredTimeSlot, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# Bouton de soumission #}
+                <div class="pt-4">
+                    {{ form_widget(form.save) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        {# Informations complémentaires #}
+        <div class="mt-8 bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900">Informations importantes</h3>
+                <div class="mt-2 text-sm text-gray-500">
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Les cours sont d'une durée de 1 heure</li>
+                        <li>Annulation possible jusqu'à 24h avant le cours</li>
+                        <li>Le tuteur vous contactera pour confirmer la réservation</li>
+                        <li>Paiement sécurisé en ligne après confirmation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
