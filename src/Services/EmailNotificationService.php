@@ -19,7 +19,7 @@ class EmailNotificationService
     public function sendBookingConfirmationToStudent(TutoringBooking $booking): void
     {
         $email = (new TemplatedEmail())
-            ->from('noreply@tutoring.com')
+            ->from('noreply@mytutorspace.com')
             ->to($booking->getStudentEmail())
             ->subject('Confirmation de votre réservation de cours')
             ->htmlTemplate('emails/booking_confirmation_student.html.twig')
@@ -33,7 +33,7 @@ class EmailNotificationService
     public function sendBookingNotificationToTutor(TutoringBooking $booking): void
     {
         $email = (new TemplatedEmail())
-            ->from('noreply@tutoring.com')
+            ->from('noreply@mytutorspace.com')
             ->to($booking->getTuteur()->getEmail())
             ->subject('Nouvelle demande de cours')
             ->htmlTemplate('emails/booking_notification_tutor.html.twig')

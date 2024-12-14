@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\User;
 use App\Entity\Contact;
 use App\Entity\Reservation;
+use App\Entity\TutoringBooking;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -23,41 +24,7 @@ class EmailService extends AbstractController
         $this->mailer = $mailer;
         $this->templating = $templating;
     }
-
-
-    // confirmation de prise de RDV pour le client
-    public function sendConfirmationEmailTo(MailerInterface $mailer, string $emailAddress, DateTime $dateDebut): void
-    {
-        $emailContent = $this->renderView('emails/reservationConfirmation.html.twig', [
-            'reservationDate' => $dateDebut->format('d/m/Y à H:i')
-        ]);
-
-        $email = (new TemplatedEmail())
-            ->from(new Address('admin@mytutorspace.com', 'MyTutorSpace'))
-            ->to($emailAddress)
-            ->subject('Confirmation de votre rendez-vous')
-            ->html($emailContent);
-
-        $mailer->send($email);
-    }
-
-    // confirmation de prise de RDV
-    public function sendConfirmationEmailFrom(MailerInterface $mailer, string $emailAddress, DateTime $dateDebut): void
-    {
-        $emailContent = $this->renderView('emails/reservationConfirmation.html.twig', [
-            'appointmentDate' => $dateDebut->format('d/m/Y à H:i')
-        ]);
-
-        $email = (new TemplatedEmail())
-            ->from(new Address($emailAddress))
-            ->to(new Address('admin@mytutorspace.com', 'MyTutorSpace'))
-            ->subject('Nouveau Rendez vous')
-            ->html($emailContent);
-
-        $mailer->send($email);
-    }
-
-
+    
     // confirmation du contact à l'user
     public function sendConfirmationEmail(MailerInterface $mailer, string $to, Contact $contact): void
     {
@@ -91,62 +58,5 @@ class EmailService extends AbstractController
 
         $mailer->send($email);
     }
-    
 
-    // notification de réception d'un nouveau message
-    public function notificationEmailToRecipient(MailerInterface $mailer, string $emailAddress, $message): void
-    {
-        $emailContent = $this->renderView('emails/messageNotification.html.twig', [
-            'titreMessage' => $message->getTitre(),
-            'contenuMessage' => $message->getContenu(),
-            'dateMessage' => $message->getCreatedAt()->format('d/m/Y à H:i')
-        ]);
-
-        $email = (new TemplatedEmail())
-            ->from(new Address('admin@mytutorspace.com', 'MyTutorSpace'))
-            ->to($emailAddress)
-            ->subject('Nouveau message reçu')
-            ->html($emailContent);
-
-        $mailer->send($email);
-    }
-
-    // notification d'annulation de RDV
-    public function sendCancellationEmail(MailerInterface $mailer, Reservation $reservation): void
-    {
-        $user = $reservation->getUser();
-        $emailContent = $this->renderView('emails/reservationCancellation.html.twig', [
-            'dateReservation' => $reservation->getDateDebut()->format('d/m/Y à H:i'),
-            'prenom' => $user ? $user->getPrenom() : 'Utilisateur anonyme',
-        ]);
-
-        $email = (new Email())
-            ->from(new Address('no-reply@mytutorspace.com', 'MyTutorSpace'))
-            ->to('admin@mytutorspace.com')
-            ->subject('Annulation de rendez-vous')
-            ->html($emailContent);
-
-        $mailer->send($email);
-    }
-
-
-    // notification de suppression de compte
-    public function sendAccountDeletionEmail(MailerInterface $mailer, UserInterface $user): void
-    {
-        /**
-         * @var User|null $user
-         */
-        $emailContent = $this->renderView('emails/accountDeletion.html.twig', [
-            'prenom' => $user->getPrenom(),
-            'email' => $user->getEmail(),
-        ]);
-
-        $email = (new Email())
-            ->from(new Address('no-reply@mytutorspace.com', 'MyTutorSpace'))
-            ->to('admin@mytutorspace.com')
-            ->subject('Suppression de compte utilisateur')
-            ->html($emailContent);
-
-        $mailer->send($email);
-    }
 }
