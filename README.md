@@ -17,6 +17,7 @@
 - **Cours en ligne personnalisés** : Réservez des sessions avec des tuteurs selon vos besoins spécifiques.
 
 ## Technologies utilisées
+
 ![icons8-symfony-64](https://github.com/user-attachments/assets/3b8add42-9228-459f-b2e7-341bc45d2d3e) &nbsp;&nbsp;&nbsp;  ![php](https://github.com/user-attachments/assets/6aeaeefc-e510-4f19-9b60-78f3e7b7e2ca) &nbsp;&nbsp;&nbsp; ![icons8-tailwind-css-48](https://github.com/user-attachments/assets/38794bac-1b9d-4884-a8f6-ca497ed1ae21)
 <br>
 - **Backend** : PHP avec le framework Symfony
@@ -25,6 +26,7 @@
 ## Installation
 
 Pour installer et exécuter le projet localement, suivez ces étapes :
+
 
 1. Clonez le dépôt :
    ```bash
