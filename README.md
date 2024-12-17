@@ -32,17 +32,21 @@ Pour installer et exécuter le projet localement, suivez ces étapes :
    ```bash
    git clone https://github.com/tonnom/MyTutorSpace.git
    ```
+   
 2. Installez les dépendances :
    ```bash
    composer install
    npm install
    ```
+   
 3. Configurez votre environnement :
     - Renommez `.env.example` en `.env` et configurez les variables d'environnement.
+      
 4. Exécutez les migrations de la base de données :
    ```bash
    php bin/console doctrine:migrations:migrate
    ```
+   
 5. Lancez le serveur de développement :
    ```bash
    symfony server:start
