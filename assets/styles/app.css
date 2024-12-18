@@ -1,6 +1,18 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flatpickr-calendar {
+    /* styles pour le calendrier */
+}
+
+.flatpickr-calendar.open {
+    /* styles pour le calendrier ouvert */
+}
+
+.flatpickr-day.selected {
+    /* styles pour la journée sélectionnée */
+}
 
 body {
     background-color: #1B4255;
