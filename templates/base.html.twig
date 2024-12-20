@@ -21,7 +21,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo de la navbar -->
             <a href="{{ path('home') }}" style="color:#FFD700;" class="flex flex-rowtext-xl font-bold items-center">
-                <img id="iconTitre" src="{{ asset('img/iconTitle.png') }}" alt="Logo">
+                <img id="iconTitre" src="{{ asset('img/iconTitle.png') }}" loading="lazy" alt="Logo">
                 <span> MyTutorSpace </span>
             </a>
 
@@ -38,7 +38,7 @@
                         href="{{ path('app_show_user', { 'id': app.user.id }) }}">
                         <div class="profilNavBar">
                             <div>
-                                <img src="{{ asset('img/user.png') }}" alt="iconProfil">
+                                <img src="{{ asset('img/user.png') }}" loading="lazy" alt="iconProfil">
                             </div>
                             <div class="pProfil">
                                 <p>{{ app.user.prenom }}</p>
