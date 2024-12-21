@@ -1,18 +1,52 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
 
-{% block body %}
-<div class="container mx-auto mt-10">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Messages reçus</h1>
-    <ul class="space-y-4">
-        {% for correspondent in correspondents %}
-        <li class="bg-gray-100 p-4 rounded-lg shadow-lg">
-            <a href="{{ path('show_message', { id: correspondent.id }) }}" class="text-blue-500 hover:underline">
-                {{ correspondent.username }}
-            </a>
-        </li>
-        {% else %}
-        <li class="text-gray-500">Aucun correspondant trouvé.</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <link id="iconTitre" rel="icon" href="{{ asset('img/iconTitle.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages reçus - MyTutorSpace</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body style="background-color: #1B4255;" class="text-gray-300 min-h-screen flex items-center justify-center">
+    <div style="background-color: #567C8D;" class="container mx-auto max-w-5xl p-6 rounded-lg shadow-lg">
+        <div class="flex flex-col items-center justify-center w-full">
+            <h1 style="color: #FFD700;" class="text-4xl font-extrabold mb-8 text-center">Messages reçus</h1>
+
+            {# Liste des correspondants #}
+            <div class="w-full bg-gray-700 p-6 rounded-lg shadow-lg mb-6">
+                {% if correspondents|length > 0 %}
+                <ul class="divide-y divide-gray-600">
+                    {% for item in correspondents %}
+                    <li class="py-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-lg font-bold">{{ item.correspondent.prenom }} {{ item.correspondent.nom }}
+                            </p>
+                            <p class="text-sm text-gray-400">Dernier message le {{
+                                item.lastMessageDate|date('d/m/Y H:i') }}</p>
+                        </div>
+                        <a href="{{ path('show_message', { id: item.correspondent.id }) }}"
+                            style="background-color: #FFD700;"
+                            class="py-2 px-4 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
+                            Voir la conversation
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-center text-gray-300">Vous n'avez aucun message pour le moment.</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-6">
+                <a href="{{ path('app_message') }}" style="background-color: #FFD700;"
+                    class="py-3 px-6 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
+                    Retour à la page d'accueil des messages
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

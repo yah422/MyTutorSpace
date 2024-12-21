@@ -29,7 +29,7 @@ class MessageRepository extends ServiceEntityRepository
         $qb = $em->createQueryBuilder(); // Crée une instance de QueryBuilder pour construire la requête DQL
 
         // Construction de la requête
-        $qb->select('DISTINCT u') // Sélectionne des utilisateurs distincts
+        $qb->select('u AS correspondent, MAX(m.messageDate) AS lastMessageDate') // Correspondant et date du dernier message
             ->from('App\Entity\User', 'u') // Définit la table source (entité User) avec l'alias 'u'
             ->join(
                 'App\Entity\Message', // Table des messages
@@ -39,12 +39,15 @@ class MessageRepository extends ServiceEntityRepository
             )
             ->where('m.sender = :user OR m.receiver = :user') // Filtre les messages liés à l'utilisateur
             ->andWhere('u.id != :user') // Exclut l'utilisateur lui-même des résultats
-            ->setParameter('user', $user); // Définit le paramètre sécurisé pour éviter les injections SQL
+            ->setParameter('user', $user) // Définit le paramètre sécurisé pour éviter les injections SQL
+            ->groupBy('u') // Groupe les résultats par correspondant
+            ->orderBy('lastMessageDate', 'DESC'); // Trie par date de dernier message
 
         // Exécution de la requête et récupération des résultats
         $query = $qb->getQuery();
         return $query->getResult();
     }
+
 
     /**
      * Récupère tous les messages échangés entre deux utilisateurs.

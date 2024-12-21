@@ -17,7 +17,7 @@
                                 class="h-32 w-32 object-cover rounded-full">
                         {% else %}
                         <img src="{{ asset('img/default-profile.jpg') }}" alt="Photo de profil par défaut"
-                        class="h-32 w-32 object-cover rounded-full">     
+                                class="h-32 w-32 object-cover rounded-full">
                         {{ dump(user.photo) }}
 
                         {% endif %}
@@ -38,6 +38,10 @@
         <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;"
                 href="{{ path('edit_user', { id: user.id }) }}">
                 Modifier le profil
+        </a>
+        <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;"
+                href="{{ path('app_message') }}">
+                Messagerie
         </a>
         {% endif %}
 

@@ -5,46 +5,35 @@
     <meta charset="UTF-8">
     <link id="iconTitre" rel="icon" href="{{ asset('img/iconTitle.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie - MyTutorSpace</title>
+    <title>Messages - MyTutorSpace</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body style="background-color: #1B4255;" class="text-gray-300 min-h-screen flex items-center justify-center">
     <div style="background-color: #567C8D;" class="container mx-auto max-w-5xl p-6 rounded-lg shadow-lg">
-        <div class="flex flex-col items-center justify-center">
-            <h1 style="color: #FFD700;" class="text-4xl font-extrabold mb-8 text-center">Messagerie</h1>
+        <div class="flex flex-col items-center justify-center w-full">
+            <h1 style="color: #FFD700;" class="text-4xl font-extrabold mb-8 text-center">Mes Messages</h1>
 
+            {# Affichage d'une erreur de connexion, si présente #}
             {% if error %}
-            <div class="bg-red-600 text-white p-4 rounded mb-4">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+            <div class="w-full bg-red-100 text-red-700 p-4 rounded-lg mb-6 shadow-md">
+                <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
             </div>
             {% endif %}
 
-            <div class="space-y-4 w-full">
-                <div class="bg-gray-700 p-4 rounded-lg mb-4">
-                    <h2 style="color: #FFD700;" class="text-xl font-bold">Messages récents</h2>
-                    <div class="space-y-3 mt-4">
-                        {% for correspondent in correspondents %}
-                        <a href="{{ path('show_message', {id: correspondent.id}) }}"
-                            class="flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-600 transition duration-300">
-                            <div class="flex items-center space-x-4">
-                                <div class="text-gray-200 font-semibold">{{ correspondent.prenom }} {{ correspondent.nom
-                                    }}</div>
-                            </div>
-                            <div class="text-sm text-gray-400">{{ correspondent.lastMessage ?
-                                correspondent.lastMessage.messageDate|date('d/m/Y H:i') : 'Aucun message' }}</div>
+            <div class="w-full bg-gray-700 p-6 rounded-lg shadow-lg mb-6">
+                <div class="space-y-4 text-center">
+                    <p class="text-lg font-semibold">Que souhaitez-vous faire ?</p>
+                    <div class="flex flex-col space-y-4">
+                        <a href="{{ path('new_message') }}" style="background-color: #FFD700;"
+                            class="py-3 px-6 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
+                            Envoyer un nouveau message
                         </a>
-                        {% else %}
-                        <p class="text-gray-400">Vous n'avez pas encore de messages.</p>
-                        {% endfor %}
+                        <a href="{{ path('received_message') }}" style="background-color: #FFD700;"
+                            class="py-3 px-6 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
+                            Voir les messages reçus
+                        </a>
                     </div>
-                </div>
-
-                <div class="text-center">
-                    <a href="{{ path('new_message') }}" style="background-color: #FFD700;"
-                        class="text-[#1B4255] py-3 px-6 rounded-lg font-semibold hover:bg-yellow-500 transition">
-                        Nouveau message
-                    </a>
                 </div>
             </div>
         </div>

@@ -44,7 +44,7 @@ class MessageController extends AbstractController
 
             $this->addFlash('success', 'Votre message a bien été envoyé.');
 
-            return $this->redirectToRoute('new_message');
+            return $this->redirectToRoute('show_message', ['id' => $message->getReceiver()->getId()]);
         }
 
         return $this->render('message/new.html.twig', [
@@ -52,7 +52,7 @@ class MessageController extends AbstractController
             'error' => $form->getErrors(true, false),
         ]);
     }
-
+    
     #[Route('/message/received', name: 'received_message')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function received(MessageRepository $messageRepository): Response
@@ -73,21 +73,26 @@ class MessageController extends AbstractController
         MessageRepository $messageRepository,
         Request $request
     ): Response {
+        // Récupération du destinataire par son ID
         $receiver = $entityManager->getRepository(User::class)->find($id);
 
         if (!$receiver) {
             throw $this->createNotFoundException('Destinataire introuvable.');
         }
 
+        // Utilisateur connecté
         $user = $this->getUser();
+        // Récupération des messages échangés entre l'utilisateur connecté et le destinataire
         $messages = $messageRepository->findAllMessages($user, $receiver);
 
+        // Création du formulaire d'envoi de message
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message, [
             'receiver' => $receiver,
         ]);
         $form->handleRequest($request);
 
+        // Gestion de la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setSender($user);
             $message->setReceiver($receiver);
@@ -98,10 +103,12 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('show_message', ['id' => $id]);
         }
 
+        // Rendu de la vue
         return $this->render('message/show.html.twig', [
-            'receiver' => $receiver,
             'messages' => $messages,
             'formMessage' => $form->createView(),
+            'receiver' => $receiver
         ]);
     }
+
 }

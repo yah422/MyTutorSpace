@@ -5,24 +5,27 @@
     <meta charset="UTF-8">
     <link id="iconTitre" rel="icon" href="{{ asset('img/iconTitle.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversation avec {{ receiver.prenom }} {{ receiver.nom }} - MyTutorSpace</title>
+    <title>Conversation avec {{ receiver.prenom }} - MyTutorSpace</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body style="background-color: #1B4255;" class="text-gray-300 min-h-screen flex items-center justify-center">
     <div style="background-color: #567C8D;" class="container mx-auto max-w-5xl p-6 rounded-lg shadow-lg">
         <div class="flex flex-col items-center justify-center w-full">
-            <h1 style="color: #FFD700;" class="text-4xl font-extrabold mb-8 text-center">Conversation avec {{
-                receiver.prenom }} {{ receiver.nom }}</h1>
+            <h1 style="color: #FFD700;" class="text-4xl font-extrabold mb-8 text-center">
+                Conversation avec {{ receiver.prenom }}
+            </h1>
 
+            <!-- Section des messages -->
             <div class="w-full bg-gray-700 p-6 rounded-lg shadow-lg mb-6">
                 <div class="space-y-4">
                     {% for message in messages %}
                     <div class="flex {{ message.sender == app.user ? 'justify-end' : 'justify-start' }} mb-4">
                         <div class="bg-gray-800 p-4 rounded-lg max-w-xs text-white">
                             <p class="text-sm">{{ message.messageContent }}</p>
-                            <span class="block text-xs text-gray-400 mt-2">{{ message.messageDate|date('d/m/Y H:i')
-                                }}</span>
+                            <span class="block text-xs text-gray-400 mt-2">
+                                {{ message.messageDate|date('d/m/Y H:i') }}
+                            </span>
                         </div>
                     </div>
                     {% else %}
@@ -31,6 +34,7 @@
                 </div>
             </div>
 
+            <!-- Formulaire d'envoi de message -->
             <div class="w-full bg-gray-700 p-4 rounded-lg">
                 <h2 style="color: #FFD700;" class="text-xl font-semibold mb-4">Envoyer un message</h2>
 
@@ -45,16 +49,17 @@
 
                 <div class="flex justify-end">
                     <button type="submit" style="background-color: #FFD700;"
-                        class="py-3 px-6 rounded-lg text-[#1B4255] font-semibold hover:bg-yellow-500 transition">
+                        class="py-3 px-6 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
                         Envoyer
                     </button>
                 </div>
                 {{ form_end(formMessage) }}
             </div>
 
+            <!-- Lien vers la boîte de réception -->
             <div class="mt-6">
                 <a href="{{ path('received_message') }}" style="background-color: #FFD700;"
-                    class="py-3 px-6 rounded-lg text-[#1B4255] font-semibold hover:bg-yellow-500 transition">
+                    class="py-3 px-6 rounded-lg text-black font-semibold hover:bg-yellow-500 transition">
                     Retour à la boîte de réception
                 </a>
             </div>
