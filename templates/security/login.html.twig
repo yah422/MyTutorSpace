@@ -53,6 +53,10 @@
                             required>
                     </div>
 
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                    </label>
+
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                     <button type="submit" style="background-color: #FFD700; color: #1B4255;"

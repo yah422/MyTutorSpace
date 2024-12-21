@@ -1,3 +1,23 @@
 _security_logout:
     resource: security.route_loader.logout
     type: service
+security:
+    firewalls:
+        main:
+            # Permet de mémoriser l'utilisateur
+            remember_me:
+                secret: '%kernel.secret%' # Une clé secrète définie dans vos paramètres
+                lifetime: 604800          # Durée en secondes (7 jours ici)
+                path: '/'                 # Path où le cookie sera valable
+                # optionnel : nom du cookie
+                name: REMEMBERME
+
+            form_login:
+                login_path: app_login    # Route de la page de connexion
+                check_path: app_login    # Route pour traiter la soumission du formulaire
+                always_use_default_target_path: true
+                default_target_path: app_home
+
+            logout:
+                path: app_logout         # Route pour déconnexion
+                target: app_home         # Route après déconnexion
