@@ -1,17 +1,18 @@
 framework:
-    secret: '%env(APP_SECRET)%'
-    csrf_protection: true  # Assurez-vous que la protection CSRF est activée
+    secret: "%env(APP_SECRET)%"
+    csrf_protection: true # Assurez-vous que la protection CSRF est activée
+
     session:
-        enabled: true  # Active les sessions
-        handler_id: null  # Utilisez le gestionnaire de session par défaut
-        cookie_secure: auto  # Ajustable selon l'utillisation de HTTPS
-        cookie_lifetime: 3600  # Durée de vie du cookie en secondes
-        cookie_path: /  # Chemin où le cookie est valide
-        cookie_domain: null  # Domaine du cookie, si nécessaire
+        enabled: true # Active les sessions
+        handler_id: null # Utilisez le gestionnaire de session par défaut
+        cookie_secure: auto # Ajustable selon l'utilisation de HTTPS
+        cookie_lifetime: 3600 # Durée de vie du cookie en secondes
+        cookie_path: / # Chemin où le cookie est valide
+        cookie_domain: null # Domaine du cookie, si nécessaire
 
 # Configuration pour l'environnement de test
 when@test:
     framework:
         test: true
         session:
-            storage_factory_id: session.storage.factory.mock_file  # Utilisez un stockage de session mocké pour les tests
+            storage_factory_id: session.storage.factory.mock_file # Utilisez un stockage de session mocké pour les tests

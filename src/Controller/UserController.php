@@ -15,7 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
@@ -140,8 +142,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/edit/{id}', name: 'edit_user', methods: ['GET', 'POST'])]
-    public function edit(int $id, EntityManagerInterface $entityManager, Request $request): Response
-    {
+    public function edit(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
+    ): Response {
         $user = $entityManager->getRepository(User::class)->find($id);
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur introuvable.');
@@ -151,21 +157,41 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $photoFile = $form->get('photo')->getData();
+            // Gestion de la photo de profil
+            $photoFile = $form->get('photoFile')->getData();
 
             if ($photoFile) {
-                $photoFilename = uniqid() . '.' . $photoFile->guessExtension();
-                $photoFile->move(
-                    $this->getParameter('photos_directory'),
-                    $photoFilename
-                );
-                $user->setPhoto($photoFilename);
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('avatars_directory'),
+                        $newFilename
+                    );
+
+                    // Supprime l'ancienne photo si elle existe
+                    if ($user->getProfilePicture()) {
+                        $oldFilePath = $this->getParameter('avatars_directory') . '/' . $user->getProfilePicture();
+                        if (file_exists($oldFilePath)) {
+                            unlink($oldFilePath);
+                        }
+                    }
+
+                    $user->setProfilePicture($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de la photo');
+                }
             }
 
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Utilisateur modifié avec succès.');
-            return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Profil mis à jour avec succès');
+                return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du profil');
+            }
         }
 
         return $this->render('user/edit.html.twig', [

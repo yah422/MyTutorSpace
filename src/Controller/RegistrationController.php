@@ -11,8 +11,11 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -31,47 +34,66 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/tuteur', name: 'app_register_tuteur')]
-    public function registerTuteur(Request $request): Response
+    public function registerTuteur(Request $request, SluggerInterface $slugger): Response
     {
-        return $this->registerWithRole($request, 'ROLE_TUTEUR');
+        return $this->registerWithRole($request, 'ROLE_TUTEUR', $this->passwordHasher, $this->entityManager, $slugger);
     }
-
     #[Route('/register/eleve', name: 'app_register_eleve')]
-    public function registerEleve(Request $request): Response
+    public function registerEleve(Request $request, SluggerInterface $slugger): Response
     {
-        return $this->registerWithRole($request, 'ROLE_ELEVE');
+        return $this->registerWithRole($request, 'ROLE_ELEVE', $this->passwordHasher, $this->entityManager, $slugger);
     }
-
     #[Route('/register/parent', name: 'app_register_parent')]
-    public function registerParent(Request $request): Response
+    public function registerParent(Request $request, SluggerInterface $slugger): Response
     {
-        return $this->registerWithRole($request, 'ROLE_PARENT');
+        return $this->registerWithRole($request, 'ROLE_PARENT', $this->passwordHasher, $this->entityManager, $slugger);
     }
-
     // Méthode commune pour tous les rôles
-    private function registerWithRole(Request $request, string $role): Response
-    {
+    #[Route('/register/{role}', name: 'app_register')]
+    public function registerWithRole(
+        Request $request,
+        string $role,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hash du mot de passe
+            // Gestion du mot de passe
             $user->setPassword(
-                $this->passwordHasher->hashPassword(
+                $passwordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
 
-            // Attribution du rôle selon la route
+            // Gestion de la photo de profil
+            $profilePictureFile = $form->get('profilePicture')->getData();
+            if ($profilePictureFile) {
+                $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePictureFile->guessExtension();
+
+                try {
+                    $profilePictureFile->move(
+                        $this->getParameter('avatars_directory'),
+                        $newFilename
+                    );
+                    $user->setProfilePicture($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Un problème est survenu lors du téléchargement de votre photo');
+                }
+            }
+
+            // Attribution du rôle
             $user->setRoles([$role]);
 
-            // Sauvegarde de l'utilisateur dans la base de données
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-            // Redirection vers la page de connexion
             return $this->redirectToRoute('app_login');
         }
 

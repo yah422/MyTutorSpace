@@ -3,48 +3,55 @@
 {% block title %} Profil {% endblock %}
 
 {% block body %}
+<div class="min-h-screen flex items-center justify-center" style="background-color: #1B4255;">
+        <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg" style="background-color: #567C8D;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <!-- Section gauche : Photo de profil -->
+                        <div class="flex flex-col items-center">
+                                {% if user.profilePicture %}
+                                <img style="width:200px; height:200px;" src="{{ asset('uploads/avatars/' ~ user.profilePicture) }}" alt="Photo de profil"
+                                        class="h-40 w-40 object-cover rounded-full shadow-md">
+                                {% else %}
+                                <img style="width:200px; height:200px;" src="{{ asset('uploads/avatars/default-profile.png') }}"
+                                        alt="Photo de profil par défaut"
+                                        class="h-40 w-40 object-cover rounded-full shadow-md">
+                                {% endif %}
+                                <h2 class="text-2xl md:text-3xl font-extrabold mt-4 text-center"
+                                        style="color: #FFD700;">
+                                        {{ user.prenom }} {{ user.nom }}
+                                </h2>
+                        </div>
 
-<div class="listEditUser">
+                        <!-- Section droite : Informations utilisateur -->
+                        <div>
+                                <div class="mb-4">
+                                        <p class="text-gray-300 text-base md:text-lg"><span class="font-bold">Email
+                                                        :</span> {{ user.email }}</p>
+                                </div>
+                                <div class="mb-4">
+                                        <p class="text-gray-300 text-base md:text-lg"><span class="font-bold">À propos
+                                                        :</span></p>
+                                        <p class="text-gray-300 text-sm md:text-base">{{ user.aboutMe }}</p>
+                                </div>
 
-        {# J'affiche un titre pour le profil de l'utilisateur #}
-        <h2 class="text-gray-300"> Profil {{ user.prenom }} </h2>
-
-        {# J'affiche les informations spécifiques de l'utilisateur #}
-        <div>
-                <div>
-                        {% if user.photo %}
-                        <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de profil"
-                                class="h-32 w-32 object-cover rounded-full">
-                        {% else %}
-                        <img src="{{ asset('img/default-profile.jpg') }}" alt="Photo de profil par défaut"
-                                class="h-32 w-32 object-cover rounded-full">
-                        {{ dump(user.photo) }}
-
-                        {% endif %}
-                </div>
-                <div>
-                        <p class="text-gray-300">Nom : {{ user.nom }}</p>
-                        <p class="text-gray-300">Prénom : {{ user.prenom }}</p>
-                        <p class="text-gray-300">Email : {{ user.email }}</p>
+                                <!-- Actions -->
+                                {% if app.user is not null and (app.user.id == user.id or 'ROLE_ADMIN' in
+                                app.user.roles) %}
+                                <div class="space-y-3">
+                                        <a href="{{ path('edit_user', { id: user.id }) }}"
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded"
+                                                style="background-color: #FFD700; color: #1B4255;">
+                                                Modifier le profil
+                                        </a>
+                                        <a href="{{ path('app_message') }}"
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded"
+                                                style="background-color: #FFD700; color: #1B4255;">
+                                                Accéder à la messagerie
+                                        </a>
+                                </div>
+                                {% endif %}
+                        </div>
                 </div>
         </div>
-        <div>
-                <p class="text-gray-300">About Me : {{ user.aboutMe }}</p>
-        </div>
-
-        {# Lien pour modifier le profil de l'utilisateur en utilisant son ID #}
-        {# Afficher le bouton seulement pour l'utilisateur connecté ou l'administrateur #}
-        {% if app.user is not null and (app.user.id == user.id or 'ROLE_ADMIN' in app.user.roles) %}
-        <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;"
-                href="{{ path('edit_user', { id: user.id }) }}">
-                Modifier le profil
-        </a>
-        <a class="text-black font-bold py-2 px-4 rounded" style="background-color: #ECECEC;"
-                href="{{ path('app_message') }}">
-                Messagerie
-        </a>
-        {% endif %}
-
 </div>
-
 {% endblock %}

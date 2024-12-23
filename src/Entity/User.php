@@ -19,19 +19,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public function __construct()
-    {
-        // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
-        $this->roles = ['ROLE_USER'];
-        $this->lecon = new ArrayCollection();
-        $this->lecons = new ArrayCollection();
-        $this->matieres = new ArrayCollection();
-        $this->niveaux = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
-        $this->availabilities = new ArrayCollection();
-        $this->bookings = new ArrayCollection();
-    }
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -64,10 +51,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?float $hourlyRate = null;
 
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender')]
+    private Collection $sent;
+
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'receiver')]
+    private Collection $received;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutorAvailability::class, cascade: ['persist', 'remove'])]
     private Collection $availabilities;
 
-    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePicture = 'default-avatar.png'; // Image par défaut
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutoringBooking::class, cascade: ['persist', 'remove'])]
     private ?Collection $tutoringBookings = null;
 
@@ -81,10 +82,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
+     */
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
+    #[ORM\ManyToOne(targetEntity: Niveau::class)]
+    private ?Niveau $niveau = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'user')]
+    private Collection $lecon;
+
+    /**
+     * @var Collection<int, Lecon>
+     */
+    #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
+    private Collection $lecons;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
+
+    public function __construct()
+    {
+        // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
+        $this->roles = ['ROLE_USER'];
+        $this->lecon = new ArrayCollection();
+        $this->lecons = new ArrayCollection();
+        $this->matieres = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->availabilities = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
+        $this->sent = new ArrayCollection();
+        $this->received = new ArrayCollection();
+    }
 
     /**
      * @return Collection<int, Contact>
@@ -116,7 +155,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        // Getter et setter pour phone
+    // Getter et setter pour phone
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -139,6 +178,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->hourlyRate = $hourlyRate;
 
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
         return $this;
     }
 
@@ -167,6 +217,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($availability->getTuteur() === $this) {
                 $availability->setTuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getSent(): Collection
+    {
+        return $this->sent;
+    }
+
+    public function addSent(Message $sent): static
+    {
+        if (!$this->sent->contains($sent)) {
+            $this->sent->add($sent);
+            $sent->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSent(Message $sent): static
+    {
+        if ($this->sent->removeElement($sent)) {
+            // set the owning side to null (unless already changed)
+            if ($sent->getSender() === $this) {
+                $sent->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getReceived(): Collection
+    {
+        return $this->received;
+    }
+
+    public function addReceived(Message $received): static
+    {
+        if (!$this->received->contains($received)) {
+            $this->received->add($received);
+            $received->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceived(Message $received): static
+    {
+        if ($this->received->removeElement($received)) {
+            // set the owning side to null (unless already changed)
+            if ($received->getReceiver() === $this) {
+                $received->setReceiver(null);
             }
         }
 
@@ -222,50 +332,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
-
-    /**
-     * @Assert\NotBlank(message="Le mot de passe est obligatoire.")
-     */
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\ManyToOne(targetEntity: Niveau::class)]
-    private ?Niveau $niveau = null;
-
-    #[UploadableField(mapping: 'user_photos', fileNameProperty: 'photo')]
-    private ?File $photoFile = null;
-
-    private ?string $photo = null;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    // Getters et Setters
-    public function setPhotoFile(?File $photoFile = null): void
-    {
-        $this->photoFile = $photoFile;
-
-        if ($photoFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getPhotoFile(): ?File
-    {
-        return $this->photoFile;
-    }
-
-    public function setPhoto(?string $photo): void
-    {
-        $this->photo = $photo;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
     public function getNiveau(): ?Niveau
     {
         return $this->niveau;
@@ -350,20 +416,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * @var Collection<int, Lecon>
-     */
-    #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'user')]
-    private Collection $lecon;
-
-    /**
-     * @var Collection<int, Lecon>
-     */
-    #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
-    private Collection $lecons;
-
-
 
     public function getPassword(): ?string
     {

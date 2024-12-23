@@ -15,7 +15,8 @@
             <!-- Section gauche avec illustration -->
             <div class="flex flex-col items-center justify-center">
                 <img src="{{ asset('img/registerImg.svg') }}" alt="Inscription Illustration" class="w-3/4 mb-4">
-                <h1 style="color: #FFD700;" class="text-3xl font-extrabold mb-2 text-center">Bienvenue sur MyTutorSpace</h1>
+                <h1 style="color: #FFD700;" class="text-3xl font-extrabold mb-2 text-center">Bienvenue sur MyTutorSpace
+                </h1>
                 <p class="text-gray-200 text-lg text-center">
                     Rejoignez notre communauté et commencez votre parcours avec nous.<br> C'est rapide et sécurisé !
                 </p>
@@ -49,6 +50,18 @@
                 'attr': {'class': 'w-full bg-[#567C8D] text-black rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
                 }) }}
 
+                <!-- Numéro de téléphone -->
+                {{ form_row(registrationForm.phone, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-black rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
+                <!-- Photo de profil -->
+                {{ form_row(registrationForm.profilePicture, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
+                'attr': {'class': 'w-full bg-[#567C8D] text-black rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
+                }) }}
+
                 <!-- About Me -->
                 {{ form_row(registrationForm.aboutMe, {
                 'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
@@ -62,13 +75,14 @@
                     'attr': {'class': 'mr-2'}
                     }) }}
                     <span class="text-sm">
-                        Accepter les <a href="#" style= "color: #FFD700;" class=" hover:underline">conditions générales</a>.
+                        Accepter les <a href="#" style="color: #FFD700;" class=" hover:underline">conditions
+                            générales</a>.
                     </span>
                 </div>
 
                 <!-- Bouton -->
-                <button type="submit"
-                    style= "background-color: #FFD700; color:#1B4255;" class="w-full font-bold py-3 rounded hover:bg-yellow-500 transition">
+                <button type="submit" style="background-color: #FFD700; color:#1B4255;"
+                    class="w-full font-bold py-3 rounded hover:bg-yellow-500 transition">
                     S'inscrire
                 </button>
 
@@ -77,7 +91,8 @@
                 <!-- Lien pour se connecter -->
                 <p class="text-center mt-4 text-sm">
                     Vous avez déjà un compte ?
-                    <a href="{{ path('app_login') }}" style="color: #FFD700;" class=" hover:underline">Connectez-vous ici</a>.
+                    <a href="{{ path('app_login') }}" style="color: #FFD700;" class=" hover:underline">Connectez-vous
+                        ici</a>.
                 </p>
             </div>
         </div>

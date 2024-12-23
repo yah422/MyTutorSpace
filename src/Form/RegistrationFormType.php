@@ -6,10 +6,12 @@ use Assert\Length;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -30,6 +32,32 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue(['message' => 'Vous devez accepter les conditions.']),
+                ],
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Numéro de téléphone',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Le numéro de téléphone est obligatoire.']),
+                    new Assert\Regex([
+                        'pattern' => '/^\+?\d{10,15}$/',
+                        'message' => 'Veuillez entrer un numéro de téléphone valide.',
+                    ]),
+                ],
+            ])
+            ->add('profilePicture', FileType::class, [
+                'label' => 'Photo de profil (optionnel)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG ou PNG)',
+                    ])
                 ],
             ])
             ->add('aboutMe', TextType::class, [
