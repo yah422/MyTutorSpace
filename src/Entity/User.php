@@ -48,9 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
-    #[ORM\Column]
-    private ?float $hourlyRate = null;
-
     /**
      * @var Collection<int, Message>
      */
@@ -67,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $availabilities;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePicture = 'default-avatar.png'; // Image par défaut
+    private ?string $profilePicture = 'default-profile.png'; // Image par défaut
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutoringBooking::class, cascade: ['persist', 'remove'])]
     private ?Collection $tutoringBookings = null;
@@ -164,19 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    // Getter et setter pour hourlyRate
-    public function getHourlyRate(): ?float
-    {
-        return $this->hourlyRate;
-    }
-
-    public function setHourlyRate(?float $hourlyRate): self
-    {
-        $this->hourlyRate = $hourlyRate;
 
         return $this;
     }

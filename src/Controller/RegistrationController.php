@@ -34,19 +34,19 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/tuteur', name: 'app_register_tuteur')]
-    public function registerTuteur(Request $request, SluggerInterface $slugger): Response
+    public function registerTuteur(Request $request, SluggerInterface $slugger, #[Autowire('%avatars_directory%')] string $avatarsDirectory): Response
     {
-        return $this->registerWithRole($request, 'ROLE_TUTEUR', $this->passwordHasher, $this->entityManager, $slugger);
+        return $this->registerWithRole($request, 'ROLE_TUTEUR', $this->passwordHasher, $this->entityManager, $slugger, $avatarsDirectory);
     }
     #[Route('/register/eleve', name: 'app_register_eleve')]
-    public function registerEleve(Request $request, SluggerInterface $slugger): Response
+    public function registerEleve(Request $request, SluggerInterface $slugger, #[Autowire('%avatars_directory%')] string $avatarsDirectory): Response
     {
-        return $this->registerWithRole($request, 'ROLE_ELEVE', $this->passwordHasher, $this->entityManager, $slugger);
+        return $this->registerWithRole($request, 'ROLE_ELEVE', $this->passwordHasher, $this->entityManager, $slugger, $avatarsDirectory);
     }
     #[Route('/register/parent', name: 'app_register_parent')]
-    public function registerParent(Request $request, SluggerInterface $slugger): Response
+    public function registerParent(Request $request, SluggerInterface $slugger, #[Autowire('%avatars_directory%')] string $avatarsDirectory): Response
     {
-        return $this->registerWithRole($request, 'ROLE_PARENT', $this->passwordHasher, $this->entityManager, $slugger);
+        return $this->registerWithRole($request, 'ROLE_PARENT', $this->passwordHasher, $this->entityManager, $slugger, $avatarsDirectory);
     }
     // Méthode commune pour tous les rôles
     #[Route('/register/{role}', name: 'app_register')]
@@ -55,7 +55,8 @@ class RegistrationController extends AbstractController
         string $role,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        #[Autowire('%avatars_directory%')] string $avatarsDirectory
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -71,21 +72,24 @@ class RegistrationController extends AbstractController
             );
 
             // Gestion de la photo de profil
-            $profilePictureFile = $form->get('profilePicture')->getData();
-            if ($profilePictureFile) {
-                $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $profilePicture = $form->get('image')->getData();
+
+            if ($profilePicture) {
+                $originalFilename = pathinfo($profilePicture->getClientOriginalName(), PATHINFO_FILENAME);
+
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePictureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePicture->guessExtension();
 
                 try {
-                    $profilePictureFile->move(
-                        $this->getParameter('avatars_directory'),
-                        $newFilename
-                    );
-                    $user->setProfilePicture($newFilename);
+                    $profilePicture->move($avatarsDirectory, $newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Un problème est survenu lors du téléchargement de votre photo');
+                    // Si l'upload rencontre un problème on affiche un message d'erreur
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+
+                    //Et on redirige vers le formulaire
+                    return $this->redirectToRoute('app_register');
                 }
+                $user->setProfilePicture('/uploads/avatars/' . $newFilename);
             }
 
             // Attribution du rôle

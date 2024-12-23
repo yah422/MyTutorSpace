@@ -45,7 +45,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('profilePicture', FileType::class, [
+            ->add('image', FileType::class, [
                 'label' => 'Photo de profil (optionnel)',
                 'mapped' => false,
                 'required' => false,

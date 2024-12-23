@@ -146,9 +146,11 @@ class UserController extends AbstractController
         int $id,
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        #[Autowire('%avatars_directory%')] string $avatarsDirectory
     ): Response {
         $user = $entityManager->getRepository(User::class)->find($id);
+
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur introuvable.');
         }
@@ -158,31 +160,24 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Gestion de la photo de profil
-            $photoFile = $form->get('photoFile')->getData();
+            $profilePicture = $form->get('image')->getData();
 
-            if ($photoFile) {
-                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+            if ($profilePicture) {
+                $originalFilename = pathinfo($profilePicture->getClientOriginalName(), PATHINFO_FILENAME);
+
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePicture->guessExtension();
 
                 try {
-                    $photoFile->move(
-                        $this->getParameter('avatars_directory'),
-                        $newFilename
-                    );
-
-                    // Supprime l'ancienne photo si elle existe
-                    if ($user->getProfilePicture()) {
-                        $oldFilePath = $this->getParameter('avatars_directory') . '/' . $user->getProfilePicture();
-                        if (file_exists($oldFilePath)) {
-                            unlink($oldFilePath);
-                        }
-                    }
-
-                    $user->setProfilePicture($newFilename);
+                    $profilePicture->move($avatarsDirectory, $newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de la photo');
+                    // Si l'upload rencontre un problème on affiche un message d'erreur
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+
+                    //Et on redirige vers le formulaire
+                    return $this->redirectToRoute('app_register');
                 }
+                $user->setProfilePicture( $newFilename);
             }
 
             try {
@@ -190,7 +185,7 @@ class UserController extends AbstractController
                 $this->addFlash('success', 'Profil mis à jour avec succès');
                 return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du profil');
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du profil.');
             }
         }
 
