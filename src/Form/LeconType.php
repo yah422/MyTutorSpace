@@ -14,6 +14,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class LeconType extends AbstractType
 {
@@ -59,7 +61,13 @@ class LeconType extends AbstractType
                         'mimeTypesMessage' => 'Veuillez télécharger un fichier PDF valide',
                     ])
                 ],
-            ]);
+            ])
+            ->add('hourly_rate', NumberType::class, [
+                'label' => 'Tarif horaire',
+                'required' => false,
+                'attr' => ['class' => 'form-control']
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

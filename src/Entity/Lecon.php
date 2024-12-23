@@ -35,11 +35,8 @@ class Lecon
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private ?float $hourlyRate = null;
-
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private ?string $prix = null;
+    #[ORM\Column(type: "decimal", scale: 2, nullable: true)]
+    private $hourlyRate;
 
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
@@ -86,18 +83,6 @@ class Lecon
         return $this->id;
     }
 
-    public function getPrix(): ?float
-    {
-        return $this->prix;
-    }
-
-    public function setPrix(float $prix): self
-    {
-        $this->prix = $prix;
-        return $this;
-    }
-
-
     public function getTitre(): ?string
     {
         return $this->titre;
@@ -109,7 +94,6 @@ class Lecon
         return $this;
     }
 
-    // Getter et setter pour hourlyRate
     public function getHourlyRate(): ?float
     {
         return $this->hourlyRate;
@@ -118,7 +102,6 @@ class Lecon
     public function setHourlyRate(?float $hourlyRate): self
     {
         $this->hourlyRate = $hourlyRate;
-
         return $this;
     }
 

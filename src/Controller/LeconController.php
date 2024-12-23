@@ -30,21 +30,21 @@ class LeconController extends AbstractController
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveauRepository = $entityManager->getRepository(Niveau::class);
         $niveaux = $niveauRepository->findAll();
-        
+
         $matiereId = $request->query->get('matiere');
         $niveauId = $request->query->get('niveau');
-        
+
         $selectedMatiere = null;
         $selectedNiveau = null;
-        
+
         if ($matiereId) {
             $selectedMatiere = $matiereRepository->find($matiereId);
         }
-        
+
         if ($niveauId) {
             $selectedNiveau = $niveauRepository->find($niveauId);
         }
-        
+
         $lecons = $leconRepository->findLeconsByFilters($selectedMatiere, $selectedNiveau);
 
         return $this->render('lecon/index.html.twig', [
@@ -60,12 +60,12 @@ class LeconController extends AbstractController
     public function add(MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
-            return $this->render('user/errorPage.html.twig');     
+            return $this->render('user/errorPage.html.twig');
         }
 
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $lecon = new Lecon();
-        
+
         $lecon->setDateCreation(new \DateTime());
 
         $form = $this->createForm(LeconType::class, $lecon);
@@ -73,9 +73,16 @@ class LeconController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $pdfFile = $form->get('pdfFile')->getData();
+            // Récupérer la valeur de hourly_rate
+            $hourlyRate = $form->get('hourly_rate')->getData();
+
+            if ($hourlyRate === null) {
+                // Attribuer une valeur par défaut si hourly_rate est NULL
+                $hourlyRate = 20;  // Exemple de valeur par défaut
+            }
 
             if ($pdfFile) {
-                $newFilename = uniqid().'.'.$pdfFile->guessExtension();
+                $newFilename = uniqid() . '.' . $pdfFile->guessExtension();
 
                 try {
                     $pdfFile->move(
@@ -88,7 +95,8 @@ class LeconController extends AbstractController
                     return $this->redirectToRoute('add_lecon');
                 }
             }
-
+            
+            $lecon->setHourlyRate($hourlyRate);
             $entityManager->persist($lecon);
             $entityManager->flush();
 
@@ -101,12 +109,11 @@ class LeconController extends AbstractController
             'matieres' => $matieres,
         ]);
     }
-
     #[Route('/lecon/edit/{id}', name: 'edit_lecon')]
     public function edit(UserRepository $userRepository, Lecon $lecon, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
-            return $this->render('user/errorPage.html.twig');     
+            return $this->render('user/errorPage.html.twig');
         }
         $user = $lecon->getUser();
         if (!$user) {
@@ -114,7 +121,7 @@ class LeconController extends AbstractController
         }
 
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
-        
+
         $form = $this->createForm(LeconType::class, $lecon);
         $form->handleRequest($request);
 
@@ -122,7 +129,7 @@ class LeconController extends AbstractController
             $pdfFile = $form->get('pdfFile')->getData();
 
             if ($pdfFile) {
-                $newFilename = uniqid().'.'.$pdfFile->guessExtension();
+                $newFilename = uniqid() . '.' . $pdfFile->guessExtension();
 
                 try {
                     $pdfFile->move(
@@ -186,10 +193,10 @@ class LeconController extends AbstractController
     {
         $exercices = $exerciceRepository->findBy([], ['titre' => 'ASC']);
         $leconExercices = $leconRepository->findExercicesByLecon($lecon);
-    
+
         // Récupérer l'exercice associé à la leçon
         $exercice = $lecon->getExercice();
-    
+
         return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $leconExercices,
