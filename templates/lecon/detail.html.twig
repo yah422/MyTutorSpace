@@ -88,35 +88,5 @@
         <br>
     </div>
     <br>
-
-    {% if is_granted('ROLE_TUTEUR') and app.user == lecon.user %}
-    <div style="background-color:#ECECEC;" class="rounded-lg shadow-md p-6 hover:shadow-lg transition">
-        <h2 class="text-xl font-bold mb-4">Réservations en attente</h2>
-        {% set hasReservations = false %}
-        {% for reservation in lecon.reservations %}
-        {% if reservation.statut == 'en_attente' %}
-        {% set hasReservations = true %}
-        <div class="mb-4 p-4 border-b">
-            <p>Élève : {{ reservation.eleve.prenom }} {{ reservation.eleve.nom }}</p>
-            <p>Du : {{ reservation.dateDebut|date('d/m/Y H:i') }}</p>
-            <p>Au : {{ reservation.dateFin|date('d/m/Y H:i') }}</p>
-            <div class="mt-2">
-                <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'confirmee'}) }}"
-                    class="text-black font-bold py-2 px-4 rounded mr-2" style="background-color: #FFD700;">
-                    Confirmer
-                </a>
-                <a href="{{ path('app_reservation_status', {'id': reservation.id, 'newStatus': 'annulee'}) }}"
-                    class="text-white font-bold py-2 px-4 rounded" style="background-color: #FF0000;">
-                    Refuser
-                </a>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% if not hasReservations %}
-        <p class="text-gray-500">Aucune réservation en attente.</p>
-        {% endif %}
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
