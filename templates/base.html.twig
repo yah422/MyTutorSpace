@@ -20,7 +20,7 @@
     <nav class="bg-[#1B4255] p-4">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo de la navbar -->
-            <a href="{{ path('home') }}" style="color:#FFD700;" class="flex flex-rowtext-xl font-bold items-center">
+            <a href="{{ path('home') }}" style="color:#FFD700;" class="text-2xl flex flex-rowtext-xl font-bold items-center">
                 <img id="iconTitre" src="{{ asset('img/iconTitle.png') }}" loading="lazy" alt="Logo">
                 <span> MyTutorSpace </span>
             </a>
@@ -28,27 +28,27 @@
             <!-- Menu principal -->
             <ul class="flex items-center space-x-6">
                 <!-- Autres liens -->
-                <li><a href="{{ path('app_lecon') }}" class="text-gray-300 hover:text-white">Cours</a></li>
-                <li><a href="{{ path('app_user') }}" class="text-gray-300 hover:text-white">Trouve un Tuteur</a></li>
+                <li><a href="{{ path('app_lecon') }}" class="text-gray-300 hover:text-white">📚 Cours</a></li>
+                <li><a href="{{ path('app_user') }}" class="text-gray-300 hover:text-white">🔍 Trouve un Tuteur</a></li>
 
                 <!-- Vérifier si l'utilisateur est connecté -->
                 {% if app.user %}
                 <li>
-                    <a style="color:#FFD700;" class="hover:text-white"
+                    <a class="hover:text-white text-gray-300"
                         href="{{ path('app_show_user', { 'id': app.user.id }) }}">
                         <div class="profilNavBar">
-                            <div>
+                            {# <div>
                                 <img src="{{ asset('img/user.png') }}" loading="lazy" alt="iconProfil">
-                            </div>
+                            </div> #}
                             <div class="pProfil">
-                                <p>{{ app.user.prenom }}</p>
+                                <p>👤 {{ app.user.prenom }}</p>
                             </div>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_logout') }}" style="background-color: #ECECEC; color: black;"
-                        class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
+                    <a href="{{ path('app_logout') }}" style="background-color: #FFD700;"
+                        class="bg-500 text-black px-4 py-2 rounded hover:bg-700">
                         <strong>Se déconnecter</strong>
                     </a>
                 </li>
