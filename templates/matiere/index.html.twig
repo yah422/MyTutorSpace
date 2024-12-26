@@ -1,36 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{# Je définis le titre de la page #}
-{% block title %} Mes Matières {% endblock %}
+{% block title %}Mes Matières{% endblock %}
 
 {% block body %}
-{# Je crée un conteneur principal avec un fond subtil et un padding approprié #}
-<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-    {# J'ajoute un header élégant pour la page #}
-    <div class="max-w-3xl mx-auto">
-        <h1 class="text-4xl font-bold text-gray-300 mb-8 text-center"> Liste de mes matières </h1>
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-4xl mx-auto px-4">
+        <!-- En-tête -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold mb-2">Liste de mes matières</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full"></div>
+        </div>
 
-        {# Je crée une grille responsive pour afficher mes matières #}
-        <div style="background-color: #ECECEC;" class="shadow-xl rounded-lg overflow-hidden">
+        <!-- Liste des matières -->
+        <div class="space-y-4 fade-in">
             {% for matiere in matieres %}
-            <div class="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors duration-150">
-                <div class="p-4 flex items-center justify-between">
-                    {# Je crée un lien pour chaque matière #}
-                    <a href="{{ path('show_matiere', {'id': matiere.id }) }}"
-                        class="text-lg font-medium text-gray-900 hover:text-indigo-600 transition-colors duration-150">
-                        {{ matiere.nom }}
+            <div
+                class="bg-white/95 backdrop-blur-sm rounded-xl overflow-hidden transform hover:translate-x-2 transition-all duration-300 shadow-lg">
+                <div class="p-6 flex items-center justify-between">
+                    <a href="{{ path('show_matiere', {'id': matiere.id }) }}" class="flex-1 group">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-[#1B4255]/10 rounded-lg">
+                                <svg class="w-6 h-6 text-[#1B4255]" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-[#1B4255] text-xl font-semibold group-hover:text-[#567C8D] transition-colors">
+                                    {{ matiere.nom }}
+                                </h3>
+                            </div>
+                        </div>
                     </a>
 
-                    {# J'ajoute les contrôles d'administration si l'utilisateur est admin #}
                     {% if is_granted('ROLE_ADMIN') %}
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-3">
                         <form action="{{ path('delete_matiere', {'id': matiere.id}) }}" method="post"
                             onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette matière ?');"
                             class="inline-block">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete_matiere') }}">
                             <button type="submit"
-                                class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-150 text-sm">
-                                Supprimer
+                                class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-md">
+                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                <span>Supprimer</span>
                             </button>
                         </form>
                     </div>
@@ -38,22 +55,57 @@
                 </div>
             </div>
             {% else %}
-            {# J'ajoute un message si aucune matière n'est trouvée #}
-            <div class="p-8 text-center text-gray-500">
-                Aucune matière n'est disponible pour le moment.
+            <div class="bg-white/95 backdrop-blur-sm rounded-xl p-8 text-center">
+                <div class="text-[#1B4255] mb-4">
+                    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-lg">Aucune matière n'est disponible pour le moment.</p>
             </div>
             {% endfor %}
         </div>
 
-        {# Je place le bouton d'ajout en bas si l'utilisateur est admin #}
+        <!-- Bouton d'ajout pour les administrateurs -->
         {% if is_granted('ROLE_ADMIN') %}
-        <div class="mt-8 text-center">
+        <div class="mt-12 text-center fade-in">
             <a href="{{ path('add_matiere') }}"
-                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150">
-                Ajouter une matière
+                class="inline-flex items-center px-6 py-3 bg-[#70F9D9] text-[#1B4255] rounded-lg font-semibold hover:bg-[#5CD9B9] transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Ajouter une matière</span>
             </a>
         </div>
         {% endif %}
     </div>
 </div>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
 {% endblock %}
