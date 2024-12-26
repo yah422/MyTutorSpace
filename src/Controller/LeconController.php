@@ -78,7 +78,7 @@ class LeconController extends AbstractController
 
             if ($hourlyRate === null) {
                 // Attribuer une valeur par défaut si hourly_rate est NULL
-                $hourlyRate = 20;  // Exemple de valeur par défaut
+                $hourlyRate = 20;
             }
 
             if ($pdfFile) {
@@ -95,7 +95,7 @@ class LeconController extends AbstractController
                     return $this->redirectToRoute('add_lecon');
                 }
             }
-            
+
             $lecon->setHourlyRate($hourlyRate);
             $entityManager->persist($lecon);
             $entityManager->flush();

@@ -35,7 +35,7 @@ class MatiereController extends AbstractController
         // Vérification des rôles 'ROLE_ADMIN' ou 'ROLE_TUTEUR'
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
             // Rediriger vers une page d'erreur si l'utilisateur n'a pas les rôles requis
-            return $this->render('user/errorPage.html.twig');     
+            return $this->render('user/errorPage.html.twig');
         }
 
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
@@ -50,6 +50,16 @@ class MatiereController extends AbstractController
 
         // Vérification si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer la valeur de hourly_rate
+
+            $hourlyRate = $form->get('hourly_rate')->getData();
+
+            if ($hourlyRate === null) {
+                // Attribuer une valeur par défaut si hourly_rate est NULL
+                $hourlyRate = 20;
+            }
+
+            $matiere->setHourlyRate($hourlyRate);
             // Sauvegarde de la matière en base de données
             $entityManager->persist($matiere);
             $entityManager->flush();

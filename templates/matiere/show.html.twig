@@ -1,47 +1,108 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Détail {{ matiere.nom }} {% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-{% endblock %}
+{% block title %}{{ matiere.nom }} - Détails{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#1B4255] text-white py-12">
-
-    {# ------------------------- Affichage des détails de la matière ------------------------- #}
-    <div class="container p-8 max-w-3xl mx-auto">
-        <h1 class="flex flex-start justify-start content-start text-4xl font-bold text-center mb-8">Détail de la matière
-        </h1>
-
-        <div style="color:#1B4255;" class="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
-            <h2 style="color:#1B4255;" class="flex flex-start justify-start content-start text-2xl font-semibold mb-4">
-                {{ matiere.nom }}</h2>
-            <p>
-                <span class="font-medium">Description :</span><br>
-                {{ matiere.description | default('Aucune description disponible.') }}
-            </p>
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-4xl mx-auto px-4">
+        <!-- En-tête de la matière -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold mb-2">{{ matiere.nom }}</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full"></div>
         </div>
 
-        {# --------------------------- Liste des tuteurs associés ---------------------------- #}
-        <h2 class="flex flex-start justify-start content-start text-3xl font-bold text-center mb-6">Liste des tuteurs</h2>
-
-        <div class="bg-white text-[#1B4255] shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
-            <div class="divide-y divide-gray-200">
-                {% for tuteur in tuteurs %}
-                <div class="py-4">
-                    <a href="{{ path('app_show_user', {'id': tuteur.id }) }}" style="color:#1B4255;"
-                        class="text-lg font-medium hover:text-[#154a5e] transition">
-                        {{ tuteur.nom }} {{ tuteur.prenom }}
-                    </a>
+        <!-- Carte des détails -->
+        <div
+            class="bg-white rounded-2xl shadow-xl p-8 mb-12 transform hover:scale-[1.02] transition-all duration-300 fade-in">
+            <div class="flex items-start space-x-4">
+                <div class="p-3 bg-[#1B4255] rounded-lg">
+                    <svg class="w-6 h-6 text-[#70F9D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
                 </div>
-                {% else %}
-                <p class="text-center py-4">Aucun tuteur associé pour cette matière.</p>
-                {% endfor %}
+                <div class="flex-1">
+                    <h2 class="text-[#1B4255] text-xl font-semibold mb-4">Description</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ matiere.description | default('Aucune description disponible.') }}
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
 
+        <!-- Section des tuteurs -->
+        <div class="mb-8 slide-in">
+            <h2 class="text-[#FFD700] text-2xl font-bold mb-6 flex items-center">
+                <span class="mr-2">👩‍🏫</span> Tuteurs disponibles
+            </h2>
+        </div>
+
+        <!-- Liste des tuteurs -->
+        <div class="grid gap-4 fade-in">
+            {% for tuteur in tuteurs %}
+            <div
+                class="bg-white/90 backdrop-blur-sm rounded-xl p-6 transform hover:translate-x-2 transition-all duration-300 border-l-4 border-[#70F9D9]">
+                <a href="{{ path('app_show_user', {'id': tuteur.id }) }}"
+                    class="flex items-center justify-between group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-[#567C8D] rounded-full flex items-center justify-center">
+                            <span class="text-white text-lg font-semibold">
+                                {{ tuteur.prenom|first|upper }}{{ tuteur.nom|first|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <h3
+                                class="text-[#1B4255] text-lg font-semibold group-hover:text-[#567C8D] transition-colors">
+                                {{ tuteur.prenom }} {{ tuteur.nom }}
+                            </h3>
+                            <p class="text-gray-500 text-sm">Tuteur certifié</p>
+                        </div>
+                    </div>
+                    <div class="text-[#567C8D] group-hover:translate-x-2 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                </a>
+            </div>
+            {% else %}
+            <div class="bg-white/90 backdrop-blur-sm rounded-xl p-8 text-center">
+                <div class="text-[#1B4255] mb-4">
+                    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-lg">Aucun tuteur n'est disponible pour cette matière pour le moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
 {% endblock %}

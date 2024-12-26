@@ -1,88 +1,174 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Ajouter une leçon {% endblock %}
+{% block title %}Nouvelle leçon{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-6 py-8 bg-ECECEC">
-    <h1 class="text-3xl font-bold text-center mb-6 text-1B4255">Ajouter une nouvelle leçon</h1>
-
-    {{ form_start(form) }}
-
-    <div class="mb-6">
-        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.titre, {'attr': {'class': 'form-input mt-2 block w-full text-black border-2 border-567C8D
-        focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.titre) }}
-    </div>
-
-    <div class="mb-6">
-        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-input mt-2 block w-full text-black border-2
-        border-567C8D focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.description) }}
-    </div>
-
-    <div class="mb-6">
-        {{ form_label(form.dateCreation, 'Date de création', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.dateCreation, {'attr': {'class': 'form-input mt-2 block w-full text-black border-2
-        border-567C8D focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.dateCreation) }}
-    </div>
-
-    <div class="mb-6">
-        {{ form_label(form.matiere, 'Matière', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.matiere, {'attr': {'class': 'form-select mt-2 block w-full text-black border-2 border-567C8D
-        focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.matiere) }}
-    </div>
-
-    <div class="mb-6">
-        {{ form_label(form.niveau, 'Niveau', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        <div class="relative">
-            {{ form_widget(form.niveau, {'attr': {'class': 'form-select mt-2 block w-full text-black border-2
-            border-567C8D focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-3xl mx-auto px-4">
+        <!-- En-tête -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold mb-2">Créer une nouvelle leçon</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full"></div>
         </div>
-        {{ form_errors(form.niveau) }}
-    </div>
 
-    <div class="mb-6">
-        {{ form_label(form.user, 'Auteur', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.user, {'attr': {'class': 'form-select mt-2 block w-full text-black border-2 border-567C8D
-        focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.user) }}
-    </div>
+        <!-- Formulaire -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 fade-in">
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
-    <div class="mb-6">
-        {{ form_label(form.users, 'Élèves', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        <div class="relative">
-            {{ form_widget(form.users, {'attr': {'class': 'form-select mt-2 block w-full text-black border-2
-            border-567C8D focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
+            <!-- Informations principales -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Titre -->
+                <div class="col-span-2 group">
+                    {{ form_label(form.titre, 'Titre de la leçon', {'label_attr': {'class': 'text-[#1B4255]
+                    font-semibold mb-2 block'}}) }}
+                    {{ form_widget(form.titre, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300',
+                    'placeholder': 'Entrez le titre de la leçon'
+                    }}) }}
+                </div>
+
+                <!-- Description -->
+                <div class="col-span-2">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'text-[#1B4255]
+                    font-semibold mb-2 block'}}) }}
+                    {{ form_widget(form.description, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300',
+                    'rows': '4',
+                    'placeholder': 'Décrivez le contenu de la leçon'
+                    }}) }}
+                </div>
+
+                <!-- Date et Matière -->
+                <div>
+                    {{ form_label(form.dateCreation, 'Date', {'label_attr': {'class': 'text-[#1B4255] font-semibold mb-2
+                    block'}}) }}
+                    {{ form_widget(form.dateCreation, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300'
+                    }}) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.matiere, 'Matière', {'label_attr': {'class': 'text-[#1B4255] font-semibold mb-2
+                    block'}}) }}
+                    {{ form_widget(form.matiere, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300'
+                    }}) }}
+                </div>
+
+                <!-- Niveau et Auteur -->
+                <div>
+                    {{ form_label(form.niveau, 'Niveau', {'label_attr': {'class': 'text-[#1B4255] font-semibold mb-2
+                    block'}}) }}
+                    {{ form_widget(form.niveau, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300'
+                    }}) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.user, 'Tuteur', {'label_attr': {'class': 'text-[#1B4255] font-semibold mb-2
+                    block'}}) }}
+                    {{ form_widget(form.user, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300'
+                    }}) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.users, 'Eléves', {'label_attr': {'class': 'text-[#1B4255] font-semibold mb-2
+                    block'}}) }}
+                    {{ form_widget(form.users, {'attr': {
+                    'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                    focus:ring-[#70F9D9]/20 transition-all duration-300'
+                    }}) }}
+                </div>
+
+                <!-- Taux horaire -->
+                <div>
+                    {{ form_label(form.hourly_rate, 'Taux horaire', {'label_attr': {'class': 'text-[#1B4255]
+                    font-semibold mb-2 block'}}) }}
+                    <div class="relative">
+                        {{ form_widget(form.hourly_rate, {'attr': {
+                        'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
+                        focus:ring-[#70F9D9]/20 transition-all duration-300'
+                        }}) }}
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">€/h</span>
+                    </div>
+                </div>
+
+                <!-- Document PDF -->
+                <div class="col-span-2">
+                    {{ form_label(form.pdfFile, 'Support de cours (PDF)', {'label_attr': {'class': 'text-[#1B4255]
+                    font-semibold mb-2 block'}}) }}
+                    <div
+                        class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-lg hover:border-[#70F9D9] transition-colors duration-300">
+                        <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                                viewBox="0 0 48 48">
+                                <path
+                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            {{ form_widget(form.pdfFile, {'attr': {
+                            'class': 'hidden'
+                            }}) }}
+                            <div class="flex text-sm text-gray-600">
+                                <label for="{{ form.pdfFile.vars.id }}"
+                                    class="relative cursor-pointer rounded-md font-medium text-[#1B4255] hover:text-[#567C8D] focus-within:outline-none">
+                                    <span>Télécharger un fichier</span>
+                                </label>
+                                <p class="pl-1">ou glisser-déposer</p>
+                            </div>
+                            <p class="text-xs text-gray-500">PDF jusqu'à 10MB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="mt-8 flex justify-end">
+                <button type="submit"
+                    class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-[#1B4255] hover:bg-[#567C8D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#70F9D9] transform hover:-translate-y-0.5 transition-all duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Créer la leçon
+                </button>
+            </div>
+
+            {{ form_end(form) }}
         </div>
-        {{ form_errors(form.users) }}
     </div>
-
-    <div class="mb-6">
-        {{ form_label(form.hourly_rate, 'Taux Horaire', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        <div class="relative">
-            {{ form_widget(form.hourly_rate, {'attr': {'class': 'form-select mt-2 block w-full text-black border-2 border-567C8D focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        </div>
-        {{ form_errors(form.hourly_rate) }}
-    </div>    
-
-    <div class="mb-6">
-        {{ form_label(form.pdfFile, 'Document PDF', {'label_attr': {'class': 'font-bold text-567C8D'}}) }}
-        {{ form_widget(form.pdfFile, {'attr': {'class': 'form-select mt-2 block w-full text-gray-300 border-2 border-567C8D
-        focus:ring-FFD700 focus:border-FFD700 rounded-lg py-2 px-3'}}) }}
-        {{ form_errors(form.pdfFile) }}
-    </div>
-
-    <div class="mt-8 text-center">
-        <button type="submit"
-            class="bg-1B4255 hover:bg-567C8D text-white font-bold py-3 px-6 rounded-lg focus:ring-2 focus:ring-FFD700">
-            Enregistrer
-        </button>
-    </div>
-
-    {{ form_end(form) }}
 </div>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
 {% endblock %}

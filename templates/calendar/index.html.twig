@@ -1,0 +1,52 @@
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            locale: 'fr',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: '{{ path("app_tutor_availabilities") }}',
+            selectable: true,
+            select: function (info) {
+                flatpickr("#flatpickr-modal", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    defaultDate: info.startStr,
+                    onClose: function (selectedDates) {
+                        if (selectedDates.length > 0) {
+                            const start = selectedDates[0].toISOString();
+                            const end = new Date(selectedDates[0].getTime() + 3600000).toISOString(); // 1h par défaut
+
+                            fetch('{{ path("app_add_availability") }}', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ start, end })
+                            }).then(response => {
+                                if (response.ok) {
+                                    calendar.refetchEvents();
+                                } else {
+                                    alert('Une erreur est survenue.');
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+            eventClick: function (info) {
+                alert('Disponibilité : ' + info.event.title);
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}
+
+<div id="flatpickr-modal" style="display: none;"></div>
