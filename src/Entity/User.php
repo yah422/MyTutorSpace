@@ -48,6 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Seance::class)]
+    private Collection $seances;
+
+    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Progression::class)]
+    private Collection $progressions;
+
     /**
      * @var Collection<int, Message>
      */
@@ -120,6 +126,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bookings = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
+        $this->seances = new ArrayCollection();
+        $this->progressions = new ArrayCollection();
     }
 
     /**
