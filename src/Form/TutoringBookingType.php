@@ -98,13 +98,13 @@ class TutoringBookingType extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'attr' => [
-                    'class' => 'mt-1 space-y-2'
+                    'class' => 'mt-1 space-y-2 text-black'
                 ]
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Réserver le cours',
                 'attr' => [
-                    'class' => 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                    'class' => 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-black font-medium bg-[#70F9D9] hover:bg-[#FFD700] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                 ]
             ]);
     }

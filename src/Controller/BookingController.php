@@ -46,39 +46,43 @@ class BookingController extends AbstractController
         ]);
     }
 
-    #[Route('/tutor-availabilities', name: 'app_tutor_availabilities', methods: ['GET'])]
-    public function fetchAvailabilities(TutorAvailabilityRepository $repository): JsonResponse
+    #[Route('/calendar', name: 'app_calendar')]
+    public function calendar(): Response
+    {
+        return $this->render('booking/calendar.html.twig');
+    }
+
+    #[Route("/tutor-availabilities", name: "app_tutor_availabilities")]
+    public function getTutorAvailabilities(TutorAvailabilityRepository $repository): JsonResponse
     {
         $availabilities = $repository->findAll();
-        $events = array_map(function (TutorAvailability $availability) {
-            return [
-                'id' => $availability->getId(),
-                'title' => $availability->isBooked() ? 'Réservé' : 'Disponible',
+
+        $events = [];
+        foreach ($availabilities as $availability) {
+            $events[] = [
+                'title' => 'Disponible',
                 'start' => $availability->getStartTime()->format('Y-m-d\TH:i:s'),
                 'end' => $availability->getEndTime()->format('Y-m-d\TH:i:s'),
                 'backgroundColor' => $availability->isBooked() ? '#FF6347' : '#90EE90',
                 'borderColor' => $availability->isBooked() ? '#FF6347' : '#90EE90',
             ];
-        }, $availabilities);
+        }
 
         return new JsonResponse($events);
     }
 
-    #[Route('/add-availability', name: 'app_add_availability', methods: ['POST'])]
-    public function addAvailability(Request $request, EntityManagerInterface $em): JsonResponse
+    #[Route('/add-availability', name: 'app_add_tutor_availability', methods: ['POST'])]
+    public function addTutorAvailability(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         $availability = new TutorAvailability();
-        $availability->setTuteur($this->getUser());
         $availability->setStartTime(new \DateTime($data['start']));
         $availability->setEndTime(new \DateTime($data['end']));
-        $availability->setIsBooked(false);
 
-        $em->persist($availability);
-        $em->flush();
+        $entityManager->persist($availability);
+        $entityManager->flush();
 
-        return new JsonResponse(['status' => 'success'], 201);
+        return new JsonResponse(['status' => 'success'], JsonResponse::HTTP_CREATED);
     }
-    
 }

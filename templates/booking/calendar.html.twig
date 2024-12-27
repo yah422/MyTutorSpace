@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Calendar</h1>
+
+<div id="calendar"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+            events: '{{ path("app_tutor_availabilities") }}', // Route pour récupérer les disponibilités
+            eventColor: '#90EE90', // Couleur des créneaux disponibles
+            eventBorderColor: '#90EE90',
+            eventClick: function (info) {
+                // Gestion de l'événement de clic (par exemple, réserver)
+                alert('Vous avez cliqué sur le créneau : ' + info.event.title);
+            },
+        });
+
+        calendar.render();
+    });
+</script>
+{% endblock %}

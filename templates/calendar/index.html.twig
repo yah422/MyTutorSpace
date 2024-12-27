@@ -1,3 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier des disponibilités{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                    Calendrier des disponibilités
+                </h2>
+            </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <button type="button" id="addAvailability"
+                    class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Ajouter une disponibilité
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="p-4">
+                <div id="calendar" class="w-full"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
 {% block javascripts %}
 {{ parent() }}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -5,6 +37,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
+
+        // Initialiser FullCalendar
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'timeGridWeek',
             locale: 'fr',
@@ -16,14 +50,15 @@
             events: '{{ path("app_tutor_availabilities") }}',
             selectable: true,
             select: function (info) {
-                flatpickr("#flatpickr-modal", {
+                // Initialiser Flatpickr sur sélection
+                flatpickr("#addAvailabilityModal", {
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
                     defaultDate: info.startStr,
                     onClose: function (selectedDates) {
                         if (selectedDates.length > 0) {
                             const start = selectedDates[0].toISOString();
-                            const end = new Date(selectedDates[0].getTime() + 3600000).toISOString(); // 1h par défaut
+                            const end = new Date(selectedDates[0].getTime() + 3600000).toISOString();
 
                             fetch('{{ path("app_add_availability") }}', {
                                 method: 'POST',
@@ -44,9 +79,8 @@
                 alert('Disponibilité : ' + info.event.title);
             }
         });
+
         calendar.render();
     });
 </script>
 {% endblock %}
-
-<div id="flatpickr-modal" style="display: none;"></div>
