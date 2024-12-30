@@ -4,8 +4,6 @@
 
 ## Description du projet
 
-
-
 **MyTutorSpace** est une plateforme de tutorat personnalisée qui permet aux étudiants d'accéder à des cours et des exercices, ainsi que de prendre des leçons avec des tuteurs qualifiés, classés par matière. Que vous ayez besoin d'aide en mathématiques, en sciences, ou dans d'autres matières, MyTutorSpace est conçu pour répondre à vos besoins d'apprentissage.
 
 ## Fonctionnalités
