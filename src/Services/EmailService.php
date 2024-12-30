@@ -24,7 +24,7 @@ class EmailService extends AbstractController
         $this->mailer = $mailer;
         $this->templating = $templating;
     }
-    
+
     // confirmation du contact à l'user
     public function sendConfirmationEmail(MailerInterface $mailer, string $to, Contact $contact): void
     {
@@ -59,4 +59,24 @@ class EmailService extends AbstractController
         $mailer->send($email);
     }
 
+    public function sendRequestResetPassword(
+        string $from,
+        string $to,
+        string $subject,
+        string $template,
+        array $context
+    ): void //La fonction ne retourne rien donc -> void
+    {
+        //Création du mail
+        $email = (new TemplatedEmail()) //Cette classe permet de rajouter les informations nécessaire à l\'envoie du mail (expediteur, destinaire)
+            ->from($from)
+            ->to($to)
+            ->subject($subject)
+            ->htmlTemplate("emails/$template.html.twig")
+            ->context($context);
+
+        //Envoie du mail
+        $this->mailer->send($email);
+
+    }
 }

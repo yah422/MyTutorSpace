@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Nouvelle demande de réservation</title>
+</head>
+
+<body>
+    <h1>Nouvelle demande de réservation</h1>
+    <p>Bonjour {{ reservation.tuteur.nom }},</p>
+    <p>L'élève <strong>{{ reservation.eleve.nom }}</strong> a réservé un créneau pour votre cours <strong>{{
+            reservation.lecon.titre }}</strong>.</p>
+    <p>Date et heure : {{ reservation.debut|date('d/m/Y H:i') }}</p>
+</body>
+
+</html>

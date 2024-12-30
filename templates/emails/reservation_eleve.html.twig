@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Confirmation de réservation</title>
+</head>
+
+<body>
+    <h1>Confirmation de votre réservation</h1>
+    <p>Bonjour {{ reservation.eleve.nom }},</p>
+    <p>Votre réservation pour le cours <strong>{{ reservation.lecon.titre }}</strong> a été confirmée.</p>
+    <p>Date et heure : {{ reservation.debut|date('d/m/Y H:i') }}</p>
+    <p>Merci de nous faire confiance.</p>
+</body>
+
+</html>

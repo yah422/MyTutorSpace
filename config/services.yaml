@@ -9,6 +9,8 @@ parameters:
     uploads_directory: "%kernel.project_dir%/public/uploads/photos"
     photos_directory: "%kernel.project_dir%/public/uploads/photos"
     avatars_directory: "%kernel.project_dir%/public/uploads/avatars"
+    app.jwtsecret : '%env(JWT_SECRET)%'
+
 services:
     _defaults:
         autowire: true
