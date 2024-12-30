@@ -5,55 +5,55 @@
 {% block body %}
 {{ parent() }}
 
-<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Contactez-nous</h2>
+<main style="background-color: #1B4255;"
+    class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div style="background-color: #567C8D;" class="w-1/2 p-8 mx-auto rounded-lg shadow-lg border border-[#FFD700]">
+        <h2 style="color: #FFD700;" class="text-3xl font-bold mb-8 text-center">Contactez-nous</h2>
 
         {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
         <div class="space-y-6">
             <div>
                 {{ form_row(form.nom, {
-                'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
-                focus:ring-indigo-500'},
-                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                'attr': {'class': 'mt-1 block w-full rounded-md border-[#567C8D] bg-[#ECECEC] text-black shadow-sm
+                focus:border-[#FFD700] focus:ring-[#FFD700]'},
+                'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: #FFD700;'}
                 }) }}
                 <div class="text-red-500 text-sm" id="firstName_error"></div>
             </div>
 
             <div>
                 {{ form_row(form.email, {
-                'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
-                focus:ring-indigo-500'},
-                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                'attr': {'class': 'mt-1 block w-full rounded-md border-[#567C8D] bg-[#ECECEC] text-black shadow-sm
+                focus:border-[#FFD700] focus:ring-[#FFD700]'},
+                'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: #FFD700;'}
                 }) }}
                 <div class="text-red-500 text-sm" id="email_error"></div>
             </div>
 
             <div>
                 {{ form_row(form.sujet, {
-                'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
-                focus:ring-indigo-500'},
-                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                'attr': {'class': 'mt-1 block w-full rounded-md border-[#567C8D] bg-[#ECECEC] text-black shadow-sm
+                focus:border-[#FFD700] focus:ring-[#FFD700]'},
+                'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: #FFD700;'}
                 }) }}
                 <div class="text-red-500 text-sm" id="subject_error"></div>
             </div>
 
             <div>
                 {{ form_row(form.message, {
-                'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
-                focus:ring-indigo-500', 'rows': '4'},
-                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                'attr': {'class': 'mt-1 block w-full rounded-md border-[#567C8D] bg-[#ECECEC] text-black shadow-sm
+                focus:border-[#FFD700] focus:ring-[#FFD700]', 'rows': '4'},
+                'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: #FFD700;'}
                 }) }}
                 <div class="text-red-500 text-sm" id="message_error"></div>
             </div>
 
             {{ form_row(form.save, {
             'attr': {'class': 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
-            text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
-            focus:ring-offset-2 focus:ring-indigo-500'}
+            text-sm font-medium', 'style': 'background-color: #FFD700; color: #1B4255;'}
             }) }}
 
-            <p class="text-sm text-gray-500 text-center mt-4">
+            <p class="text-sm text-center mt-4" style="color: #ECECEC;">
                 Remplissez les champs requis (*)<br>
             </p>
         </div>
