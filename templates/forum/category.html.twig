@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }} - Forum MyTutorSpace{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#ECECEC]">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-[#1B4255]">{{ category.name }}</h1>
+                <p class="text-[#567C8D]">{{ category.description }}</p>
+            </div>
+
+            <div class="space-y-4">
+                {% for topic in category.topics %}
+                <div class="border border-[#567C8D] rounded-lg p-4 hover:border-[#FFD700] transition-colors">
+                    <a href="{{ path('app_forum_topic', {'id': topic.id}) }}" class="block">
+                        <h2 class="text-xl font-semibold text-[#1B4255] mb-2">{{ topic.title }}</h2>
+                        <div class="flex justify-between text-sm text-[#567C8D]">
+                            <span>Par {{ topic.author.prenom }}</span>
+                            <span>{{ topic.createdAt|date('d/m/Y H:i') }}</span>
+                        </div>
+                    </a>
+                </div>
+                {% else %}
+                <p class="text-center text-[#567C8D]">Aucun sujet dans cette catégorie</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

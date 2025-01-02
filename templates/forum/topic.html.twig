@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ topic.title }} - Forum MyTutorSpace{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#ECECEC]">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-[#1B4255]">{{ topic.title }}</h1>
+                <div class="text-sm text-[#567C8D] mt-2">
+                    Par {{ topic.author.prenom }} le {{ topic.createdAt|date('d/m/Y H:i') }}
+                </div>
+            </div>
+
+            <div class="border-b border-[#567C8D] pb-6 mb-6">
+                <div class="prose max-w-none">
+                    {{ topic.content|nl2br }}
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                {% for post in topic.posts %}
+                <div class="border-b border-[#567C8D] pb-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="font-semibold text-[#1B4255]">{{ post.author.prenom }}</div>
+                        <div class="text-sm text-[#567C8D]">{{ post.createdAt|date('d/m/Y H:i') }}</div>
+                    </div>
+                    <div class="prose max-w-none">
+                        {{ post.content|nl2br }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if is_granted('ROLE_USER') %}
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-[#1B4255] mb-4">Répondre</h3>
+                {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+                {{ form_widget(form.content, {
+                'attr': {
+                'class': 'w-full rounded-lg border-[#567C8D] focus:border-[#FFD700] focus:ring focus:ring-[#FFD700]
+                focus:ring-opacity-50'
+                }
+                }) }}
+                <button type="submit"
+                    class="bg-[#1B4255] text-white px-4 py-2 rounded-lg hover:bg-[#567C8D] transition-colors">
+                    Répondre
+                </button>
+                {{ form_end(form) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
