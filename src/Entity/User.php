@@ -113,6 +113,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
 
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'parent')]
+    private Collection $eleves;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'eleves')]
+    private ?User $parent = null;
+
     public function __construct()
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
@@ -128,6 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->received = new ArrayCollection();
         $this->seances = new ArrayCollection();
         $this->progressions = new ArrayCollection();
+        $this->eleves = new ArrayCollection();
     }
 
     /**
@@ -539,4 +546,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getEleves(): Collection
+    {
+        return $this->eleves;
+    }
+
+    public function addEleve(User $eleve): self
+    {
+        if (!$this->eleves->contains($eleve)) {
+            $this->eleves[] = $eleve;
+            $eleve->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEleve(User $eleve): self
+    {
+        if ($this->eleves->removeElement($eleve)) {
+            // unset the owning side of the relation if necessary
+            if ($eleve->getParent() === $this) {
+                $eleve->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParent(): ?User
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?User $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
 }
