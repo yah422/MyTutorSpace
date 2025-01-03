@@ -41,7 +41,7 @@ class ForumController extends AbstractController
     {
         $topic = new Topic();
         $form = $this->createForm(TopicType::class, $topic);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $topic->setAuthor($this->getUser());
@@ -61,12 +61,12 @@ class ForumController extends AbstractController
     {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setAuthor($this->getUser());
             $post->setTopic($topic);
-            
+
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -78,4 +78,57 @@ class ForumController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/post/edit/{id}', name: 'app_forum_edit_post')]
+    #[IsGranted('ROLE_USER')]
+    public function editPost(Post $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Vérifie que l'utilisateur connecté est bien l'auteur du message
+        if ($post->getAuthor() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez modifier que vos propres messages.');
+            return $this->redirectToRoute('app_forum_topic', ['id' => $post->getTopic()->getId()]);
+        }
+
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre message a été modifié avec succès.');
+
+            return $this->redirectToRoute('app_forum_topic', ['id' => $post->getTopic()->getId()]);
+        }
+
+        return $this->render('forum/edit_post.html.twig', [
+            'form' => $form,
+            'post' => $post,
+        ]);
+    }
+
+    #[Route('/topic/edit/{id}', name: 'app_forum_edit_topic')]
+    #[IsGranted('ROLE_USER')]
+    public function editTopic(Topic $topic, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Vérifie que l'utilisateur connecté est bien l'auteur du topic
+        if ($topic->getAuthor() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez modifier que vos propres topics.');
+            return $this->redirectToRoute('app_forum_category', ['id' => $topic->getCategory()->getId()]);
+        }
+
+        $form = $this->createForm(TopicType::class, $topic);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre topic a été modifié avec succès.');
+
+            return $this->redirectToRoute('app_forum_category', ['id' => $topic->getCategory()->getId()]);
+        }
+
+        return $this->render('forum/edit_topic.html.twig', [
+            'form' => $form,
+            'topic' => $topic,
+        ]);
+    }
+
 }
