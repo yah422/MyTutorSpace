@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier votre message - MyTutorSpace{% endblock %}
+
+{% block body %}
+    <div class="bg-[#ECECEC] min-h-screen flex items-center justify-center p-4">
+        <div class="bg-[#1B4255] text-[#ECECEC] rounded-lg p-8 shadow-lg w-full max-w-md">
+            <h1 class="text-2xl font-bold mb-6 text-center text-[#FFD700]">
+                Modifier votre message
+            </h1>
+
+            <form class="space-y-6">
+                <div class="relative">
+                    <textarea class="w-full p-3 rounded-lg border border-[#567C8D] bg-[#ECECEC] text-[#1B4255] 
+                    focus:ring-[#FFD700] focus:ring-2 focus:outline-none resize-none min-h-[120px]
+                    placeholder-[#567C8D]" placeholder="Votre message..."></textarea>
+                </div>
+
+                <button type="submit" class="bg-[#70F9D9] text-[#1B4255] font-semibold py-3 px-6 rounded-lg w-full
+                hover:bg-[#567C8D] hover:text-[#ECECEC] transition-all duration-300
+                flex items-center justify-center gap-2">
+                    <span>Modifier</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m22 2-7 20-4-9-9-4Z" />
+                        <path d="M22 2 11 13" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
