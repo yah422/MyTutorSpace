@@ -3,57 +3,78 @@
 {% block title %} Profil {% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center" style="background-color: #1B4255;">
-        <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg" style="background-color: #567C8D;">
+<div class="min-h-screen flex items-center justify-center bg-[#1B4255]">
+        <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                         <!-- Section gauche : Photo de profil -->
                         <div class="flex flex-col items-center">
-                                {% if user.profilePicture %}
-                                <img style="width:200px; height:200px;" src="{{ asset('uploads/avatars/' ~ user.profilePicture) }}" alt="Photo de profil"
-                                        class="h-40 w-40 object-cover rounded-full shadow-md">
-                                {% else %}
-                                <img style="width:200px; height:200px;" src="{{ asset('uploads/avatars/default-profile.png') }}"
-                                        alt="Photo de profil par défaut"
-                                        class="h-40 w-40 object-cover rounded-full shadow-md">
-                                {% endif %}
-                                <h2 class="text-2xl md:text-3xl font-extrabold mt-4 text-center"
-                                        style="color: #FFD700;">
+                                <img src="{{ user.profilePicture 
+? asset('uploads/avatars/' ~ user.profilePicture) 
+: asset('uploads/avatars/default-profile.png') }}" alt="Photo de profil de {{ user.prenom }} {{ user.nom }}"
+                                        class="w-[200px] h-[200px] object-cover rounded-full shadow-md">
+                                <h2 class="text-2xl md:text-3xl font-extrabold mt-4 text-center text-[#FFD700]">
                                         {{ user.prenom }} {{ user.nom }}
                                 </h2>
+                                {% if user.roles is defined and 'ROLE_TUTOR' in user.roles %}
+                                <span
+                                        class="px-3 py-1 text-sm font-semibold bg-[#70F9D9] text-[#1B4255] rounded-full mt-2">
+                                        Tuteur
+                                </span>
+                                {% endif %}
                         </div>
 
                         <!-- Section droite : Informations utilisateur -->
-                        <div>
-                                <div class="mb-4">
-                                        <p class="text-gray-300 text-base md:text-lg"><span class="font-bold">Email
-                                                        :</span> {{ user.email }}</p>
-                                </div>
-                                <div class="mb-4">
-                                        <p class="text-gray-300 text-base md:text-lg"><span class="font-bold">À propos
-                                                        :</span></p>
-                                        <p class="text-gray-300 text-sm md:text-base">{{ user.aboutMe }}</p>
+                        <div class="space-y-6">
+                                <div class="space-y-4">
+                                        <p class="text-gray-300 text-base md:text-lg">
+                                                <span class="font-bold">Email :</span>
+                                                {% if is_granted('ROLE_ADMIN') or app.user.id == user.id %}
+                                                {{ user.email }}
+                                                {% else %}
+                                                <span class="italic">Information privée</span>
+                                                {% endif %}
+                                        </p>
+                                        <p class="text-gray-300 text-base md:text-lg">
+                                                <span class="font-bold">À propos :</span>
+                                        </p>
+                                        <p class="text-gray-300 text-sm md:text-base">
+                                                {{ user.aboutMe | default("Aucune information disponible.") }}
+                                        </p>
                                 </div>
 
-                                <!-- Actions -->
-                                {% if app.user is not null and (app.user.id == user.id or 'ROLE_ADMIN' in
-                                app.user.roles) %}
+                                <!-- Actions avec restrictions d'accès -->
                                 <div class="space-y-3">
+                                        {% if app.user and app.user.id == user.id %}
                                         <a href="{{ path('edit_user', { id: user.id }) }}"
-                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded"
-                                                style="background-color: #FFD700; color: #1B4255;">
-                                                Modifier le profil
-                                        </a>
-                                        <a href="{{ path('app_message') }}"
-                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded"
-                                                style="background-color: #FFD700; color: #1B4255;">
-                                                Accéder à la messagerie
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
+                                                Modifier mon profil
                                         </a>
                                         <a href="{{ path('app_dashboard') }}"
-                                                class="block w-full text-center text-gray-800 py-2 text-sm md:text-base font-bold rounded">
-                                                Accéder à mon dashboard
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
+                                                Mon tableau de bord
                                         </a>
+                                        {% elseif app.user and 'ROLE_ADMIN' in app.user.roles %}
+                                        <a href="{{ path('edit_user', { id: user.id }) }}"
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
+                                                Modifier le profil (Admin)
+                                        </a>
+                                        {% endif %}
+
+                                        {% if app.user and app.user != user %}
+                                        <a href="{{ path('new_message') }}"
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
+                                                Contacter le tuteur
+                                        </a>
+                                        {% endif %}
+
+                                        {% if app.user and 'ROLE_STUDENT' in app.user.roles %}
+                                        {# <a href="{{ path('book_session', { tutor: user.id }) }}" #} {#
+                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
+                                                #}
+                                                Réserver une séance
+                                                {# </a> #}
+                                        {% endif %}
                                 </div>
-                                {% endif %}
                         </div>
                 </div>
         </div>
