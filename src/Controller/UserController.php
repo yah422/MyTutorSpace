@@ -85,7 +85,8 @@ class UserController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         MatiereRepository $matiereRepository,
-        NiveauRepository $niveauRepository
+        NiveauRepository $niveauRepository,
+        User $user,
     ): Response {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
@@ -100,6 +101,7 @@ class UserController extends AbstractController
 
         return $this->render('user/index.html.twig', [
             'matieres' => $matieres,
+            'user' => $user,
             'niveaux' => $niveaux,
             'selectedMatiereId' => $selectedMatiereId,
             'selectedNiveauId' => $selectedNiveauId,
