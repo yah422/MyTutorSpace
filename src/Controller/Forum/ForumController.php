@@ -2,28 +2,30 @@
 
 namespace App\Controller\Forum;
 
-use App\Entity\Forum\Category;
 use App\Entity\Forum\Post;
 use App\Entity\Forum\Topic;
 use App\Form\Forum\PostType;
 use App\Form\Forum\TopicType;
+use App\Entity\Forum\Category;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\Forum\TopicRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/forum')]
 class ForumController extends AbstractController
 {
     #[Route('/', name: 'app_forum')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Topic $topic, EntityManagerInterface $entityManager): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
 
         return $this->render('forum/index.html.twig', [
             'categories' => $categories,
+            'topic' => $topic,
         ]);
     }
 
@@ -128,6 +130,40 @@ class ForumController extends AbstractController
         return $this->render('forum/edit_topic.html.twig', [
             'form' => $form,
             'topic' => $topic,
+        ]);
+    }
+
+    #[Route('/topic/lock/{id}', name: 'app_forum_lock_topic')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function lockTopic(Topic $topic,int $id, TopicRepository $topicRepository, EntityManagerInterface $entityManager): Response
+    {
+        $topic = $topicRepository -> find($id);
+        // Lock the topic
+        $topic->setLocked(true);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Le topic a été verrouillé.');
+    
+        // Redirection vers le détail du topic après l'action
+        return $this->redirectToRoute('app_forum_category', [
+            'id' => $topic->getId(),  // On passe l'ID du topic pour rediriger vers la page du topic
+        ]);
+    }
+    
+    #[Route('/topic/unlock/{id}', name: 'app_forum_unlock_topic')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function unlockTopic(Topic $topic,int $id, TopicRepository $topicRepository, EntityManagerInterface $entityManager): Response
+    {
+        $topic = $topicRepository -> find($id);
+        // Unlock the topic
+        $topic->setLocked(false);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Le topic a été déverrouillé.');
+    
+        // Redirection vers le détail du topic après l'action
+        return $this->redirectToRoute('app_forum_category', [
+            'id' => $topic->getId(),  // On passe l'ID du topic pour rediriger vers la page du topic
         ]);
     }
 

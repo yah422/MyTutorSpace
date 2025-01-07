@@ -46,11 +46,10 @@
             "mandatory": true // Show a message about mandatory cookies
         });
     </script>
-    <script>
-        // Google Analytics
-        tarteaucitron.user.gtagUa = '694190220787-elursji5hbf1qjjrtgg9g9mdhm11c68a.apps.googleusercontent.com';
-        tarteaucitron.user.gtagMore = function () { /* add optionnal gtag() */ };
-        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+    
+    <script type="text/javascript">
+        tarteaucitron.user.recaptchaapi = 'XXXXX';
+        (tarteaucitron.job = tarteaucitron.job || []).push('recaptcha');
 
         // Google Sign-In
         (tarteaucitron.job = tarteaucitron.job || []).push('googlesignin');

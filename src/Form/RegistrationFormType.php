@@ -98,11 +98,11 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Le mot de passe est obligatoire'
                     ]),
                     new Assert\Length([
-                        'min' => 6,
+                        'min' => 12,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères'
                     ]),
                     new Assert\Regex([
-                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/',
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/',
                         'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.'
                     ]),
                 ],

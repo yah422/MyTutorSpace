@@ -16,11 +16,23 @@
                 <div class="border border-[#567C8D] rounded-lg p-4 hover:border-[#FFD700] transition-colors">
                     <a href="{{ path('app_forum_topic', {'id': topic.id}) }}" class="block">
                         <h2 class="text-xl font-semibold text-[#1B4255] mb-2">{{ topic.title }}</h2>
+                    </a>
                         <div class="flex justify-between text-sm text-[#567C8D]">
                             <span>Par {{ topic.author.prenom }}</span>
                             <span>{{ topic.createdAt|date('d/m/Y H:i') }}</span>
                         </div>
-                    </a>
+                   
+
+                </div>
+                <div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if topic.locked %}
+                    <a href="{{ path('app_forum_unlock_topic', {'id': topic.id}) }}"
+                        class="btn btn-success"><img src="{{ asset('img/unlocked.svg') }}" alt="ImageDeverouille"></i></a>
+                    {% else %}
+                    <a href="{{ path('app_forum_lock_topic', {'id': topic.id}) }}" class="btn btn-warning"><img src="{{ asset('img/locked.svg') }}" alt="ImageVerouille"></a>
+                    {% endif %}
+                    {% endif %}
                 </div>
                 {% else %}
                 <p class="text-center text-[#567C8D]">Aucun sujet dans cette catégorie</p>

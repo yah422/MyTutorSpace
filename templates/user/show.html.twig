@@ -3,7 +3,15 @@
 {% block title %} Profil {% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-[#1B4255]">
+<div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex flex-col gap-7.5">
+        <div>
+                {% if app.user and 'ROLE_USER' in app.user.roles %}
+                <a href="{{ path('app_message', { receiver: user.id }) }}"
+                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
+                        Contacter le tuteur
+                        </a>
+                {% endif %}
+        </div>
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                         <!-- Section gauche : Photo de profil -->
