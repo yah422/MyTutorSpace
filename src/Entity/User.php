@@ -25,7 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\Email(message: 'Veuillez entrer un email valide.')]  // Validation de l'email
+    #[Assert\Email(message: 'Veuillez entrer un email valide.')]
     private ?string $email = null;
 
     #[ORM\ManyToMany(targetEntity: Matiere::class, inversedBy: "users")]
@@ -47,12 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
-
-    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Seance::class)]
-    private Collection $seances;
-
-    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Progression::class)]
-    private Collection $progressions;
 
     /**
      * @var Collection<int, Message>
@@ -132,8 +126,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bookings = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
-        $this->seances = new ArrayCollection();
-        $this->progressions = new ArrayCollection();
         $this->eleves = new ArrayCollection();
     }
 
