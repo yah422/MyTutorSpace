@@ -107,16 +107,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
 
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'parent')]
-    private Collection $eleves;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'eleves')]
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, cascade: ['persist'])]
+    private Collection $children;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     private ?User $parent = null;
 
     public function __construct()
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
         $this->roles = ['ROLE_USER'];
+        $this->children = new ArrayCollection();
         $this->lecon = new ArrayCollection();
         $this->lecons = new ArrayCollection();
         $this->matieres = new ArrayCollection();
@@ -539,27 +545,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEleves(): Collection
+    /**
+     * @return Collection<int, User>
+     */
+    public function getChildren(): Collection
     {
-        return $this->eleves;
+        return $this->children;
     }
 
-    public function addEleve(User $eleve): self
+    public function addChild(User $child): self
     {
-        if (!$this->eleves->contains($eleve)) {
-            $this->eleves[] = $eleve;
-            $eleve->setParent($this);
+        if (!$this->children->contains($child)) {
+            $this->children->add($child);
+            $child->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeEleve(User $eleve): self
+    public function removeChild(User $child): self
     {
-        if ($this->eleves->removeElement($eleve)) {
-            // unset the owning side of the relation if necessary
-            if ($eleve->getParent() === $this) {
-                $eleve->setParent(null);
+        if ($this->children->removeElement($child)) {
+            // Set the parent to null if it's currently set to this user
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
             }
         }
 
@@ -574,8 +583,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setParent(?User $parent): self
     {
         $this->parent = $parent;
-
         return $this;
     }
+
+    // Helper methods for parent/child relationship
+    public function isChild(): bool
+    {
+        return $this->parent !== null;
+    }
+
+    public function isParent(): bool
+    {
+        return !$this->children->isEmpty();
+    }
+
+    public function hasParent(): bool
+    {
+        return $this->parent !== null;
+    }
+
+    public function hasChildren(): bool
+    {
+        return !$this->children->isEmpty();
+    }
+
 
 }

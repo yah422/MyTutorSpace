@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Lecon;
 use App\Entity\Niveau; // Importation de l'entité Niveau
 use App\Entity\Matiere; // Importation de l'entité Matiere
@@ -17,7 +18,7 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     {
         parent::__construct($registry, Lecon::class); // Appel du constructeur parent avec le registre et l'entité Lecon
     }
-    
+
     /**
      * Find exercises by lesson.
      * Cette méthode permet de trouver les exercices associés à une leçon via la matière.
@@ -30,21 +31,21 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     {
         // Récupération du gestionnaire d'entités
         $em = $this->getEntityManager();
-        
+
         // Récupération du repository des exercices
         $exerciceRepository = $em->getRepository('App\Entity\Exercice');
-        
+
         // Construction d'une requête qui permet de trouver les exercices liés
         // à la leçon passée en paramètre
         $queryBuilder = $exerciceRepository->createQueryBuilder('e')
             ->where('e.lecon = :lecon')
             ->setParameter('lecon', $lecon)
             ->orderBy('e.titre', 'ASC');
-        
+
         // Exécution de la requête et obtention des résultats
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
 
 
     // /**
@@ -63,7 +64,7 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
     //         ->getQuery()
     //         ->getResult();
     // }
-    
+
 
     /**
      * Find lessons by level.
@@ -92,12 +93,12 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
 
         if ($matiere) { // Vérification si une matière est fournie
             $qb->andWhere('l.matiere = :matiere') // Condition pour filtrer par matière
-            ->setParameter('matiere', $matiere); // Définition du paramètre pour la matière
+                ->setParameter('matiere', $matiere); // Définition du paramètre pour la matière
         }
 
         if ($niveau) { // Vérification si un niveau est fourni
             $qb->andWhere(':niveau MEMBER OF l.niveaux') // Condition pour filtrer par niveau
-            ->setParameter('niveau', $niveau); // Définition du paramètre pour le niveau
+                ->setParameter('niveau', $niveau); // Définition du paramètre pour le niveau
         }
 
         return $qb->getQuery()->getResult(); // Exécution de la requête et obtention des résultats
@@ -119,5 +120,24 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
             ->orderBy('l.titre', 'ASC') // Tri des résultats par titre de leçon
             ->getQuery() // Obtention de la requête
             ->getResult(); // Exécution de la requête et obtention des résultats
+    }
+
+    public function findAvailableLessons()
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.hourlyRate IS NOT NULL')
+            ->orderBy('l.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLessonsByTutor(User $tutor)
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.user = :tutor')
+            ->setParameter('tutor', $tutor)
+            ->orderBy('l.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -64,19 +64,55 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         if ($matiere) { // Vérification si une matière est fournie
             $qb->leftJoin('u.matieres', 'm') // Jointure avec l'entité Matiere
-            ->andWhere('m = :matiere') // Condition pour filtrer par matière
-            ->setParameter('matiere', $matiere); // Définition du paramètre pour la matière
+                ->andWhere('m = :matiere') // Condition pour filtrer par matière
+                ->setParameter('matiere', $matiere); // Définition du paramètre pour la matière
         }
 
         if ($niveau) { // Vérification si un niveau est fourni
             $qb->leftJoin('u.niveaux', 'n') // Jointure avec l'entité Niveau
-            ->andWhere('n = :niveau') // Condition pour filtrer par niveau
-            ->setParameter('niveau', $niveau); // Définition du paramètre pour le niveau
+                ->andWhere('n = :niveau') // Condition pour filtrer par niveau
+                ->setParameter('niveau', $niveau); // Définition du paramètre pour le niveau
         }
 
         return $qb->getQuery()->getResult(); // Exécution de la requête et obtention des résultats
     }
 
+    public function findByRole(string $role): array
+    {
+        return $this->createQueryBuilder('u')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('role', '%"' . $role . '"%')
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findTutors()
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%"ROLE_TUTEUR"%')
+            ->orderBy('u.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAvailableTutors(\DateTime $startTime, \DateTime $endTime)
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('App\Entity\Reservation', 'r', 'WITH', 'r.tutor = u')
+            ->where('u.roles LIKE :role')
+            ->andWhere('
+                r.id IS NULL OR 
+                (r.startTime > :endTime OR r.endTime < :startTime)
+            ')
+            ->setParameter('role', '%"ROLE_TUTEUR"%')
+            ->setParameter('startTime', $startTime)
+            ->setParameter('endTime', $endTime)
+            ->groupBy('u.id')
+            ->orderBy('u.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     * Exemple de méthode pour trouver des utilisateurs par un champ spécifique.
