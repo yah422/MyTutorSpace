@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class MessageController extends AbstractController
 {
     #[Route('/message', name: 'app_message')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(MessageRepository $messageRepository, AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
