@@ -9,12 +9,15 @@
 
 {% block body %}
 <div class="min-h-screen p-8">
-    <div class="max-w-7xl mx-auto">
-        <h1 class="text-5xl font-bold mb-4">Des tuteurs privés qui s'adaptent à votre emploi du temps</h1>
-        <p class="text-xl text-gray-300 mb-8">
-            Trouvez votre tuteur idéal et organisez une réunion vidéo gratuite. Puis réservez des cours particuliers en
-            ligne qui s'adaptent à votre emploi du temps.
-        </p>
+    {# <div class="max-w-7xl mx-auto"> #}
+        <div class="mb-8 p-10">
+            <h1 class="flex items-start justify-start content-start text-5xl font-bold mb-4">Des tuteurs privés qui s'adaptent à votre emploi du temps</h1>
+            <p class="text-xl text-gray-300 mb-8">
+                Trouvez votre tuteur idéal et organisez une réunion vidéo gratuite. Puis réservez des cours particuliers
+                en
+                ligne qui s'adaptent à votre emploi du temps.
+            </p>
+        </div>
 
         <button class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
             Réserver un tuteur
@@ -81,6 +84,7 @@
             {% endfor %}
         </div>
 
-    </div>
+        {#
+    </div> #}
 </div>
 {% endblock %}
