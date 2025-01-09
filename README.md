@@ -28,7 +28,7 @@ Pour installer et exécuter le projet localement, suivez ces étapes :
 
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/tonnom/MyTutorSpace.git
+   git clone https://github.com/yah422/MyTutorSpace.git
    ```
    
 2. Installez les dépendances :
