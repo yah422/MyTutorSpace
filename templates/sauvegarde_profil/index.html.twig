@@ -1,0 +1,8 @@
+<h1>Profils Sauvegardés</h1>
+<ul>
+    {% for sauvegarde in sauvegardes %}
+    <li>{{ sauvegarde.tuteur.nom }} {{ sauvegarde.tuteur.prenom }}</li>
+    {% else %}
+    <li>Aucun profil sauvegardé.</li>
+    {% endfor %}
+</ul>

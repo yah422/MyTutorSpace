@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Profil {% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex flex-col gap-7.5">
+<div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex-col gap-7.5">
         <div>
                 {% if app.user and 'ROLE_USER' in app.user.roles %}
                 <a href="{{ path('app_message', { receiver: user.id }) }}"
                         class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
                         Contacter le tuteur
-                        </a>
+                </a>
                 {% endif %}
         </div>
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
@@ -17,8 +17,9 @@
                         <!-- Section gauche : Photo de profil -->
                         <div class="flex flex-col items-center">
                                 <img src="{{ user.profilePicture 
-? asset('uploads/avatars/' ~ user.profilePicture) 
-: asset('uploads/avatars/default-profile.png') }}" alt="Photo de profil de {{ user.prenom }} {{ user.nom }}"
+                ? asset('uploads/avatars/' ~ user.profilePicture) 
+                : asset('uploads/avatars/default-profile.png') }}"
+                                        alt="Photo de profil de {{ user.prenom }} {{ user.nom }}"
                                         class="w-[200px] h-[200px] object-cover rounded-full shadow-md">
                                 <h2 class="text-2xl md:text-3xl font-extrabold mt-4 text-center text-[#FFD700]">
                                         {{ user.prenom }} {{ user.nom }}
@@ -36,7 +37,7 @@
                                 <div class="space-y-4">
                                         <p class="text-gray-300 text-base md:text-lg">
                                                 <span class="font-bold">Email :</span>
-                                                {% if is_granted('ROLE_ADMIN') or app.user.id == user.id %}
+                                                {% if is_granted('ROLE_ADMIN') or app.user and app.user.id == user.id %}
                                                 {{ user.email }}
                                                 {% else %}
                                                 <span class="italic">Information privée</span>
@@ -75,16 +76,44 @@
                                         </a>
                                         {% endif %}
 
+                                        <button class="save-profile-btn" data-id="{{ user.id }}"
+                                                data-url="{{ path('app_save_profile', { id: user.id }) }}">
+                                                Sauvegarder
+                                        </button>
+
                                         {% if app.user and 'ROLE_STUDENT' in app.user.roles %}
-                                        {# <a href="{{ path('book_session', { tutor: user.id }) }}" #} {#
+                                        <a href="{{ path('book_session', { tutor: user.id }) }}"
                                                 class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
-                                                #}
                                                 Réserver une séance
-                                                {# </a> #}
+                                        </a>
                                         {% endif %}
                                 </div>
                         </div>
                 </div>
         </div>
 </div>
+<script>
+        document.querySelectorAll('.save-profile-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                        const url = button.dataset.url;
+
+                        fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json'
+                                }
+                        })
+                                .then(response => response.json())
+                                .then(data => {
+                                        if (data.success) {
+                                                alert(data.message);
+                                        } else {
+                                                alert('Erreur : ' + data.message);
+                                        }
+                                })
+                                .catch(error => console.error('Erreur lors de la sauvegarde :', error));
+                });
+        });
+</script>
 {% endblock %}

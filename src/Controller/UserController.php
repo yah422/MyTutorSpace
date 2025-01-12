@@ -179,7 +179,7 @@ class UserController extends AbstractController
                     //Et on redirige vers le formulaire
                     return $this->redirectToRoute('app_register');
                 }
-                $user->setProfilePicture( $newFilename);
+                $user->setProfilePicture($newFilename);
             }
 
             try {
@@ -212,10 +212,17 @@ class UserController extends AbstractController
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
 
+        $tuteur = null;
+
+        if (in_array('ROLE_TUTEUR', $user->getRoles(), true)) {
+            $tuteur = $user; // L'utilisateur est lui-même le tuteur
+        }
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'matieres' => $matieres,
             'niveaux' => $niveaux,
+            'tuteur' => $tuteur,
         ]);
     }
 }

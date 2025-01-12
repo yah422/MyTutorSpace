@@ -60,9 +60,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'receiver')]
     private Collection $received;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TutorAvailability::class, cascade: ['persist', 'remove'])]
-    private Collection $availabilities;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePicture = 'default-profile.png'; // Image par défaut
 
@@ -107,7 +104,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
 
-
     /**
      * @var Collection<int, User>
      */
@@ -117,6 +113,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     private ?User $parent = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $tuteur = null;
+
+
 
     public function __construct()
     {
@@ -133,6 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
         $this->eleves = new ArrayCollection();
+        $this->sauvegardeProfils = new ArrayCollection();
     }
 
     /**
@@ -186,37 +188,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfilePicture(?string $profilePicture): self
     {
         $this->profilePicture = $profilePicture;
-        return $this;
-    }
-
-    // Getter et setter pour availabilities
-    /**
-     * @return Collection<int, TutorAvailability>
-     */
-    public function getAvailabilities(): Collection
-    {
-        return $this->availabilities;
-    }
-
-    public function addAvailability(TutorAvailability $availability): self
-    {
-        if (!$this->availabilities->contains($availability)) {
-            $this->availabilities->add($availability);
-            $availability->setTuteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvailability(TutorAvailability $availability): self
-    {
-        if ($this->availabilities->removeElement($availability)) {
-            // set the owning side to null (unless already changed)
-            if ($availability->getTuteur() === $this) {
-                $availability->setTuteur(null);
-            }
-        }
-
         return $this;
     }
 
@@ -401,6 +372,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $plainPassword = null;
+
+    /**
+     * @var Collection<int, SauvegardeProfil>
+     */
+    #[ORM\OneToMany(targetEntity: SauvegardeProfil::class, mappedBy: 'user')]
+    private Collection $sauvegardeProfils;
 
     public function getPlainPassword(): ?string
     {
@@ -607,5 +584,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return !$this->children->isEmpty();
     }
 
+    /**
+     * @return Collection<int, SauvegardeProfil>
+     */
+    public function getSauvegardeProfils(): Collection
+    {
+        return $this->sauvegardeProfils;
+    }
+
+    public function addSauvegardeProfil(SauvegardeProfil $sauvegardeProfil): static
+    {
+        if (!$this->sauvegardeProfils->contains($sauvegardeProfil)) {
+            $this->sauvegardeProfils->add($sauvegardeProfil);
+            $sauvegardeProfil->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSauvegardeProfil(SauvegardeProfil $sauvegardeProfil): static
+    {
+        if ($this->sauvegardeProfils->removeElement($sauvegardeProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($sauvegardeProfil->getUser() === $this) {
+                $sauvegardeProfil->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+    public function getTuteur(): ?User
+    {
+        return $this->tuteur;
+    }
+
+    public function setTuteur(?User $tuteur): self
+    {
+        $this->tuteur = $tuteur;
+
+        return $this;
+    }
 
 }
