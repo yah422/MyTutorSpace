@@ -117,8 +117,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $tuteur = null;
 
-
-
     public function __construct()
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs

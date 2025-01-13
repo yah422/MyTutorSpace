@@ -90,9 +90,9 @@ class TutoringBookingType extends AbstractType
             ->add('preferredTimeSlot', ChoiceType::class, [
                 'label' => 'Créneau horaire préféré',
                 'choices' => [
-                    'Matin (9h-12h)' => 'matinée',
-                    'Après-midi (14h-17h)' => 'après-midi',
-                    'Soir (18h-20h)' => 'soirée'
+                    'Matin (9h-12h)' => 'morning',
+                    'Après-midi (14h-17h)' => 'afternoon',
+                    'Soir (18h-20h)' => 'evening'
                 ],
                 'expanded' => true,
                 'multiple' => false,

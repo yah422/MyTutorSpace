@@ -24,6 +24,9 @@ class SauvegardeProfil
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $tuteur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class SauvegardeProfil
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTuteur(): ?User
+    {
+        return $this->tuteur;
+    }
+
+    public function setTuteur(?User $tuteur): self
+    {
+        $this->tuteur = $tuteur;
 
         return $this;
     }

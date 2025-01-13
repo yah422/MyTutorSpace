@@ -39,6 +39,7 @@ class SauvegardeProfilController extends AbstractController
         return new JsonResponse(['message' => 'Profil sauvegardé avec succès.'], 200);
     }
 
+    #[Route('/liste-sauvegardes', name: 'app_list_saved_profiles')]
     public function listSavedProfiles(#[CurrentUser] User $user): Response
     {
         $sauvegardes = $user->getSauvegardeProfils();
@@ -48,6 +49,7 @@ class SauvegardeProfilController extends AbstractController
         ]);
     }
 
+    #[Route('/delete-profil/{id}', name:'delete_profile')]
     public function deleteSavedProfile(
         #[CurrentUser] User $user,
         SauvegardeProfil $sauvegarde,

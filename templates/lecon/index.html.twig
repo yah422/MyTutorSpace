@@ -18,19 +18,19 @@
                 Trouvez votre cours idéal et profitez d'une leçon d'essai gratuite en vidéo. Ensuite, réservez des
                 sessions
                 en ligne qui s’adaptent à votre planning.
-            </p>
-        </div>
-        {% if app.user %}
-        <a href="{{ path('app_booking') }}">
-            <button class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
+            </p> {% if app.user %}
+            <a href="{{ path('app_booking') }}">
+                <button class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
+                    Réserver un séance
+                </button>
+            </a>
+            {% else %}
+            <button id="reservation-button"
+                class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
                 Réserver un cours
             </button>
-        </a>
-        {% else %}
-        <button id="reservation-button"
-            class="bg-emerald-400 text-black px-6 py-3 rounded-md font-semibold mb-8 hover:bg-emerald-500">
-            Réserver un cours
-        </button>
+        </div>
+
 
         <!-- Pop-up modal -->
         <div id="reservation-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 items-center justify-center">
@@ -138,7 +138,8 @@
         </div>
 
         <br>
-    {# </div> #}
+        {#
+    </div> #}
 </div>
 <br>
 {% endblock %}
