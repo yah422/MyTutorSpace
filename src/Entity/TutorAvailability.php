@@ -14,9 +14,9 @@ class TutorAvailability
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'availabilities')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $tuteur = null;
+    #[ORM\ManyToOne(targetEntity:"App\Entity\User")]
+    #[ORM\JoinColumn(nullable:false)]
+    private $tuteur;
 
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]

@@ -14,12 +14,6 @@
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     {% endblock %}
 
-    {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-    {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {% endblock %}
-
-
     <!-- Tarte au Citron Script -->
     <script src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.9.3/tarteaucitron.js"></script>
     <script>
@@ -174,12 +168,15 @@
         </div>
     </footer>
 
+    {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
     <script src="{{ asset('js/leconIndex.js') }}"></script>
     <script src="{{ asset('js/reservation.js') }}"></script>
     <script src="node_modules/@fullcalendar/core/main.js"></script>
     <script src="node_modules/@fullcalendar/daygrid/main.js"></script>
     <script src="node_modules/@fullcalendar/timegrid/main.js"></script>
     <script src="node_modules/@fullcalendar/interaction/main.js"></script>
+    {% endblock %}
 </body>
 
 </html>

@@ -53,13 +53,15 @@ class BookingController extends AbstractController
     }
 
     #[Route("/tutor-availabilities", name: "app_tutor_availabilities")]
-    public function getTutorAvailabilities(TutorAvailabilityRepository $repository): JsonResponse
+    public function getTutorAvailabilities(EntityManagerInterface $entityManager): JsonResponse
     {
-        $availabilities = $repository->findAll();
+        // Récupérer toutes les disponibilités des tuteurs
+        $availabilities = $entityManager->getRepository(TutorAvailability::class)->findAll();
 
         $events = [];
         foreach ($availabilities as $availability) {
             $events[] = [
+                'id' => $availability->getId(),
                 'title' => 'Disponible',
                 'start' => $availability->getStartTime()->format('Y-m-d\TH:i:s'),
                 'end' => $availability->getEndTime()->format('Y-m-d\TH:i:s'),
@@ -70,7 +72,7 @@ class BookingController extends AbstractController
 
         return new JsonResponse($events);
     }
-
+    
     #[Route('/add-availability', name: 'app_add_tutor_availability', methods: ['POST'])]
     public function addTutorAvailability(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -84,5 +86,23 @@ class BookingController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['status' => 'success'], JsonResponse::HTTP_CREATED);
+    }
+
+    #[Route('/tutor/availabilities/{id}', name: 'tutor_availabilities')]
+    public function showTutorAvailabilities(
+        int $tutorId, 
+        TutorAvailabilityRepository $tutorAvailabilityRepository
+    ): Response {
+        // Définissez une plage de dates
+        $startDate = new \DateTime('now');
+        $endDate = (new \DateTime('now'))->modify('+1 month');
+
+        // Récupérer les disponibilités
+        $availabilities = $tutorAvailabilityRepository->findAvailabilitiesForTutor($tutorId, $startDate, $endDate);
+
+        // Rendre la vue
+        return $this->render('booking/index.html.twig', [
+            'availabilities' => $availabilities,
+        ]);
     }
 }

@@ -12,12 +12,15 @@ use App\Services\Calendar\CalendarService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\TutorAvailabilityRepository;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
@@ -40,25 +43,19 @@ class UserController extends AbstractController
 
     #[Route('/availabilities', name: 'app_tutor_availabilities', methods: ['GET'])]
     #[IsGranted('ROLE_TUTEUR')]
-    public function getAvailabilities(Request $request): Response
+    public function getAvailabilities(Request $request, CalendarService $calendarService): JsonResponse
     {
-        $start = new \DateTime($request->query->get('start'));
-        $end = new \DateTime($request->query->get('end'));
-        $tutor = $this->getUser();
+        $user = $this->getUser();
+        $startDate = new \DateTime($request->query->get('start'));
+        $endDate = new \DateTime($request->query->get('end'));
 
-        $availabilities = $this->calendarService->getTutorAvailabilities($tutor, $start, $end);
+        try {
+            $availabilities = $calendarService->getTutorAvailabilities($user, $startDate, $endDate);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], 400);
+        }
 
-        $events = array_map(function ($availability) {
-            return [
-                'id' => $availability->getId(),
-                'title' => 'Disponible',
-                'start' => $availability->getStartTime()->format('Y-m-d\TH:i:s'),
-                'end' => $availability->getEndTime()->format('Y-m-d\TH:i:s'),
-                'backgroundColor' => $availability->isBooked() ? '#EF4444' : '#10B981',
-            ];
-        }, $availabilities);
-
-        return $this->json($events);
+        return $this->json($availabilities);
     }
 
     #[Route('/availability/add', name: 'app_tutor_availability_add', methods: ['POST'])]

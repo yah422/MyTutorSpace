@@ -14,7 +14,25 @@ class CalendarService
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TutorAvailabilityRepository $availabilityRepository
-    ) {}
+    ) {
+    }
+
+    private function isTuteur(User $user): bool
+    {
+        $roles = $user->getRoles();
+
+        // Ajout de debug pour vérifier les rôles.
+        if (!in_array('ROLE_TUTEUR', $roles, true)) {
+            throw new \LogicException(sprintf(
+                'User %s does not have the required ROLE_TUTEUR. Current roles: %s',
+                $user->getPrenom(),
+                implode(', ', $roles)
+            ));
+        }
+
+        return in_array('ROLE_TUTEUR', $roles, true);
+    }
+
 
     public function getTutorAvailabilities(User $tuteur, \DateTime $startDate, \DateTime $endDate): array
     {
@@ -22,8 +40,10 @@ class CalendarService
             throw new \InvalidArgumentException('User must have ROLE_TUTEUR to have availabilities');
         }
 
+        // Appel à la méthode définie dans le repository
         return $this->availabilityRepository->findAvailabilitiesForPeriod($tuteur, $startDate, $endDate);
     }
+
 
     public function addAvailability(User $tuteur, \DateTime $startTime, \DateTime $endTime): TutorAvailability
     {
@@ -48,8 +68,8 @@ class CalendarService
         $this->entityManager->flush();
     }
 
-    private function isTuteur(User $user): bool
-    {
-        return in_array('ROLE_TUTEUR', $user->getRoles(), true);
-    }
+    // private function isTuteur(User $user): bool
+    // {
+    //     return in_array('ROLE_TUTEUR', $user->getRoles(), true);
+    // }
 }
