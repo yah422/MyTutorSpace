@@ -93,14 +93,14 @@
                 <div style="background-color: #ECECEC;"
                     class="p-6 rounded-lg shadow-md flex flex-row gap-5 content-start justify-start">
 
-                    <div>
+                    <div >
                         <img style="width: 100px;height: auto;" src="{{ user.profilePicture 
                         ? asset('uploads/avatars/' ~ user.profilePicture) 
                         : asset('uploads/avatars/default-profile.png') }}"
                             alt="Photo de profil de {{ user.prenom }} {{ user.nom }}"
                             class="object-cover rounded-full shadow-md">
                     </div>
-                    <div>
+                    <div class="flex flex-row items-center ">
                         <h2 style="color:#1B4255;" class="text-2xl font-bold mb-2">{{ tuteur.nom }} {{ tuteur.prenom }}
                         </h2>
                         {# <p class="text-gray-600 mb-2">{{ tuteur.universite }}</p> --> à ajouter #}
