@@ -1,8 +1,73 @@
-<h1>Profils Sauvegardés</h1>
-<ul>
-    {% for sauvegarde in sauvegardes %}
-    <li>{{ sauvegarde.tuteur.nom }} {{ sauvegarde.tuteur.prenom }}</li>
-    {% else %}
-    <li>Aucun profil sauvegardé.</li>
-    {% endfor %}
-</ul>
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des profils sauvegardés{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex flex-col bg-gray-300">
+    <!-- Flash Messages -->
+    <div class="container mx-auto mt-6">
+        {% for label, messages in app.flashes %}
+        <div class="
+            p-4 rounded-lg mb-4 font-bold 
+            text-black 
+            {% if label == 'success' %} bg-teal-500 border-teal-700 
+            {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600 
+            {% elseif label == 'error' %} bg-red-500 border-red-700 
+            {% endif %}
+            ">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl font-bold text-center text-[#1B4255] my-6 border-b-4 border-[#567C8D] pb-4">
+        Liste des profils sauvegardés
+    </h1>
+
+    <!-- List of Saved Profiles -->
+    <div class="container mx-auto">
+        <ul class="space-y-6">
+            {% for sauvegarde in sauvegardes %}
+            <li
+                class="flex flex-col md:flex-row md:items-center justify-between bg-[#ECECEC] text-[#1B4255] p-6 rounded-lg shadow-lg border border-[#567C8D]">
+                <!-- Profile Info -->
+                {% if sauvegarde.tuteur %}
+                <a href="{{ path('app_show_user', {'id': sauvegarde.tuteur.id}) }}">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ sauvegarde.tuteur.profilePicture 
+                        ? asset('uploads/avatars/' ~ sauvegarde.tuteur.profilePicture) 
+                        : asset('uploads/avatars/default-profile.png') }}"
+                            alt="Photo de profil de {{ sauvegarde.tuteur.prenom }} {{ sauvegarde.tuteur.nom }}"
+                            class="w-24 h-24 object-cover rounded-full shadow-md">
+                        <div>
+                            <p class="text-lg font-semibold">{{ sauvegarde.tuteur.nom }}</p>
+                            <p class="text-sm text-gray-600">Sauvegardé le : {{ sauvegarde.dateSauvegarde|date('d/m/Y')
+                                }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+                <div class="text-center text-gray-500 py-8">
+                    Aucun tuteur ne correspond à vos critères.
+                </div>
+                {% endif %}
+
+                <!-- Delete Button -->
+                <form action="{{ path('delete_profile', {id: sauvegarde.id}) }}" method="post" class="mt-4 md:mt-0">
+                    <button type="submit"
+                        class="bg-[#FFD700] text-[#1B4255] font-bold py-2 px-6 rounded-lg shadow hover:bg-[#1B4255] hover:text-[#ECECEC] transition duration-300">
+                        Supprimer
+                    </button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Footer Spacer -->
+    <div class="mt-auto py-4"></div>
+</div>
+{% endblock %}

@@ -4,14 +4,6 @@
 
 {% block body %}
 <div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex-col gap-7.5">
-        <div>
-                {% if app.user and 'ROLE_USER' in app.user.roles %}
-                <a href="{{ path('app_message', { receiver: user.id }) }}"
-                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
-                        Contacter le tuteur
-                </a>
-                {% endif %}
-        </div>
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                         <!-- Section gauche : Photo de profil -->
@@ -68,19 +60,18 @@
                                                 Modifier le profil (Admin)
                                         </a>
                                         {% endif %}
-
-                                        {% if app.user and app.user != user %}
-                                        <a href="{{ path('new_message') }}"
-                                                class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
-                                                Contacter le tuteur
-                                        </a>
-                                        {% endif %}
-
-                                        <button class="save-profile-btn" data-id="{{ user.id }}"
-                                                data-url="{{ path('app_save_profile', { id: user.id }) }}">
-                                                Sauvegarder
-                                        </button>
-
+                                        <div class="flex flex-row justify-between space-x-[10px]">
+                                                {% if app.user and app.user != user %}
+                                                <a href="{{ path('new_message') }}"
+                                                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
+                                                        Contacter le tuteur
+                                                </a>
+                                                <button class="save-profile-btn" data-id="{{ user.id }}"
+                                                        data-url="{{ path('app_save_profile', { id: user.id }) }}">
+                                                        <img src="{{ asset('img/save.png') }}" alt="saveImage">
+                                                </button>
+                                                {% endif %}
+                                        </div>
                                         {% if app.user and 'ROLE_STUDENT' in app.user.roles %}
                                         <a href="{{ path('book_session', { tutor: user.id }) }}"
                                                 class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
@@ -90,6 +81,22 @@
                                 </div>
                         </div>
                 </div>
+        </div>
+
+        <br>
+
+        <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
+                {% if app.user and 'ROLE_USER' in app.user.roles %}
+                <a href="{{ path('app_message', { receiver: user.id }) }}"
+                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
+                        Contacter le tuteur
+                </a>
+                <br>
+                <a href="{{ path('app_list_saved_profiles') }}"
+                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">>
+                        Mes profils sauvegardés
+                </a>
+                {% endif %}
         </div>
 </div>
 <script>
