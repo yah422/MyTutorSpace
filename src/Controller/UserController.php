@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Entity\SauvegardeProfil;
 use App\Repository\UserRepository;
 use App\Repository\NiveauRepository;
 use App\Repository\MatiereRepository;
@@ -204,17 +205,29 @@ class UserController extends AbstractController
     public function profile(
         User $user,
         MatiereRepository $matiereRepository,
-        NiveauRepository $niveauRepository
+        NiveauRepository $niveauRepository,
+        EntityManagerInterface $em
     ): Response {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
 
         $tuteur = null;
+        
+        $existingSauvegarde = $em->getRepository(SauvegardeProfil::class)
+        ->findOneBy(['user' => $user, 'tuteur' => $tuteur]);
+
+        if ($existingSauvegarde) {
+            $this->addFlash('warning', 'Ce profil est déjà sauvegardé.');
+            return $this->redirectToRoute('app_list_saved_profiles');
+        }
+
+        
 
         if (in_array('ROLE_TUTEUR', $user->getRoles(), true)) {
             $tuteur = $user; // L'utilisateur est lui-même le tuteur
         }
 
+        $this->addFlash('success', 'Votre profil a été sauvegardé.');
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'matieres' => $matieres,
