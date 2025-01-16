@@ -4,16 +4,25 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
-{
+{ 
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -65,6 +74,15 @@ class UserType extends AbstractType
                     ]),
                 ],
             ]);
+            
+            if ($this->security->isGranted('ROLE_TUTEUR')) {
+                $builder->add('hourly_rate', NumberType::class, [
+                    'label' => 'Tarif horaire',
+                    'required' => false,
+                    'attr' => ['class' => 'form-control']
+                ]);
+            }
+           
     }
 
     public function configureOptions(OptionsResolver $resolver): void

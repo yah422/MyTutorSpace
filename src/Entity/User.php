@@ -48,6 +48,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[ORM\Column(type: "decimal", scale: 2, nullable: true)]
+    private $hourlyRate;
+
     /**
      * @var Collection<int, Message>
      */
@@ -620,6 +623,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->tuteur = $tuteur;
 
+        return $this;
+    }
+
+    public function getHourlyRate(): ?float
+    {
+        return $this->hourlyRate;
+    }
+
+    public function setHourlyRate(?float $hourlyRate): self
+    {
+        $this->hourlyRate = $hourlyRate;
         return $this;
     }
 

@@ -68,6 +68,18 @@
                 'attr': {'class': 'w-full bg-[#567C8D] text-black rounded p-3 focus:ring-2 focus:ring-[#FFD700]'}
                 }) }}
 
+                <!-- HourlyRate -->
+                {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
+                <div class="mb-4">
+                    {{ form_row(registrationForm.hourly_rate, 'Taux Horaire', {'label_attr': {'class': 'block text-lg
+                    font-semibold
+                    text-[#ECECEC]'}}) }}
+                    {{ form_row(registrationForm.hourly_rate, {'attr': {'class': 'mt-1 block w-full p-2 bg-[#567C8D]
+                    text-[#ECECEC]
+                    border border-[#70F9D9] rounded focus:ring-2 focus:ring-[#FFD700] focus:outline-none'}}) }}
+                </div>
+                {% endif %}
+
                 <!-- Conditions générales -->
                 <div class="flex items-center">
                     {{ form_row(registrationForm.agreeTerms, {

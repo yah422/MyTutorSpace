@@ -74,6 +74,12 @@
                         {{ form_errors(form.matiere, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
                     </div>
                     <div class="mt-4">
+                        {{ form_label(form.tuteur, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-gray-700'}}) }}
+                        {{ form_widget(form.tuteur) }}
+                        {{ form_errors(form.tuteur, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                    <div class="mt-4">
                         {{ form_label(form.message, null, {'label_attr': {'class': 'block text-sm font-medium
                         text-gray-700'}}) }}
                         {{ form_widget(form.message) }}

@@ -2,9 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\Matiere;
-use App\Entity\TutoringBooking;
 use App\Entity\Subject;
+use App\Entity\TutoringBooking;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,6 +61,20 @@ class TutoringBookingType extends AbstractType
                 'choice_label' => 'nom',
                 'label' => 'Matière',
                 'required' => true,
+                'attr' => [
+                    'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+                ]
+            ])
+            ->add('tuteur', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'prenom',
+                'label' => 'Tuteur',
+                'required' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->where('u.roles LIKE :role')
+                              ->setParameter('role', '%"ROLE_TUTEUR"%');
+                },
                 'attr' => [
                     'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
                 ]

@@ -87,19 +87,6 @@
                     }}) }}
                 </div>
 
-                <!-- Taux horaire -->
-                <div>
-                    {{ form_label(form.hourly_rate, 'Taux horaire', {'label_attr': {'class': 'text-[#1B4255]
-                    font-semibold mb-2 block'}}) }}
-                    <div class="relative">
-                        {{ form_widget(form.hourly_rate, {'attr': {
-                        'class': 'w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#70F9D9] focus:ring
-                        focus:ring-[#70F9D9]/20 transition-all duration-300'
-                        }}) }}
-                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">€/h</span>
-                    </div>
-                </div>
-
                 <!-- Document PDF -->
                 <div class="col-span-2">
                     {{ form_label(form.pdfFile, 'Support de cours (PDF)', {'label_attr': {'class': 'text-[#1B4255]

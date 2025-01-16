@@ -59,6 +59,12 @@
                                         <p class="text-gray-300 text-sm md:text-base">
                                                 {{ user.aboutMe | default("Aucune information disponible.") }}
                                         </p>
+                                        {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
+                                        <div>
+                                                <p class="text-sm text-gray-500">Taux horaire</p>
+                                                <p class="text-[#1B4255] font-medium">{{ lecon.hourlyRate }}€/h</p>
+                                        </div>
+                                        {% endif %}
                                 </div>
 
                                 <!-- Actions avec restrictions d'accès -->

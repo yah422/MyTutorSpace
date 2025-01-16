@@ -52,6 +52,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult(); // Exécution de la requête et obtention des résultats
     }
 
+   
     /**
      * Find tutors by filters including subject and level.
      * Cette méthode permet de trouver les tuteurs en fonction de la matière et du niveau.

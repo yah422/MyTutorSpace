@@ -46,8 +46,6 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-
     // /**
     //  * Find resources by lesson.
     //  * @param Lecon $lecon

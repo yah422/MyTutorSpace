@@ -5,6 +5,7 @@ namespace App\Form;
 use Assert\Length;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -23,6 +24,13 @@ use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
 
 class RegistrationFormType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -111,7 +119,18 @@ class RegistrationFormType extends AbstractType
                 'constraints' => new Recaptcha3(),
                 'action_name' => 'register',
                 'locale' => 'fr',
-            ]);
+            ])
+            ;
+
+            if ($this->security->isGranted('ROLE_TUTEUR')) {
+                $builder->add('hourly_rate', NumberType::class, [
+                    'label' => 'Tarif horaire',
+                    'required' => false,
+                    'attr' => ['class' => 'form-control']
+                ]);
+            }
+
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

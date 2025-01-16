@@ -62,11 +62,6 @@ class LeconType extends AbstractType
                     ])
                 ],
             ])
-            ->add('hourly_rate', NumberType::class, [
-                'label' => 'Tarif horaire',
-                'required' => false,
-                'attr' => ['class' => 'form-control']
-            ])
             ;
     }
 

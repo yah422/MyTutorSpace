@@ -35,9 +35,6 @@ class Lecon
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(type: "decimal", scale: 2, nullable: true)]
-    private $hourlyRate;
-
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
@@ -91,17 +88,6 @@ class Lecon
     public function setTitre(string $titre): self
     {
         $this->titre = $titre;
-        return $this;
-    }
-
-    public function getHourlyRate(): ?float
-    {
-        return $this->hourlyRate;
-    }
-
-    public function setHourlyRate(?float $hourlyRate): self
-    {
-        $this->hourlyRate = $hourlyRate;
         return $this;
     }
 
