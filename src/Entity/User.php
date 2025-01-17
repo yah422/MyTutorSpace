@@ -120,6 +120,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $tuteur = null;
 
+    #[ORM\Column(type: "boolean")]
+    private bool $banned = false;
+
     public function __construct()
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
@@ -634,6 +637,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setHourlyRate(?float $hourlyRate): self
     {
         $this->hourlyRate = $hourlyRate;
+        return $this;
+    }
+
+    public function isBanned(): bool
+    {
+        return $this->banned;
+    }
+
+    public function setBanned(bool $banned): self
+    {
+        $this->banned = $banned;
+
         return $this;
     }
 

@@ -35,49 +35,6 @@ class UserController extends AbstractController
         $this->calendarService = $calendarService;
     }
 
-    #[Route('/calendar', name: 'app_tutor_calendar')]
-    #[IsGranted('ROLE_TUTEUR')]
-    public function calendar(): Response
-    {
-        return $this->render('tutor/calendar.html.twig');
-    }
-
-    #[Route('/availabilities', name: 'app_tutor_availabilities', methods: ['GET'])]
-    #[IsGranted('ROLE_TUTEUR')]
-    public function getAvailabilities(Request $request, CalendarService $calendarService): JsonResponse
-    {
-        $user = $this->getUser();
-        $startDate = new \DateTime($request->query->get('start'));
-        $endDate = new \DateTime($request->query->get('end'));
-
-        try {
-            $availabilities = $calendarService->getTutorAvailabilities($user, $startDate, $endDate);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
-        }
-
-        return $this->json($availabilities);
-    }
-
-    #[Route('/availability/add', name: 'app_tutor_availability_add', methods: ['POST'])]
-    #[IsGranted('ROLE_TUTEUR')]
-    public function addAvailability(Request $request): Response
-    {
-        $data = json_decode($request->getContent(), true);
-        $tutor = $this->getUser();
-
-        $startTime = new \DateTime($data['start']);
-        $endTime = new \DateTime($data['end']);
-
-        $availability = $this->calendarService->addAvailability($tutor, $startTime, $endTime);
-
-        return $this->json([
-            'id' => $availability->getId(),
-            'start' => $availability->getStartTime()->format('Y-m-d\TH:i:s'),
-            'end' => $availability->getEndTime()->format('Y-m-d\TH:i:s'),
-        ]);
-    }
-
     #[Route('/user', name: 'app_user')]
     public function index(
         Request $request,
@@ -91,19 +48,23 @@ class UserController extends AbstractController
 
         $selectedMatiereId = $request->query->get('matiere', null);
         $selectedNiveauId = $request->query->get('niveau', null);
+        $selectedPrix = $request->query->get('hourly_rate', null);
+
+        $selectedPrix = $selectedPrix !== null && $selectedPrix >= 0 ? (float) $selectedPrix : null;
 
         $selectedMatiere = $selectedMatiereId ? $matiereRepository->find($selectedMatiereId) : null;
         $selectedNiveau = $selectedNiveauId ? $niveauRepository->find($selectedNiveauId) : null;
 
-        $tuteurs = $userRepository->findTutorsByFilters($selectedMatiere, $selectedNiveau);
+        $tuteurs = $userRepository->findTutorsByFilters($selectedMatiere, $selectedNiveau, $selectedPrix);
 
         return $this->render('user/index.html.twig', [
             'matieres' => $matieres,
-            'user' => $user,
             'niveaux' => $niveaux,
             'selectedMatiereId' => $selectedMatiereId,
             'selectedNiveauId' => $selectedNiveauId,
+            'selectedPrix' => $selectedPrix ?? '',
             'tuteurs' => $tuteurs,
+            'user' => $user,
         ]);
     }
 
@@ -122,11 +83,23 @@ class UserController extends AbstractController
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
 
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Récupérer la valeur de hourly_rate
+            $hourlyRate = $form->get('hourly_rate')->getData();
+
+            if ($hourlyRate === null) {
+                // Attribuer une valeur par défaut si hourly_rate est NULL
+                $hourlyRate = 20;
+            }
+
+            $user->setHourlyRate($hourlyRate);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -201,6 +174,36 @@ class UserController extends AbstractController
         return $this->render('user/dashboardUserLogin.html.twig');
     }
 
+    #[Route('/user/ban/{id}', name: 'app_ban_user')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function ban(User $user,int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository -> find($id);
+        // Bannir l'utilisateur
+        $user->setBanned(true);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Utilisateur a été verrouillé.');
+    
+        // Redirection vers le détail du user après l'action
+        return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
+    }
+    
+    #[Route('/user/unban/{id}', name: 'app_unban_user')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function unban(User $user,int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository -> find($id);
+        // UnBan the user
+        $user->setBanned(false);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Utilisateur a été banni.');
+    
+        // Redirection vers le détail de user après l'action
+        return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
+    }
+
     #[Route('/user/{id}', name: 'app_show_user')]
     public function profile(
         User $user,
@@ -212,16 +215,14 @@ class UserController extends AbstractController
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
 
         $tuteur = null;
-        
+
         $existingSauvegarde = $em->getRepository(SauvegardeProfil::class)
-        ->findOneBy(['user' => $user, 'tuteur' => $tuteur]);
+            ->findOneBy(['user' => $user, 'tuteur' => $tuteur]);
 
         if ($existingSauvegarde) {
             $this->addFlash('warning', 'Ce profil est déjà sauvegardé.');
-            return $this->redirectToRoute('app_list_saved_profiles');
+            return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
         }
-
-        
 
         if (in_array('ROLE_TUTEUR', $user->getRoles(), true)) {
             $tuteur = $user; // L'utilisateur est lui-même le tuteur
@@ -235,4 +236,5 @@ class UserController extends AbstractController
             'tuteur' => $tuteur,
         ]);
     }
+
 }

@@ -55,9 +55,10 @@
 
         <div class="mb-8 bg-[#ECECEC] rounded-lg shadow-md p-6">
             <form method="GET" action="{{ path('app_user') }}" class="mb-8">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Matière -->
                     <div>
-                        <label class="block text-sm font-medium  text-gray-700 mb-1">Matière</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Matière</label>
                         <select name="matiere"
                             class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
                             <option value="">Toutes les matières</option>
@@ -69,8 +70,9 @@
                         </select>
                     </div>
 
+                    <!-- Niveau -->
                     <div>
-                        <label class="block text-sm font-medium  text-gray-700 mb-1">Niveau</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
                         <select name="niveau" class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10">
                             <option value="">Tous les niveaux</option>
                             {% for niveau in niveaux %}
@@ -80,6 +82,14 @@
                             {% endfor %}
                         </select>
                     </div>
+
+                    <!-- Prix -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Prix maximum (€)</label>
+                        <input type="number" name="hourly_rate" value="{{ selectedPrix|default('') }}"
+                            class="w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10"
+                            placeholder="Ex: 20">
+                    </div>
                 </div>
                 <button style="background-color:#FFD700" type="submit"
                     class="mt-4 text-black px-4 py-2 rounded-md hover:bg-blue-600">
@@ -87,13 +97,14 @@
                 </button>
             </form>
         </div>
+
         <div class="space-y-4">
             {% for tuteur in tuteurs %}
             <a href="{{ path('app_show_user', {'id': tuteur.id}) }}">
                 <div style="background-color: #ECECEC;"
                     class="p-6 rounded-lg shadow-md flex flex-row gap-5 content-start justify-start">
 
-                    <div >
+                    <div>
                         <img style="width: 100px;height: auto;" src="{{ user.profilePicture 
                         ? asset('uploads/avatars/' ~ user.profilePicture) 
                         : asset('uploads/avatars/default-profile.png') }}"
@@ -106,6 +117,18 @@
                         {# <p class="text-gray-600 mb-2">{{ tuteur.universite }}</p> --> à ajouter #}
                         {# <p class="text-gray-700 mb-4">{{ tuteur.aboutMe }}</p> #}
                     </div>
+                    {% if user.id is not null %}
+                    {% if user.banned %}
+                    <a href="{{ path('app_unban_user', {'id': user.id}) }}" class="btn btn-success">
+                        <img src="{{ asset('img/unlocked.svg') }}" alt="ImageDeverouille"> unban
+                    </a>
+                    {% else %}
+                    <a href="{{ path('app_ban_user', {'id': user.id}) }}" class="btn btn-warning">
+                        <img src="{{ asset('img/locked.svg') }}" alt="ImageVerouille"> ban
+                    </a>
+                    {% endif %}
+                    {% endif %}
+
                 </div>
             </a>
             <br>

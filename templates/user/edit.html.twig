@@ -33,37 +33,31 @@
 
         {# Champ pour la nouvelle photo #}
         <div class="mb-4">
-            {{ form_label(form.image, 'Nouvelle photo de profil', {'label_attr': {'class': 'block font-semibold
-            text-gray-300 mb-2'}}) }}
+            {{ form_label(form.image, 'Nouvelle photo de profil', {'label_attr': {'class': 'block font-semibold text-gray-300 mb-2'}}) }}
             {{ form_widget(form.image, {
             'attr': {
-            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2
-            focus:ring-[#FFD700]'
+            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2 focus:ring-[#FFD700]'
             }
             }) }}
             <small class="text-gray-300">Formats acceptés : JPG, JPEG, PNG. Taille maximale : 5MB</small>
         </div>
 
-
         {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
         <div class="mb-4">
-            {{ form_label(form.hourly_rate, 'Taux Horaire', {'label_attr': {'class': 'block text-lg font-semibold
-            text-[#ECECEC]'}}) }}
-            {{ form_widget(form.hourly_rate, {'attr': {'class': 'mt-1 block w-full p-2 bg-[#567C8D] text-[#ECECEC]
-            border border-[#70F9D9] rounded focus:ring-2 focus:ring-[#FFD700] focus:outline-none'}}) }}
+            {{ form_label(form.hourly_rate, 'Taux Horaire', {'label_attr': {'class': 'block text-lg font-semibold text-[#ECECEC]'}}) }}
+            {{ form_widget(form.hourly_rate, {'attr': {'class': 'mt-1 block w-full p-2 bg-[#567C8D] text-[#ECECEC] border border-[#70F9D9] rounded focus:ring-2 focus:ring-[#FFD700] focus:outline-none'}}) }}
             {{ form_errors(form.hourly_rate) }}
         </div>
         {% endif %}
 
-        {# Autres champs du formulaire, en excluant "profilePicture" #}
+        {# Autres champs du formulaire, en excluant "profilePicture" et "hourly_rate" #}
         {% for field in form %}
-        {% if field.vars.name != 'image' && !='hourly_rate' %}
+        {% if field.vars.name != 'image' and field.vars.name != 'hourly_rate' %}
         <div class="mb-4">
             {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300 mb-2'}}) }}
             {{ form_widget(field, {
             'attr': {
-            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2
-            focus:ring-[#FFD700]'
+            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2 focus:ring-[#FFD700]'
             }
             }) }}
             {{ form_errors(field, {'attr': {'class': 'text-red-500 mt-1'}}) }}

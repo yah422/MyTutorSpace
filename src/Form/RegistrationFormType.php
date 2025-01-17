@@ -5,6 +5,7 @@ namespace App\Form;
 use Assert\Length;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\SecurityBundle\Security;
 use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,10 +18,13 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class RegistrationFormType extends AbstractType
 {
@@ -122,15 +126,20 @@ class RegistrationFormType extends AbstractType
             ])
             ;
 
-            if ($this->security->isGranted('ROLE_TUTEUR')) {
+            if ($this->security->isGranted('ROLE_TUTEUR' || 'ROLE_ADMIN')) {
                 $builder->add('hourly_rate', NumberType::class, [
-                    'label' => 'Tarif horaire',
-                    'required' => false,
-                    'attr' => ['class' => 'form-control']
+                    'attr' => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],  
+                    'constraints' => [
+                        new GreaterThanOrEqual([
+                            'value' => 0,
+                            'message' => 'L\'âge doit être supérieur ou égal à zéro.'
+                        ])
+                    ],
                 ]);
             }
-
-            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

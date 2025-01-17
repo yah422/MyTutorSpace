@@ -52,12 +52,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult(); // Exécution de la requête et obtention des résultats
     }
 
-   
+
     /**
      * Find tutors by filters including subject and level.
      * Cette méthode permet de trouver les tuteurs en fonction de la matière et du niveau.
      */
-    public function findTutorsByFilters(?Matiere $matiere = null, ?Niveau $niveau = null)
+    public function findTutorsByFilters(?Matiere $matiere = null, ?Niveau $niveau = null, $hourlyRate = null)
     {
         $qb = $this->createQueryBuilder('u') // Création d'un query builder pour l'entité User
             ->andWhere('u.roles LIKE :role') // Condition pour filtrer par rôle de tuteur
@@ -75,16 +75,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('niveau', $niveau); // Définition du paramètre pour le niveau
         }
 
+        if ($hourlyRate !== null) {
+            $qb->andWhere('u.hourlyRate <= :hourlyRate')
+                ->setParameter('hourlyRate', $hourlyRate);
+        }
+
         return $qb->getQuery()->getResult(); // Exécution de la requête et obtention des résultats
     }
 
     public function findByRole(string $role): array
     {
         return $this->createQueryBuilder('u')
-        ->andWhere('u.roles LIKE :role')
-        ->setParameter('role', '%"' . $role . '"%')
-        ->getQuery()
-        ->getResult();
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('role', '%"' . $role . '"%')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findTutors()

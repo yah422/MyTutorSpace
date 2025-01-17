@@ -40,7 +40,7 @@
             "mandatory": true // Show a message about mandatory cookies
         });
     </script>
-    
+
     <script type="text/javascript">
         tarteaucitron.user.recaptchaapi = 'XXXXX';
         (tarteaucitron.job = tarteaucitron.job || []).push('recaptcha');
@@ -116,6 +116,23 @@
 
     <main>
         {% block body %}
+        <!-- Flash Messages -->
+        {# <div class="container mx-auto mt-6">
+            {% for label, messages in app.flashes %}
+            <div class="
+            p-4 rounded-lg mb-4 font-bold 
+            text-black 
+            {% if label == 'success' %} bg-teal-500 border-teal-700 
+            {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600 
+            {% elseif label == 'error' %} bg-red-500 border-red-700 
+            {% endif %}
+            ">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div> #}
         {% endblock %}
     </main>
 

@@ -100,6 +100,16 @@ class RegistrationController extends AbstractController
                 $user->setProfilePicture('/uploads/avatars/' . $newFilename);
             }
 
+            // Récupérer la valeur de hourly_rate
+            $hourlyRate = $form->get('hourly_rate')->getData();
+
+            if ($hourlyRate === null) {
+                // Attribuer une valeur par défaut si hourly_rate est NULL
+                $hourlyRate = 20;
+            }
+
+            $user->setHourlyRate($hourlyRate);
+
             // Attribution du rôle
             $user->setRoles([$role]);
 

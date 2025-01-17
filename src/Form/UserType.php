@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use Assert\NotNull;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -9,10 +10,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class UserType extends AbstractType
 { 
@@ -75,16 +79,22 @@ class UserType extends AbstractType
                 ],
             ]);
             
-            if ($this->security->isGranted('ROLE_TUTEUR')) {
+            if ($this->security->isGranted('ROLE_TUTEUR' || 'ROLE_ADMIN' )) {
                 $builder->add('hourly_rate', NumberType::class, [
-                    'label' => 'Tarif horaire',
-                    'required' => false,
-                    'attr' => ['class' => 'form-control']
+                    'attr' => [
+                        'min' => 0,
+                    ],
+                    'constraints' => [
+                        new GreaterThanOrEqual([
+                            'value' => 0,
+                            'message' => 'L\'âge doit être supérieur ou égal à zéro.'
+                        ])
+                    ],
                 ]);
             }
-           
-    }
 
+    }    
+    
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

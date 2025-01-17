@@ -73,13 +73,6 @@ class LeconController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $pdfFile = $form->get('pdfFile')->getData();
-            // Récupérer la valeur de hourly_rate
-            $hourlyRate = $form->get('hourly_rate')->getData();
-
-            if ($hourlyRate === null) {
-                // Attribuer une valeur par défaut si hourly_rate est NULL
-                $hourlyRate = 20;
-            }
 
             if ($pdfFile) {
                 $newFilename = uniqid() . '.' . $pdfFile->guessExtension();
@@ -96,7 +89,6 @@ class LeconController extends AbstractController
                 }
             }
 
-            $lecon->setHourlyRate($hourlyRate);
             $entityManager->persist($lecon);
             $entityManager->flush();
 
