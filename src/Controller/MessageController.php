@@ -28,7 +28,6 @@ class MessageController extends AbstractController
     }
 
     #[Route('/message/new', name: 'new_message')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $message = new Message();
