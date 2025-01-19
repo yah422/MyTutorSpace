@@ -27,18 +27,20 @@ class ProgressController extends AbstractController
 
         // Vérifie que l'utilisateur a des "dependents"
         $dependents = $user->getDependents();
-        if (!$dependents) {
+        $dependentsArray = $dependents ? $dependents->toArray() : [];
+        if (!$dependentsArray) {
             $this->addFlash('warning', 'Vous n\'avez aucun dependent enregistré.');
             return $this->redirectToRoute('app_dashboard'); // Redirection si nécessaire
         }
 
         // Récupère les enregistrements de progrès
-        $progressRecords = $progressRepository->findBy(['dependent' => $dependents]);
+        $progressRecords = $progressRepository->findBy(['dependent' => $dependentsArray]);
 
         return $this->render('progress/index.html.twig', [
             'progressRecords' => $progressRecords,
         ]);
     }
+
 
     #[Route('/progress/new', name: 'app_progress_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

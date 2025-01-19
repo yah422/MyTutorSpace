@@ -26,12 +26,22 @@ class ProgressRepository extends ServiceEntityRepository
      * @param array $dependents
      * @return Progress[]
      */
-    public function findByDependents(array $dependents): array
+    // public function findByDependents(array $dependents): array
+    // {
+    //     return $this->createQueryBuilder('p')
+    //         ->andWhere('p.dependent IN (:dependents)')
+    //         ->setParameter('dependents', $dependents)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
+    public function findByDependent($dependentsArray)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.dependent IN (:dependents)')
-            ->setParameter('dependents', $dependents)
+            ->setParameter('dependents', $dependentsArray)
             ->getQuery()
             ->getResult();
     }
+
 }
