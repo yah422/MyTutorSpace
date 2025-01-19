@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -79,19 +80,11 @@ class UserType extends AbstractType
                 ],
             ]);
             
-            if ($this->security->isGranted('ROLE_TUTEUR' || 'ROLE_ADMIN' )) {
-                $builder->add('hourly_rate', NumberType::class, [
-                    'attr' => [
-                        'min' => 0,
-                    ],
-                    'constraints' => [
-                        new GreaterThanOrEqual([
-                            'value' => 0,
-                            'message' => 'L\'âge doit être supérieur ou égal à zéro.'
-                        ])
-                    ],
-                ]);
-            }
+            $builder->add('hourly_rate', MoneyType::class, [
+                'label' => 'Taux horaire ',
+                'required' => true,
+                'currency' => 'EUR',
+            ]);
 
     }    
     

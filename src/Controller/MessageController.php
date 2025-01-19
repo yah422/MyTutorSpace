@@ -53,7 +53,7 @@ class MessageController extends AbstractController
     }
     
     #[Route('/message/received', name: 'received_message')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function received(MessageRepository $messageRepository): Response
     {
         $user = $this->getUser();
@@ -65,7 +65,7 @@ class MessageController extends AbstractController
     }
 
     #[Route('/message/show/{id}', name: 'show_message')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function show(
         int $id,
         EntityManagerInterface $entityManager,

@@ -8,13 +8,13 @@
         <div class="container mx-auto mt-6">
                 {% for label, messages in app.flashes %}
                 <div class="
-            p-4 rounded-lg mb-4 font-bold 
-            text-black 
-            {% if label == 'success' %} bg-teal-500 border-teal-700 
-            {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600 
-            {% elseif label == 'error' %} bg-red-500 border-red-700 
-            {% endif %}
-            ">
+        p-4 rounded-lg mb-4 font-bold 
+        text-black 
+        {% if label == 'success' %} bg-teal-500 border-teal-700 
+        {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600 
+        {% elseif label == 'error' %} bg-red-500 border-red-700 
+        {% endif %}
+        ">
                         {% for message in messages %}
                         {{ message }}
                         {% endfor %}
@@ -50,7 +50,7 @@
                                                 {% if is_granted('ROLE_ADMIN') or app.user and app.user.id == user.id %}
                                                 {{ user.email }}
                                                 {% else %}
-                                                <span class="italic">Information privée</span>
+                                                <span class="italic">Information privée :</span>
                                                 {% endif %}
                                         </p>
                                         <p class="text-gray-300 text-base md:text-lg">
@@ -61,8 +61,8 @@
                                         </p>
                                         {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
                                         <div>
-                                                <p class="text-sm text-gray-500">Taux horaire</p>
-                                                <p class="text-[#1B4255] font-medium">{{ lecon.hourlyRate }}€/h</p>
+                                                <p class="text-gray-300 text-base md:text-lg">Taux horaire :</p>
+                                                <p class="text-gray-300 font-medium">{{ user.hourlyRate }}€/h</p>
                                         </div>
                                         {% endif %}
                                 </div>

@@ -23,8 +23,5 @@ services:
             # - '../src/Entity/'
             - "../src/Kernel.php"
 
-    # Services Calendar explicitement définis
-    # App\Services\Calendar\CalendarService:
-    #     arguments:
-    #         $entityManager: "@doctrine.orm.entity_manager"
-    #         $availabilityRepository: '@App\Repository\TutorAvailabilityRepository'
+    Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3:
+        arguments: ['siteKey', 'secret']

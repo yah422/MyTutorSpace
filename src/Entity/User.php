@@ -107,15 +107,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text')]
     private ?string $AboutMe = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, cascade: ['persist'])]
-    private Collection $children;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    private Collection $dependents;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
-    private ?User $parent = null;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'dependents')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?self $parent = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $tuteur = null;
@@ -127,7 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Par défaut, on donne le rôle ROLE_USER à tous les nouveaux utilisateurs
         $this->roles = ['ROLE_USER'];
-        $this->children = new ArrayCollection();
+        $this->dependents = new ArrayCollection();
         $this->lecon = new ArrayCollection();
         $this->lecons = new ArrayCollection();
         $this->matieres = new ArrayCollection();
@@ -465,16 +462,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+    
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): void
+    {
+        $this->isVerified = $isVerified;
     }
 
     /**
@@ -527,27 +529,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, self>
      */
-    public function getChildren(): Collection
+    public function getDependents(): Collection
     {
-        return $this->children;
+        return $this->dependents;
     }
 
-    public function addChild(User $child): self
+    public function addChild(self $child): self
     {
-        if (!$this->children->contains($child)) {
-            $this->children->add($child);
+        if (!$this->dependents->contains($child)) {
+            $this->dependents->add($child);
             $child->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeChild(User $child): self
+    public function removeChild(self $child): self
     {
-        if ($this->children->removeElement($child)) {
-            // Set the parent to null if it's currently set to this user
+        if ($this->dependents->removeElement($child)) {
+            // set the owning side to null (unless already changed)
             if ($child->getParent() === $this) {
                 $child->setParent(null);
             }
@@ -575,7 +577,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isParent(): bool
     {
-        return !$this->children->isEmpty();
+        return !$this->dependents->isEmpty();
     }
 
     public function hasParent(): bool
@@ -583,9 +585,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->parent !== null;
     }
 
-    public function hasChildren(): bool
+    public function hasDependents(): bool
     {
-        return !$this->children->isEmpty();
+        return !$this->dependents->isEmpty();
     }
 
     /**
@@ -629,14 +631,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getHourlyRate(): ?float
+    public function getHourlyRate(): ?int
     {
         return $this->hourlyRate;
     }
 
-    public function setHourlyRate(?float $hourlyRate): self
+    public function setHourlyRate(?int $hourlyRate): self
     {
         $this->hourlyRate = $hourlyRate;
+
         return $this;
     }
 

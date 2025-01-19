@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -118,28 +119,20 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.'
                     ]),
                 ],
-            ])
-            ->add('captcha', Recaptcha3Type::class, [
-                'constraints' => new Recaptcha3(),
-                'action_name' => 'register',
-                'locale' => 'fr',
-            ])
-            ;
+            ]);
 
-            if ($this->security->isGranted('ROLE_TUTEUR' || 'ROLE_ADMIN')) {
-                $builder->add('hourly_rate', NumberType::class, [
-                    'attr' => [
-                        'min' => 0,
-                        'max' => 100,
-                    ],  
-                    'constraints' => [
-                        new GreaterThanOrEqual([
-                            'value' => 0,
-                            'message' => 'L\'âge doit être supérieur ou égal à zéro.'
-                        ])
-                    ],
-                ]);
-            }
+        $builder->add('captcha', Recaptcha3Type::class, [
+            'constraints' => new Recaptcha3(),
+            'action_name' => 'register',
+            'locale' => 'fr',
+        ]);
+
+        $builder->add('hourly_rate', MoneyType::class, [
+            'label' => 'Taux horaire ',
+            'required' => true,
+            'currency' => 'EUR',
+        ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

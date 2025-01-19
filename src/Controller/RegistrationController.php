@@ -143,11 +143,13 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Utilisateur inscrit. Veuillez vous connecter.');
             return $this->redirectToRoute('app_login');
-            
+
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'role' => $role
+
         ]);
     }
 
@@ -189,7 +191,7 @@ class RegistrationController extends AbstractController
             $user = $userRepository->find($payload['user_id']);
 
             // On vérifie qu'on a bien un user et qu'il n'est pas déjà activé
-            if ($user && !$user->isVerified()) {
+            if ($user && !$user->getIsVerified()) { // Correction ici : utiliser getIsVerified() au lieu de isVerified()
                 $user->setIsVerified(true);
                 $em->flush();
 
@@ -200,4 +202,5 @@ class RegistrationController extends AbstractController
         $this->addFlash('danger', 'Le token est invalide ou a expiré');
         return $this->redirectToRoute('app_login');
     }
+
 }

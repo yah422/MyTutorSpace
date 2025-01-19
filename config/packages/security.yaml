@@ -45,6 +45,8 @@ security:
         - { path: ^/tuteur, roles: ROLE_TUTEUR }
         - { path: ^/eleve, roles: ROLE_ELEVE }
         - { path: ^/parent, roles: ROLE_PARENT }
+        - { path: ^/progress, roles: ROLE_PARENT }
+
 
 when@test:
     security:

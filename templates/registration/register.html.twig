@@ -69,14 +69,11 @@
                 }) }}
 
                 <!-- HourlyRate -->
-                {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
+                {% if role == 'ROLE_TUTEUR' %}
                 <div class="mb-4">
-                    {{ form_row(registrationForm.hourly_rate, 'Taux Horaire', {'label_attr': {'class': 'block text-lg
-                    font-semibold
-                    text-[#ECECEC]'}}) }}
                     {{ form_row(registrationForm.hourly_rate, {'attr': {'class': 'mt-1 block w-full p-2 bg-[#567C8D]
-                    text-[#ECECEC]
-                    border border-[#70F9D9] rounded focus:ring-2 focus:ring-[#FFD700] focus:outline-none'}}) }}
+                    text-[#ECECEC] border border-[#70F9D9] rounded focus:ring-2 focus:ring-[#FFD700]
+                    focus:outline-none'}}) }}
                 </div>
                 {% endif %}
 

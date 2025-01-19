@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Progress Details{% endblock %}
+
+{% block body %}
+<h1>Progress Details</h1>
+
+<dl>
+    <dt>Dependent</dt>
+    <dd>{{ progress.dependent.email }}</dd>
+
+    <dt>Tutoring Booking</dt>
+    <dd>{{ progress.tutoringBooking }}</dd>
+
+    <dt>Comment</dt>
+    <dd>{{ progress.comment }}</dd>
+</dl>
+
+<a href="{{ path('app_progress_index') }}">Back to list</a>
+{% endblock %}

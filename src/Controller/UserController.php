@@ -27,12 +27,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
     private UserPasswordHasherInterface $passwordHasher;
-    private CalendarService $calendarService;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, CalendarService $calendarService)
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
-        $this->calendarService = $calendarService;
     }
 
     #[Route('/user', name: 'app_user')]
@@ -165,6 +163,7 @@ class UserController extends AbstractController
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'role' => $user->getRoles(),
         ]);
     }
 
