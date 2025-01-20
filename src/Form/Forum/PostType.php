@@ -22,11 +22,6 @@ class PostType extends AbstractType
                     'rows' => 5
                 ]
             ])
-            ->add('topic', EntityType::class, [
-                'class' => Topic::class,
-                'choice_label' => 'title',
-                'label' => 'Topic',
-            ])
         ;
     }
 

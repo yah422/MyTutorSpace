@@ -45,7 +45,9 @@ class ForumController extends AbstractController
     Request $request,
     PaginatorInterface $paginatorInterface): Response
     {
-        $data = $entityManager->getRepository(Topic::class)->findAll();
+        $data = $entityManager->getRepository(Topic::class)->findBy(
+            ['category' => $category],
+        );
         $topics = $paginatorInterface->paginate(
             $data,
             $request->query->getInt('page', 1),
@@ -79,67 +81,41 @@ class ForumController extends AbstractController
         ]);
     }
 
-    #[Route('/post/new', name: 'app_forum_new_post')]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        // Créer un nouvel objet Post
-        $post = new Post();
-
-        // Créer le formulaire
-        $form = $this->createForm(PostType::class, $post);
-
-        // Traitement de la soumission du formulaire
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post->setAuthor($this->getUser());
-            // Sauvegarder l'objet Post dans la base de données
-            $entityManager->persist($post);
-            $entityManager->flush();
-
-            // Rediriger vers la page du topic ou une autre page pertinente
-            return $this->redirectToRoute('app_forum_topic', ['id' => $post->getTopic()->getId()]);
-        }
-
-        // Afficher le formulaire
-        return $this->render('forum/new_post.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
     #[Route('/topic/{id}', name: 'app_forum_topic')]
-    public function topic(Topic $topic,
-    Request $request,
-    EntityManagerInterface $entityManager,
-    PaginatorInterface $paginatorInterface): Response
+    public function topic(Topic $topic, Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginatorInterface): Response
     {
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-
-        $data = $entityManager->getRepository(Topic::class)->findAll();
-        $topics = $paginatorInterface->paginate(
+    
+        $data = $entityManager->getRepository(Post::class)->findBy(
+            ['topic' => $topic],
+        );
+        $posts = $paginatorInterface->paginate(
             $data,
             $request->query->getInt('page', 1),
-            6 
+            2
         );
 
+    
+        $post = new Post();
+        $form = $this->createForm(PostType::class, $post);
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setAuthor($this->getUser());
             $post->setTopic($topic);
-
+    
             $entityManager->persist($post);
             $entityManager->flush();
-
+    
             return $this->redirectToRoute('app_forum_topic', ['id' => $topic->getId()]);
         }
-
+    
         return $this->render('forum/topic.html.twig', [
             'topic' => $topic,
-            'form' => $form,
-            'topics' =>$topics,
+            'form' => $form->createView(),
+            'posts' => $posts
         ]);
     }
+    
 
     #[Route('/post/edit/{id}', name: 'app_forum_edit_post')]
     #[IsGranted('ROLE_USER')]

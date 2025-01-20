@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Lecon;
 use App\Entity\Niveau;
 use App\Entity\Matiere;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -40,6 +41,11 @@ class LeconType extends AbstractType
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->where('u.roles LIKE :role')
+                              ->setParameter('role', '%"ROLE_TUTEUR"%');
+                },
                 'choice_label' => 'nom',
             ])
             ->add('users', EntityType::class, [

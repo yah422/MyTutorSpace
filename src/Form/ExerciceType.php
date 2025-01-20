@@ -23,11 +23,11 @@ class ExerciceType extends AbstractType
             ])
             ->add('lecon', EntityType::class, [
                 'class' => Lecon::class,
-                'choice_label' => 'id',
+                'label' => 'titre',
             ])
             ->add('type', EntityType::class, [
                 'class' => Type::class,
-                'choice_label' => 'id',
+                'label' => 'nom',
             ])
         ;
     }
