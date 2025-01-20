@@ -23,7 +23,7 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         var calendarEl = document.getElementById('calendar');
                         var calendar = new FullCalendar.Calendar(calendarEl, {
-                            initialView: 'dayGridMonth',
+                            initialView: 'dayGridWeek',
                             locale: 'fr',
                             events: "{{ path('app_tutor_availabilities') }}", // API des disponibilités
                             eventColor: '#90EE90', // Couleur des créneaux disponibles

@@ -16,8 +16,9 @@ class Progress
     #[ORM\JoinColumn(nullable: false)]
     private ?User $dependent = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $tutoringBooking = null;
+    #[ORM\ManyToOne(targetEntity: TutoringBooking::class, inversedBy: 'progress')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TutoringBooking $tutoringBooking = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment = null;
@@ -43,18 +44,6 @@ class Progress
     public function setDependent(?User $dependent): self
     {
         $this->dependent = $dependent;
-
-        return $this;
-    }
-
-    public function getTutoringBooking(): ?string
-    {
-        return $this->tutoringBooking;
-    }
-
-    public function setTutoringBooking(string $tutoringBooking): self
-    {
-        $this->tutoringBooking = $tutoringBooking;
 
         return $this;
     }

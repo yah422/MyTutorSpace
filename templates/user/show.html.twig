@@ -108,9 +108,9 @@
         </div>
 
         <br>
+        {% if app.user and 'ROLE_USER' in app.user.roles %}
 
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
-                {% if app.user and 'ROLE_USER' in app.user.roles %}
                 <a href="{{ path('app_message', { receiver: user.id }) }}"
                         class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
                         Contacter le tuteur
@@ -120,8 +120,9 @@
                         class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">>
                         Mes profils sauvegardés
                 </a>
-                {% endif %}
         </div>
+        {% endif %}
+
 </div>
 <script>
         document.querySelectorAll('.save-profile-btn').forEach(button => {
