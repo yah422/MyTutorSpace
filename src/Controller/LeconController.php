@@ -13,6 +13,7 @@ use App\Repository\LeconRepository;
 use App\Repository\MatiereRepository;
 use App\Repository\ExerciceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +26,13 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class LeconController extends AbstractController
 {
     #[Route('/lecon', name: 'app_lecon')]
-    public function index(Request $request, LeconRepository $leconRepository, MatiereRepository $matiereRepository, EntityManagerInterface $entityManager): Response
-    {
+    public function index(
+        Request $request,
+        LeconRepository $leconRepository,
+        MatiereRepository $matiereRepository,
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginatorInterface,
+    ): Response {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveauRepository = $entityManager->getRepository(Niveau::class);
         $niveaux = $niveauRepository->findAll();
@@ -45,7 +51,12 @@ class LeconController extends AbstractController
             $selectedNiveau = $niveauRepository->find($niveauId);
         }
 
-        $lecons = $leconRepository->findLeconsByFilters($selectedMatiere, $selectedNiveau);
+        $data = $leconRepository->findLeconsByFilters($selectedMatiere, $selectedNiveau);
+        $lecons = $paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            9
+        );
 
         return $this->render('lecon/index.html.twig', [
             'lecons' => $lecons,
