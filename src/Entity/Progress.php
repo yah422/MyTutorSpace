@@ -16,9 +16,9 @@ class Progress
     #[ORM\JoinColumn(nullable: false)]
     private ?User $dependent = null;
 
-    #[ORM\ManyToOne(targetEntity: TutoringBooking::class, inversedBy: 'progress')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?TutoringBooking $tutoringBooking = null;
+    // #[ORM\ManyToOne(targetEntity: TutoringBooking::class, inversedBy: 'progress')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?TutoringBooking $tutoringBooking = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment = null;
