@@ -9,6 +9,7 @@ use App\Form\Forum\TopicType;
 use App\Entity\Forum\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Forum\TopicRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,9 +20,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ForumController extends AbstractController
 {
     #[Route('/', name: 'app_forum')]
-    public function index(Topic $topic, EntityManagerInterface $entityManager): Response
+    public function index(Topic $topic,
+    EntityManagerInterface $entityManager,
+    PaginatorInterface $paginatorInterface,
+    Request $request): Response
     {
-        $categories = $entityManager->getRepository(Category::class)->findAll();
+        $data = $entityManager->getRepository(Category::class)->findAll();
+        $categories = $paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            4 
+        );
 
         return $this->render('forum/index.html.twig', [
             'categories' => $categories,
@@ -30,10 +39,22 @@ class ForumController extends AbstractController
     }
 
     #[Route('/category/{id}', name: 'app_forum_category')]
-    public function category(Category $category): Response
+    public function category(
+    Category $category,
+    EntityManagerInterface $entityManager,
+    Request $request,
+    PaginatorInterface $paginatorInterface): Response
     {
+        $data = $entityManager->getRepository(Topic::class)->findAll();
+        $topics = $paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            4 
+        );
+
         return $this->render('forum/category.html.twig', [
             'category' => $category,
+            'topics' => $topics,
         ]);
     }
 
@@ -58,11 +79,49 @@ class ForumController extends AbstractController
         ]);
     }
 
+    #[Route('/post/new', name: 'app_forum_new_post')]
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Créer un nouvel objet Post
+        $post = new Post();
+
+        // Créer le formulaire
+        $form = $this->createForm(PostType::class, $post);
+
+        // Traitement de la soumission du formulaire
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post->setAuthor($this->getUser());
+            // Sauvegarder l'objet Post dans la base de données
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            // Rediriger vers la page du topic ou une autre page pertinente
+            return $this->redirectToRoute('app_forum_topic', ['id' => $post->getTopic()->getId()]);
+        }
+
+        // Afficher le formulaire
+        return $this->render('forum/new_post.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/topic/{id}', name: 'app_forum_topic')]
-    public function topic(Topic $topic, Request $request, EntityManagerInterface $entityManager): Response
+    public function topic(Topic $topic,
+    Request $request,
+    EntityManagerInterface $entityManager,
+    PaginatorInterface $paginatorInterface): Response
     {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
+
+        $data = $entityManager->getRepository(Topic::class)->findAll();
+        $topics = $paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            6 
+        );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,6 +137,7 @@ class ForumController extends AbstractController
         return $this->render('forum/topic.html.twig', [
             'topic' => $topic,
             'form' => $form,
+            'topics' =>$topics,
         ]);
     }
 
@@ -129,6 +189,48 @@ class ForumController extends AbstractController
 
         return $this->render('forum/edit_topic.html.twig', [
             'form' => $form,
+            'topic' => $topic,
+        ]);
+    }
+
+    #[Route('/post/{id}/delete', name: 'app_forum_delete_post')]
+    #[IsGranted('ROLE_USER')]
+    public function deletePost(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $post = $entityManager->getRepository(Post::class)->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException('Post not found');
+        }
+
+        if ($post->getAuthor() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('You do not have permission to delete this post.');
+        }
+
+        $entityManager->remove($post);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_forum_topic', ['id' => $post->getTopic()->getId()]);
+    }
+
+    #[Route('/topic/{id}/delete', name: 'app_forum_delete_topic')]
+    #[IsGranted('ROLE_USER')]
+    public function deleteTopic(Topic $topic,int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $topic = $entityManager->getRepository(Topic::class)->find($id);
+
+        if (!$topic) {
+            throw $this->createNotFoundException('Topic not found');
+        }
+
+        if ($topic->getAuthor() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('You do not have permission to delete this topic.');
+        }
+
+        $entityManager->remove($topic);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_forum_index', [
             'topic' => $topic,
         ]);
     }

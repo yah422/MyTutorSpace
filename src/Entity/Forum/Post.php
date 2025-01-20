@@ -29,6 +29,10 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?Topic $topic = null;
 
+    // #[ORM\ManyToOne(targetEntity: 'App\Entity\Forum\Topic', cascade: ['persist'])]
+    // #[ORM\JoinColumn(name: 'topic_id', referencedColumnName: 'id')]
+    // private $topic;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();

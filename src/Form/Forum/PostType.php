@@ -3,10 +3,12 @@
 namespace App\Form\Forum;
 
 use App\Entity\Forum\Post;
+use App\Entity\Forum\Topic;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PostType extends AbstractType
 {
@@ -19,6 +21,11 @@ class PostType extends AbstractType
                     'placeholder' => 'Votre réponse...',
                     'rows' => 5
                 ]
+            ])
+            ->add('topic', EntityType::class, [
+                'class' => Topic::class,
+                'choice_label' => 'title',
+                'label' => 'Topic',
             ])
         ;
     }

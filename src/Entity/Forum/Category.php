@@ -18,7 +18,7 @@ class Category
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:'text')]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Topic::class)]

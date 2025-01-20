@@ -3,44 +3,68 @@
 {% block title %}Nouveau sujet - Forum MyTutorSpace{% endblock %}
 
 {% block body %}
-
-<div style="height:100vh;">
-    <div class="border-b border-gray-300 pb-6 mb-6">
-        <div class="prose max-w-none text-gray-300">
-            {{ topic.content|nl2br }}
-        </div>
-
-        {% if app.user == topic.author %}
-        <div class="mt-4 text-right">
-            <a href="{{ path('app_forum_edit_topic', {'id': topic.id}) }}"
-                class="text-sm text-gray-300 underline hover:text-[#567C8D] transition-colors duration-300">
-                Modifier le sujet
+<div class="min-h-screen bg-[#ECECEC]">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-[#1B4255]">{{ topic.title }} - MyTutorSpace</h1>
+            {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_forum_new_post') }}"
+                class="bg-[#1B4255] text-white px-4 py-2 rounded-lg hover:bg-[#567C8D] transition-colors">
+                Nouveau Post
             </a>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
 
-    <div class="space-y-6">
-        {% for post in topic.posts %}
-        <div class="border-b border-gray-300 pb-6">
-            <div class="flex justify-between items-start mb-4">
-                <div class="font-semibold text-[#1B4255]">{{ post.author.prenom }}</div>
-                <div class="text-sm text-gray-500">{{ post.createdAt|date('d/m/Y H:i') }}</div>
-            </div>
-            <div class="prose max-w-none text-gray-700">
-                {{ post.content|nl2br }}
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                {{ topic.content|nl2br }}
             </div>
 
-            {% if app.user == post.author %}
-            <div class="mt-2 text-right">
-                <a href="{{ path('app_forum_edit_post', {'id': post.id}) }}"
+            {% if app.user == topic.author %}
+            <div class="mt-4 text-right">
+                <a href="{{ path('app_forum_edit_topic', {'id': topic.id}) }}"
                     class="text-sm text-[#1B4255] underline hover:text-[#567C8D] transition-colors duration-300">
-                    Modifier le post
+                    Modifier le sujet
                 </a>
+                <p class="text-sm text-gray-400">
+                    Par {{ topic.author.prenom }}
+                </p>
             </div>
             {% endif %}
         </div>
-        {% endfor %}
+
+        <div class="container mx-auto px-4 py-8">
+            {% for post in topic.posts %}
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="font-semibold text-[#1B4255]">{{ post.author.prenom }}</div>
+                    <div class="text-sm text-gray-500">{{ post.createdAt|date('d/m/Y H:i') }}</div>
+                </div>
+                <div class="prose max-w-none text-gray-700">
+                    {{ post.content|nl2br }}
+                </div>
+                <br>
+                {% if app.user == post.author or is_granted('ROLE_ADMIN') %}
+                <a class="bg-[#1B4255] text-white px-4 py-2 rounded-lg hover:bg-[#567C8D]" href="{{ path('app_forum_delete_post', { 'id': post.id }) }}"
+                    onclick="return confirm('Etes-vous sûre de vouloir supprimer votre post ?')">Supprimer le Post</a>
+                {% endif %}
+
+                {% if app.user == post.author %}
+                <div class="mt-2 text-right">
+                    <a href="{{ path('app_forum_edit_post', {'id': post.id}) }}"
+                        class="text-sm text-[#1B4255] underline hover:text-[#567C8D] transition-colors duration-300">
+                        Modifier le post
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="navigation flex justify-center nb-8 text-[#1B4255]">
+        {{ knp_pagination_render(topics) }}
     </div>
 </div>
 {% endblock %}
