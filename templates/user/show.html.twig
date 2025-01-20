@@ -5,22 +5,23 @@
 {% block body %}
 <div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex-col gap-7.5">
         <!-- Flash Messages -->
-        <div class="container mx-auto mt-6">
-                {% for label, messages in app.flashes %}
-                <div class="
-        p-4 rounded-lg mb-4 font-bold 
-        text-black 
-        {% if label == 'success' %} bg-teal-500 border-teal-700 
-        {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600 
-        {% elseif label == 'error' %} bg-red-500 border-red-700 
-        {% endif %}
-        ">
-                        {% for message in messages %}
-                        {{ message }}
+        {# <div class="
+                p-4 rounded-lg mb-4 font-bold
+                text-black
+                {% if app.flashes is not empty %}
+                        {% for label, messages in app.flashes %}
+                        {% if label == 'success' %} bg-teal-500 border-teal-700
+                        {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600
+                        {% elseif label == 'error' %} bg-red-500 border-red-700
+                        {% endif %}
                         {% endfor %}
-                </div>
+                {% endif %}
+                fade-out
+                ">
+                {% for message in messages %}
+                {{ message }}
                 {% endfor %}
-        </div>
+        </div> #}
 
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -111,10 +112,10 @@
         {% if app.user and 'ROLE_USER' in app.user.roles %}
 
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
-                <a href="{{ path('app_message', { receiver: user.id }) }}"
+                {# <a href="{{ path('app_message', { receiver: user.id }) }}"
                         class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
                         Contacter le tuteur
-                </a>
+                </a> #}
                 <br>
                 <a href="{{ path('app_list_saved_profiles') }}"
                         class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">>
@@ -145,6 +146,16 @@
                                         }
                                 })
                                 .catch(error => console.error('Erreur lors de la sauvegarde :', error));
+                });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+                const messages = document.querySelectorAll('.fade-out');
+
+                messages.forEach(message => {
+                        setTimeout(() => {
+                                message.classList.add('fade-out');
+                        }, 3000); // 3 secondes pour que le message disparaisse
                 });
         });
 </script>
