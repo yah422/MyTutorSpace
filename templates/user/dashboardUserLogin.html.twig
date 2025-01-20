@@ -114,6 +114,28 @@
                     <p class="text-[#567C8D]">Modifiez vos informations personnelles et gérez votre compte.</p>
                 </div>
             </a>
+
+            {# Progress (Accessible uniquement pour ROLE_PARENT) #}
+            {% if is_granted('ROLE_PARENT') %}
+            <a href="{{ path('app_progress_index') }}"
+                class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+                <div class="p-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3 rounded-lg bg-[#70F9D9] bg-opacity-20 text-[#1B4255] group-hover:bg-[#FFD700] group-hover:text-[#1B4255] transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-[#1B4255]">Progress</h3>
+                    </div>
+                    <p class="text-[#567C8D]">Suivez les progrès des élèves et accédez aux statistiques.</p>
+                </div>
+            </a>
+            {% endif %}
+            
         </div>
     </main>
 

@@ -97,8 +97,8 @@
                                                 </button>
                                                 {% endif %}
                                         </div>
-                                        {% if app.user and 'ROLE_STUDENT' in app.user.roles %}
-                                        <a href="{{ path('book_session', { tutor: user.id }) }}"
+                                        {% if app.user and 'ROLE_ELEVE' and 'ROLE_PARENT' in app.user.roles %}
+                                        <a href="{{ path('app_booking', { tuteur: user.id }) }}"
                                                 class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
                                                 Réserver une séance
                                         </a>
