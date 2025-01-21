@@ -31,32 +31,12 @@ class Lecon
     #[ORM\JoinColumn(nullable: false)]
     private ?Matiere $matiere = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'lecons')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lecons")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private $user;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private $dateCreation;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="lecons")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $niveau;
-
-    public function getNiveau(): ?Niveau
-    {
-        return $this->niveau;
-    }
-
-    public function setNiveau(?Niveau $niveau): self
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'lecons')]
     #[ORM\JoinTable(name: "lecon_user")]

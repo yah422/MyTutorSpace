@@ -22,9 +22,14 @@ class Niveau
     #[ORM\JoinTable(name: 'niveau_lecon')]
     private Collection $lecons;
 
+    #[ORM\ManyToMany(targetEntity:User::class, inversedBy:"niveaux")]
+    #[ORM\JoinTable(name:"niveau_users")]
+    private $users;
+
     public function __construct()
     {
         $this->lecons = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -68,6 +73,32 @@ class Niveau
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+        }
 
         return $this;
     }

@@ -35,9 +35,13 @@ class TutoringBooking
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $message = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tutoringBookings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $tuteur = null;
+    // #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tutoringBookings')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?User $tuteur = null;
+
+    #[ORM\ManyToOne(targetEntity:User::class, inversedBy:"tutoringBookings")]
+    #[ORM\JoinColumn(nullable:false)]
+    private $tuteur;
 
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]

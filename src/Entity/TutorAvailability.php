@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TutorAvailabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TutorAvailabilityRepository::class)]
 class TutorAvailability
@@ -12,30 +12,51 @@ class TutorAvailability
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['availability:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity:"App\Entity\User")]
-    #[ORM\JoinColumn(nullable:false)]
-    private $tuteur;
-
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank]
-    private ?\DateTimeInterface $startTime = null;
-
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank]
-    private ?\DateTimeInterface $endTime = null;
+    #[ORM\Column]
+    #[Groups(['availability:read'])]
+    private ?\DateTimeInterface $start = null;
 
     #[ORM\Column]
-    private bool $isBooked = false;
+    #[Groups(['availability:read'])]
+    private ?\DateTimeInterface $end = null;
 
-    // Getter pour id
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'availabilities')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['availability:read'])]
+    private ?User $tuteur = null;
+
+    // Getters et Setters
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    // Getter et Setter pour tuteur
+    public function getStart(): ?\DateTimeInterface
+    {
+        return $this->start;
+    }
+
+    public function setStart(\DateTimeInterface $start): self
+    {
+        $this->start = $start;
+        return $this;
+    }
+
+    public function getEnd(): ?\DateTimeInterface
+    {
+        return $this->end;
+    }
+
+    public function setEnd(\DateTimeInterface $end): self
+    {
+        $this->end = $end;
+        return $this;
+    }
+
     public function getTuteur(): ?User
     {
         return $this->tuteur;
@@ -44,46 +65,6 @@ class TutorAvailability
     public function setTuteur(?User $tuteur): self
     {
         $this->tuteur = $tuteur;
-
-        return $this;
-    }
-
-    // Getter et Setter pour startTime
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    // Getter et Setter pour endTime
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(?\DateTimeInterface $endTime): self
-    {
-        $this->endTime = $endTime;
-
-        return $this;
-    }
-
-    // Getter et Setter pour isBooked
-    public function isBooked(): bool
-    {
-        return $this->isBooked;
-    }
-
-    public function setIsBooked(bool $isBooked): self
-    {
-        $this->isBooked = $isBooked;
-
         return $this;
     }
 }

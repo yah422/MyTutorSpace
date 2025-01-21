@@ -72,9 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    #[ORM\ManyToMany(targetEntity: Niveau::class, inversedBy: "users")]
-    private Collection $niveaux;
-
     #[ORM\Column(type: 'json')] // Définition du champ roles en tant que JSON
     private array $roles = [];
 
@@ -84,22 +81,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    // #[ORM\ManyToOne(targetEntity: Niveau::class)]
+    // private ?Niveau $niveau = null;
+
     #[ORM\ManyToOne(targetEntity: Niveau::class)]
-    private ?Niveau $niveau = null;
+    private $niveau = null;
+
+    #[ORM\ManyToMany(targetEntity:Niveau::class, mappedBy:"users")]
+    private $niveaux;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
+
     /**
      * @var Collection<int, Lecon>
      */
     #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'user')]
     private Collection $lecon;
 
-    /**
-     * @var Collection<int, Lecon>
-     */
-    #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
-    private Collection $lecons;
+    // /**
+    //  * @var Collection<int, Lecon>
+    //  */
+    // #[ORM\ManyToMany(targetEntity: Lecon::class, inversedBy: 'users')]
+    // private Collection $lecons;
+
+    #[ORM\OneToMany(targetEntity: Lecon::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private $lecons;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -313,27 +320,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNiveaux(): Collection
-    {
-        return $this->niveaux;
-    }
-
-    public function addNiveau(Niveau $niveau): self
-    {
-        if (!$this->niveaux->contains($niveau)) {
-            $this->niveaux[] = $niveau;
-        }
-
-        return $this;
-    }
-
-    public function removeNiveau(Niveau $niveau): self
-    {
-        $this->niveaux->removeElement($niveau);
-
-        return $this;
-    }
-
     /**
      * Retourne les rôles de l'utilisateur, en ajoutant ROLE_USER s'il n'est pas déjà présent.
      */
@@ -532,68 +518,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, self>
-     */
-    public function getDependents(): Collection
-    {
-        return $this->dependents;
-    }
-
-    public function addChild(self $child): self
-    {
-        if (!$this->dependents->contains($child)) {
-            $this->dependents->add($child);
-            $child->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChild(self $child): self
-    {
-        if ($this->dependents->removeElement($child)) {
-            // set the owning side to null (unless already changed)
-            if ($child->getParent() === $this) {
-                $child->setParent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getParent(): ?User
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?User $parent): self
-    {
-        $this->parent = $parent;
-        return $this;
-    }
-
-    // Helper methods for parent/child relationship
-    public function isChild(): bool
-    {
-        return $this->parent !== null;
-    }
-
-    public function isParent(): bool
-    {
-        return !$this->dependents->isEmpty();
-    }
-
-    public function hasParent(): bool
-    {
-        return $this->parent !== null;
-    }
-
-    public function hasDependents(): bool
-    {
-        return !$this->dependents->isEmpty();
-    }
-
-    /**
      * @return Collection<int, SauvegardeProfil>
      */
     public function getSauvegardeProfils(): Collection
@@ -654,6 +578,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBanned(bool $banned): self
     {
         $this->banned = $banned;
+
+        return $this;
+    }
+
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function setNiveaux(Collection $niveaux): self
+    {
+        $this->niveaux = $niveaux;
+
+        return $this;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+            $niveau->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveaux->removeElement($niveau)) {
+            $niveau->removeUser($this); 
+        }
 
         return $this;
     }
