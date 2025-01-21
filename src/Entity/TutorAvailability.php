@@ -28,6 +28,9 @@ class TutorAvailability
     #[Groups(['availability:read'])]
     private ?User $tuteur = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $booked = false;
+
     // Getters et Setters
 
     public function getId(): ?int
@@ -39,24 +42,24 @@ class TutorAvailability
     {
         return $this->start;
     }
-
-    public function setStart(\DateTimeInterface $start): self
+    
+    public function setStart(?\DateTimeInterface $start): self
     {
         $this->start = $start;
         return $this;
     }
-
+    
     public function getEnd(): ?\DateTimeInterface
     {
         return $this->end;
     }
-
-    public function setEnd(\DateTimeInterface $end): self
+    
+    public function setEnd(?\DateTimeInterface $end): self
     {
         $this->end = $end;
         return $this;
     }
-
+    
     public function getTuteur(): ?User
     {
         return $this->tuteur;
@@ -65,6 +68,17 @@ class TutorAvailability
     public function setTuteur(?User $tuteur): self
     {
         $this->tuteur = $tuteur;
+        return $this;
+    }
+
+    public function isBooked(): bool
+    {
+        return $this->booked;
+    }
+
+    public function setBooked(bool $booked): self
+    {
+        $this->booked = $booked;
         return $this;
     }
 }
