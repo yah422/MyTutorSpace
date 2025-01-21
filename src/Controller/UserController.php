@@ -10,6 +10,7 @@ use App\Repository\NiveauRepository;
 use App\Repository\MatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Services\Calendar\CalendarService;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,8 @@ class UserController extends AbstractController
         UserRepository $userRepository,
         MatiereRepository $matiereRepository,
         NiveauRepository $niveauRepository,
-        User $user,
+        PaginatorInterface $paginator, // Injection du pagineur
+        User $user
     ): Response {
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
@@ -53,7 +55,14 @@ class UserController extends AbstractController
         $selectedMatiere = $selectedMatiereId ? $matiereRepository->find($selectedMatiereId) : null;
         $selectedNiveau = $selectedNiveauId ? $niveauRepository->find($selectedNiveauId) : null;
 
-        $tuteurs = $userRepository->findTutorsByFilters($selectedMatiere, $selectedNiveau, $selectedPrix);
+        $data = $userRepository->findTutorsByFilters($selectedMatiere, $selectedNiveau, $selectedPrix);
+
+        $page = $request->query->getInt('page', 1); // Récupération de la page actuelle
+        $tuteurs = $paginator->paginate(
+            $data, // Data pour la pagination
+            $page,  // Numéro de la page
+            4     // Nombre d'éléments par page
+        );
 
         return $this->render('user/index.html.twig', [
             'matieres' => $matieres,
@@ -65,6 +74,7 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+
 
     #[Route('/user/ajouter', name: 'add_user')]
     public function add(
@@ -175,30 +185,30 @@ class UserController extends AbstractController
 
     #[Route('/user/ban/{id}', name: 'app_ban_user')]
     #[IsGranted('ROLE_ADMIN')]
-    public function ban(User $user,int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function ban(User $user, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        $user = $userRepository -> find($id);
+        $user = $userRepository->find($id);
         // Bannir l'utilisateur
         $user->setBanned(true);
         $entityManager->flush();
-    
+
         $this->addFlash('success', 'Utilisateur a été verrouillé.');
-    
+
         // Redirection vers le détail du user après l'action
         return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
     }
-    
+
     #[Route('/user/unban/{id}', name: 'app_unban_user')]
     #[IsGranted('ROLE_ADMIN')]
-    public function unban(User $user,int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function unban(User $user, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        $user = $userRepository -> find($id);
+        $user = $userRepository->find($id);
         // UnBan the user
         $user->setBanned(false);
         $entityManager->flush();
-    
+
         $this->addFlash('success', 'Utilisateur a été banni.');
-    
+
         // Redirection vers le détail de user après l'action
         return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
     }
