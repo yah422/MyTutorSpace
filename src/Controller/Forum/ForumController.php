@@ -7,6 +7,7 @@ use App\Entity\Forum\Topic;
 use App\Form\Forum\PostType;
 use App\Form\Forum\TopicType;
 use App\Entity\Forum\Category;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Forum\TopicRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -20,23 +21,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ForumController extends AbstractController
 {
     #[Route('/', name: 'app_forum')]
-    public function index(Topic $topic,
-    EntityManagerInterface $entityManager,
-    PaginatorInterface $paginatorInterface,
-    Request $request): Response
-    {
+    public function index(
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginatorInterface,
+        Request $request
+    ): Response {
+        // Fetch all categories from the repository
         $data = $entityManager->getRepository(Category::class)->findAll();
+    
+        // Paginate the results
         $categories = $paginatorInterface->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            4 
+            $data, // Query or data to paginate
+            $request->query->getInt('page', 1), // Current page number
+            4 // Number of items per page
         );
-
+    
         return $this->render('forum/index.html.twig', [
             'categories' => $categories,
-            'topic' => $topic,
         ]);
     }
+    
 
     #[Route('/category/{id}', name: 'app_forum_category')]
     public function category(
