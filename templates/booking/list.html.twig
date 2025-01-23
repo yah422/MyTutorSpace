@@ -3,11 +3,12 @@
 {% block title %}Mes Réservations{% endblock %}
 
 {% block body %}
+<main class="w-full max-w-screen-xl mx-auto p-4">
 <h1 class="text-3xl font-semibold text-gray-800 mb-6">Mes Réservations</h1>
 
 {% if bookings is not empty %}
 <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
-    <table class="min-w-full table-auto border-collapse">
+    <table class="w-full table-auto border-collapse">
         <thead class="bg-gray-100 text-gray-700">
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-medium">Cours</th>
@@ -58,4 +59,5 @@
 {% else %}
 <p class="text-gray-500 text-lg">Aucune réservation trouvée.</p>
 {% endif %}
+</main>
 {% endblock %}
