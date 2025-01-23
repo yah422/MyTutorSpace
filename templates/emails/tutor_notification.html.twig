@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle réservation de tutorat</title>
+    <style>
+        /* Basic Tailwind styles inlined for email compatibility */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #1B4255; /* Navbar color */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        .footer {
+            background-color: #1B4255;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #D4AF37;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #b58f2d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Email Header -->
+        <div class="header">
+            <h1>Nouvelle réservation de tutorat</h1>
+        </div>
+
+        <!-- Email Content -->
+        <div class="content">
+            <p>Bonjour {{ booking.tuteur.prenom }},</p>
+            <p>
+                Une nouvelle réservation de tutorat a été effectuée par {{ booking.StudentName }} 
+                pour un cours de "{{ booking.matiere.nom }}".
+            </p>
+            <p>
+                Date et heure de la session : 
+                <strong> {{ booking.preferredDate|date('d/m/Y') }} - {{ booking.preferredTimeSlot }}</strong>
+            </p>
+            <p>
+                Veuillez confirmer la réservation ou contacter l'élève si nécessaire.
+            </p>
+        </div>
+
+        <!-- Email Footer -->
+        <div class="footer">
+            <p>Merci d'utiliser MyTutorSpace !</p>
+            <p>&copy; {{ "now"|date('Y') }} MyTutorSpace. Tous droits réservés.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,7 +19,7 @@ class BookingMailer
     public function sendConfirmationEmail(TutoringBooking $booking): void
     {
         $email = (new TemplatedEmail())
-            ->from('noreply@votresite.com')
+            ->from('noreply@mytutorspace.com')
             ->to($booking->getStudentEmail())
             ->subject('Confirmation de votre réservation de tutorat')
             ->htmlTemplate('emails/booking_confirmation.html.twig')
@@ -31,7 +31,7 @@ class BookingMailer
 
         // Send notification to tutor
         $tutorEmail = (new TemplatedEmail())
-            ->from('noreply@votresite.com')
+            ->from('noreply@mytutorspace.com')
             ->to($booking->getTuteur()->getEmail())
             ->subject('Nouvelle réservation de tutorat')
             ->htmlTemplate('emails/tutor_notification.html.twig')

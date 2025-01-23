@@ -1,16 +1,86 @@
-<h2>Confirmation de réservation de tutorat</h2>
+<!DOCTYPE html>
+<html lang="fr">
 
-<p>Bonjour {{ booking.studentName }},</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de réservation</title>
+    <style>
+        /* Styles simplifiés pour emails */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
 
-<p>Votre réservation de tutorat a été confirmée avec les détails suivants :</p>
+        .header {
+            background-color: #1B4255;
+            /* Couleur de la navbar */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
 
-<ul>
-    <li>Date : {{ booking.preferredDate|date('d/m/Y') }}</li>
-    <li>Créneau : {{ booking.preferredTimeSlot }}</li>
-    <li>Matière : {{ booking.matiere.nom }}</li>
-    <li>Tuteur : {{ booking.tuteur.prenom }} {{ booking.tuteur.nom }}</li>
-</ul>
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+            color: #333333;
+        }
 
-<p>Message additionnel : {{ booking.message }}</p>
+        .footer {
+            background-color: #1B4255;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
 
-<p>Merci de votre confiance !</p>
+        .btn {
+            display: inline-block;
+            background-color: #D4AF37;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #b58f2d;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Email Header -->
+    <div class="header">
+        <h1>Nouvelle réservation de tutorat</h1>
+    </div>
+    <h2>Confirmation de réservation de tutorat</h2>
+
+    <p>Bonjour {{ booking.studentName }},</p>
+
+    <p>Votre réservation de tutorat a été confirmée avec les détails suivants :</p>
+
+    <ul>
+        <li>Date : {{ booking.preferredDate|date('d/m/Y') }}</li>
+        <li>Créneau : {{ booking.preferredTimeSlot }}</li>
+        <li>Matière : {{ booking.matiere.nom }}</li>
+        <li>Tuteur : {{ booking.tuteur.prenom }} {{ booking.tuteur.nom }}</li>
+    </ul>
+
+    <p>Message additionnel : {{ booking.message }}</p>
+
+    <p>Merci de votre confiance !</p>
+
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>Merci d'utiliser MyTutorSpace pour vos besoins en tutorat !</p>
+        <p>&copy; {{ "now"|date('Y') }} MyTutorSpace. Tous droits réservés.</p>
+    </div>
+    </div>
+</body>
+
+</html>
