@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
-use App\Services\BookingMailer;
 use App\Entity\TutoringBooking;
+use App\Services\BookingMailer;
 use App\Entity\TutorAvailability;
 use App\Form\TutoringBookingType;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\TutoringBookingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookingController extends AbstractController
@@ -53,6 +55,49 @@ class BookingController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/bookings', name: 'booking_list')]
+    #[IsGranted('ROLE_USER')]
+    public function listBookings(TutoringBookingRepository $bookingRepository): Response
+    {
+        $user = $this->getUser();
+
+        if ($this->isGranted('ROLE_TUTEUR')) {
+            // Get bookings that need confirmation from the tutor
+            $bookings = $bookingRepository->findBy(['tuteur' => $user, 'status' => 'pending']);
+        } elseif ($this->isGranted('ROLE_PARENT')) {
+            // Get bookings for the children of the parent
+            $bookings = $bookingRepository->findByParentChildren($user);
+        } else {
+            // For students, show their own bookings
+            $bookings = $bookingRepository->findBy(['eleve' => $user]);
+        }
+
+        return $this->render('booking/list.html.twig', [
+            'bookings' => $bookings,
+        ]);
+    }
+
+    #[Route('/booking/{id}/confirm', name: 'booking_confirm')]
+    public function confirmBooking(TutoringBooking $booking, EntityManagerInterface $entityManager): Response
+    {
+        $booking->setStatus('confirmed');
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Réservation confirmée.');
+        return $this->redirectToRoute('booking_list');
+    }
+
+    #[Route('/booking/{id}/cancel', name: 'booking_cancel')]
+    public function cancelBooking(TutoringBooking $booking, EntityManagerInterface $entityManager): Response
+    {
+        $booking->setStatus('canceled');
+        $entityManager->flush();
+
+        $this->addFlash('error', 'Réservation annulée.');
+        return $this->redirectToRoute('booking_list');
+    }
+
 
     #[Route('/booking/confirmation/{id}', name: 'app_booking_confirmation')]
     public function confirmation(TutoringBooking $booking): Response

@@ -61,4 +61,18 @@ class TutoringBookingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+        /**
+     * Get bookings for a parent's children.
+     */
+    public function findByParentChildren($parent)
+    {
+        return $this->createQueryBuilder('b')
+            ->join('b.eleve', 'e')
+            ->join('e.parents', 'p') // Ensure your `eleve` entity has a relationship with parents
+            ->where('p.id = :parentId')
+            ->setParameter('parentId', $parent->getId())
+            ->getQuery()
+            ->getResult();
+    }
 }
