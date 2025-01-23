@@ -2,18 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\TutorAvailability;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @extends ServiceEntityRepository<TutorAvailability>
- *
- * @method TutorAvailability|null find($id, $lockMode = null, $lockVersion = null)
- * @method TutorAvailability|null findOneBy(array $criteria, array $orderBy = null)
- * @method TutorAvailability[]    findAll()
- * @method TutorAvailability[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class TutorAvailabilityRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,31 +14,35 @@ class TutorAvailabilityRepository extends ServiceEntityRepository
         parent::__construct($registry, TutorAvailability::class);
     }
 
-    public function findAvailabilitiesForPeriod($tuteur, \DateTime $startDate, \DateTime $endDate): array
+    public function findAvailabilitiesForTutor(User $tutor, \DateTime $start, \DateTime $end)
     {
-        $qb = $this->createQueryBuilder('a')
-            ->where('a.tuteur = :tuteur')
-            ->andWhere('a.startTime >= :startDate')
-            ->andWhere('a.endTime <= :endDate')
-            ->setParameter('tuteur', $tuteur)
-            ->setParameter('startDate', $startDate)
-            ->setParameter('endDate', $endDate);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    public function findAvailabilitiesForTutor(int $tutorId, \DateTime $startDate, \DateTime $endDate): array
-    {
-        return $this->createQueryBuilder('ta')
-            ->where('ta.tutor = :tutor')
-            ->andWhere('ta.startTime >= :startDate')
-            ->andWhere('ta.endTime <= :endDate')
-            ->setParameter('tutor', $tutorId)
-            ->setParameter('startDate', $startDate)
-            ->setParameter('endDate', $endDate)
-            ->orderBy('ta.startTime', 'ASC')
+        return $this->createQueryBuilder('a')
+            ->where('a.tutor = :tutor')
+            ->andWhere('a.start >= :start')
+            ->andWhere('a.end <= :end')
+            ->andWhere('a.isBooked = :isBooked')
+            ->setParameter('tutor', $tutor)
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->setParameter('isBooked', false)
+            ->orderBy('a.start', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
+    public function findOverlappingAvailabilities(TutorAvailability $availability)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.tutor = :tutor')
+            ->andWhere('a.id != :id')
+            ->andWhere('
+                (a.start < :end AND a.end > :start)
+            ')
+            ->setParameter('tutor', $availability->getTutor())
+            ->setParameter('id', $availability->getId() ?? 0)
+            ->setParameter('start', $availability->getStart())
+            ->setParameter('end', $availability->getEnd())
+            ->getQuery()
+            ->getResult();
+    }
 }

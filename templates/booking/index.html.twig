@@ -25,8 +25,7 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridWeek',
                             locale: 'fr',
-                            events: "{{ path('app_tutor_availabilities') }}", // API des disponibilités
-                            eventColor: '#90EE90', // Couleur des créneaux disponibles
+                            events: '{{ path("app_tutor_availabilities") }}',                            eventColor: '#90EE90', // Couleur des créneaux disponibles
                             eventBorderColor: '#90EE90',
                             eventContent: function (info) {
                                 // Personnalisation des étiquettes d'événements

@@ -1,0 +1,16 @@
+<h2>Confirmation de réservation de tutorat</h2>
+
+<p>Bonjour {{ booking.studentName }},</p>
+
+<p>Votre réservation de tutorat a été confirmée avec les détails suivants :</p>
+
+<ul>
+    <li>Date : {{ booking.preferredDate|date('d/m/Y') }}</li>
+    <li>Créneau : {{ booking.preferredTimeSlot }}</li>
+    <li>Matière : {{ booking.matiere.nom }}</li>
+    <li>Tuteur : {{ booking.tuteur.prenom }} {{ booking.tuteur.nom }}</li>
+</ul>
+
+<p>Message additionnel : {{ booking.message }}</p>
+
+<p>Merci de votre confiance !</p>

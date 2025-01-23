@@ -39,8 +39,8 @@ class TutoringBooking
     // #[ORM\JoinColumn(nullable: false)]
     // private ?User $tuteur = null;
 
-    #[ORM\ManyToOne(targetEntity:User::class, inversedBy:"tutoringBookings")]
-    #[ORM\JoinColumn(nullable:false)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "tutoringBookings")]
+    #[ORM\JoinColumn(nullable: false)]
     private $tuteur;
 
     #[ORM\Column(type: 'datetime')]
@@ -58,6 +58,11 @@ class TutoringBooking
 
     #[ORM\Column(type: 'datetime')]
     private DateTimeInterface $createdAt;
+
+    // In TutoringBooking entity
+    #[ORM\ManyToOne(targetEntity: TutorAvailability::class, inversedBy: 'booking')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?TutorAvailability $availability = null;
 
     public function __construct()
     {
@@ -162,5 +167,16 @@ class TutoringBooking
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getAvailability(): ?TutorAvailability
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(?TutorAvailability $availability): self
+    {
+        $this->availability = $availability;
+        return $this;
     }
 }

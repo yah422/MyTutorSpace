@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TutorAvailabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TutorAvailabilityRepository::class)]
 class TutorAvailability
@@ -12,73 +12,123 @@ class TutorAvailability
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['availability:read'])]
     private ?int $id = null;
 
-    #[ORM\Column]
-    #[Groups(['availability:read'])]
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $tutor = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTimeInterface $start = null;
 
-    #[ORM\Column]
-    #[Groups(['availability:read'])]
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
+    #[Assert\GreaterThan(propertyPath: "start")]
     private ?\DateTimeInterface $end = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'availabilities')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['availability:read'])]
-    private ?User $tuteur = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBooked = false;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $booked = false;
+    private bool $isRecurring = false;
 
-    // Getters et Setters
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $recurrencePattern = null;
+
+    #[ORM\OneToOne(targetEntity: TutoringBooking::class, mappedBy: 'availability', cascade: ['persist'])]
+    private ?TutoringBooking $booking = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    public function getTutor(): ?User
+    {
+        return $this->tutor;
+    }
+
+    public function setTutor(?User $tutor): self
+    {
+        $this->tutor = $tutor;
+        return $this;
+    }
+
     public function getStart(): ?\DateTimeInterface
     {
         return $this->start;
     }
-    
-    public function setStart(?\DateTimeInterface $start): self
+
+    public function setStart(\DateTimeInterface $start): self
     {
         $this->start = $start;
         return $this;
     }
-    
+
     public function getEnd(): ?\DateTimeInterface
     {
         return $this->end;
     }
-    
-    public function setEnd(?\DateTimeInterface $end): self
+
+    public function setEnd(\DateTimeInterface $end): self
     {
         $this->end = $end;
-        return $this;
-    }
-    
-    public function getTuteur(): ?User
-    {
-        return $this->tuteur;
-    }
-
-    public function setTuteur(?User $tuteur): self
-    {
-        $this->tuteur = $tuteur;
         return $this;
     }
 
     public function isBooked(): bool
     {
-        return $this->booked;
+        return $this->isBooked;
     }
 
-    public function setBooked(bool $booked): self
+    public function setIsBooked(bool $isBooked): self
     {
-        $this->booked = $booked;
+        $this->isBooked = $isBooked;
         return $this;
+    }
+
+    public function isRecurring(): bool
+    {
+        return $this->isRecurring;
+    }
+
+    public function setIsRecurring(bool $isRecurring): self
+    {
+        $this->isRecurring = $isRecurring;
+        return $this;
+    }
+
+    public function getRecurrencePattern(): ?string
+    {
+        return $this->recurrencePattern;
+    }
+
+    public function setRecurrencePattern(?string $recurrencePattern): self
+    {
+        $this->recurrencePattern = $recurrencePattern;
+        return $this;
+    }
+
+    public function getBooking(): ?TutoringBooking
+    {
+        return $this->booking;
+    }
+
+    public function setBooking(?TutoringBooking $booking): self
+    {
+        $this->booking = $booking;
+        return $this;
+    }
+
+    public function getDuration(): \DateInterval
+    {
+        return $this->start->diff($this->end);
+    }
+
+    public function overlaps(TutorAvailability $other): bool
+    {
+        return $this->start < $other->end && $this->end > $other->start;
     }
 }

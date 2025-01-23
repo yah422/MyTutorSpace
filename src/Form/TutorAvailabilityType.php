@@ -3,29 +3,36 @@
 namespace App\Form;
 
 use App\Entity\TutorAvailability;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class TutorAvailabilityType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startTime', null, [
+            ->add('start', DateTimeType::class, [
                 'widget' => 'single_text',
+                'label' => 'Début',
+                'required' => true
             ])
-            ->add('endTime', null, [
+            ->add('end', DateTimeType::class, [
                 'widget' => 'single_text',
+                'label' => 'Fin',
+                'required' => true
             ])
-            // ->add('isBooked')
-            ->add('tuteur', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
+            ->add('isRecurring', CheckboxType::class, [
+                'label' => 'Récurrent',
+                'required' => false
             ])
-        ;
+            ->add('recurrencePattern', TextType::class, [
+                'label' => 'Pattern de récurrence',
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

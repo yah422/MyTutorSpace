@@ -1,23 +1,124 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Réservation de Tutorat{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css' rel='stylesheet' />
+<link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.css' rel='stylesheet' />
+<link href='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.css' rel='stylesheet' />
+{% endblock %}
+
 {% block body %}
-<h1>Calendar</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Réservation de Tutorat</h1>
 
-<div id="calendar"></div>
+    <!-- Calendar -->
+    <div class="mb-8">
+        <div id="calendar" class="bg-white p-4 rounded-lg shadow"></div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar"></script>
+    <!-- Booking Form -->
+    <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Réserver un créneau</h2>
+        <div class="px-4 py-5 sm:p-6">
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+            <div>
+                <h3 class="text-lg font-medium text-gray-900">Vos informations</h3>
+                <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                    <div>
+                        {{ form_label(form.studentName, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-gray-700'}}) }}
+                        {{ form_widget(form.studentName) }}
+                        {{ form_errors(form.studentName, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.studentEmail, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-gray-700'}}) }}
+                        {{ form_widget(form.studentEmail) }}
+                        {{ form_errors(form.studentEmail, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-medium text-gray-900">Matière et détails</h3>
+                <div class="mt-4">
+                    {{ form_label(form.matiere, null, {'label_attr': {'class': 'block text-sm font-medium
+                    text-gray-700'}}) }}
+                    {{ form_widget(form.matiere) }}
+                    {{ form_errors(form.matiere, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                </div>
+                <div class="mt-4">
+                    {{ form_label(form.tuteur, null, {'label_attr': {'class': 'block text-sm font-medium
+                    text-gray-700'}}) }}
+                    {{ form_widget(form.tuteur) }}
+                    {{ form_errors(form.tuteur, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                </div>
+                <div class="mt-4">
+                    {{ form_label(form.message, null, {'label_attr': {'class': 'block text-sm font-medium
+                    text-gray-700'}}) }}
+                    {{ form_widget(form.message) }}
+                    {{ form_errors(form.message, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                </div>
+            </div>
+            <div>
+                <h3 class="text-lg font-medium text-gray-900">Date et horaire</h3>
+                <div class="text-black mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                    <div>
+                        {{ form_label(form.preferredDate, null, {'label_attr': {'class': 'block text-sm font-medium
+                        text-black'}}) }}
+                        {{ form_widget(form.preferredDate) }}
+                        {{ form_errors(form.preferredDate, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.preferredTimeSlot, null, {'label_attr': {'class': 'block text-sm
+                        font-medium text-black'}}) }}
+                        {{ form_widget(form.preferredTimeSlot) }}
+                        {{ form_errors(form.preferredTimeSlot, {'attr': {'class': 'mt-1 text-sm text-red-600'}}) }}
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/main.min.js'></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-            events: '{{ path("app_tutor_availabilities") }}', // Route pour récupérer les disponibilités
-            eventColor: '#90EE90', // Couleur des créneaux disponibles
-            eventBorderColor: '#90EE90',
-            eventClick: function (info) {
-                // Gestion de l'événement de clic (par exemple, réserver)
-                alert('Vous avez cliqué sur le créneau : ' + info.event.title);
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            slotMinTime: '08:00:00',
+            slotMaxTime: '20:00:00',
+            allDaySlot: false,
+            locale: 'fr',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
             },
+            events: '{{ path("app_tutor_availabilities") }}',
+            selectable: true,
+            select: function (info) {
+                document.querySelector('#tutoring_booking_preferredDate').value = info.start.toISOString().slice(0, 10);
+                calendar.unselect();
+            }
         });
-
         calendar.render();
     });
 </script>

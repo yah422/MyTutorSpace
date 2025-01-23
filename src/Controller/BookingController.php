@@ -2,24 +2,37 @@
 
 namespace App\Controller;
 
+use App\Services\BookingMailer;
 use App\Entity\TutoringBooking;
 use App\Entity\TutorAvailability;
 use App\Form\TutoringBookingType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\TutorAvailabilityRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookingController extends AbstractController
 {
-    #[Route('/booking', name: 'app_booking')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/booking/calendar', name: 'app_booking_calendar')]
+    public function calendar(Request $request, EntityManagerInterface $entityManager): Response
     {
         $booking = new TutoringBooking();
-        $booking->setTuteur($this->getUser());
+        $form = $this->createForm(TutoringBookingType::class, $booking);
+
+        return $this->render('booking/calendar.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/booking/create', name: 'app_booking')]
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        BookingMailer $bookingMailer
+    ): Response {
+        $booking = new TutoringBooking();
         $form = $this->createForm(TutoringBookingType::class, $booking);
 
         $form->handleRequest($request);
@@ -28,12 +41,15 @@ class BookingController extends AbstractController
             $entityManager->persist($booking);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Votre demande de réservation a été enregistrée avec succès ! Nous vous contacterons rapidement pour confirmer votre créneau.');
+            // Send confirmation emails
+            $bookingMailer->sendConfirmationEmail($booking);
+
+            $this->addFlash('success', 'Votre réservation a été confirmée. Un email de confirmation vous a été envoyé.');
 
             return $this->redirectToRoute('app_booking_confirmation', ['id' => $booking->getId()]);
         }
 
-        return $this->render('booking/index.html.twig', [
+        return $this->render('booking/calendar.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -46,13 +62,7 @@ class BookingController extends AbstractController
         ]);
     }
 
-    #[Route('/calendar', name: 'app_calendar')]
-    public function calendar(): Response
-    {
-        return $this->render('booking/calendar.html.twig');
-    }
-
-    #[Route("/tutor-availabilities", name: "app_tutor_availabilities")]
+    #[Route('/tutor-availabilities', name: 'app_tutor_availabilities')]
     public function getTutorAvailabilities(EntityManagerInterface $entityManager): JsonResponse
     {
         $availabilities = $entityManager->getRepository(TutorAvailability::class)->findAll();
@@ -70,35 +80,5 @@ class BookingController extends AbstractController
         }
 
         return new JsonResponse($events);
-    }
-
-    #[Route('/add-availability', name: 'app_add_tutor_availability', methods: ['POST'])]
-    public function addTutorAvailability(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $availability = new TutorAvailability();
-        $availability->setStart(new \DateTime($data['start']));
-        $availability->setEnd(new \DateTime($data['end']));
-
-        $entityManager->persist($availability);
-        $entityManager->flush();
-
-        return new JsonResponse(['status' => 'success'], JsonResponse::HTTP_CREATED);
-    }
-
-    #[Route('/tutor/availabilities/{id}', name: 'tutor_availabilities')]
-    public function showTutorAvailabilities(
-        int $tutorId, 
-        TutorAvailabilityRepository $tutorAvailabilityRepository
-    ): Response {
-        $startDate = new \DateTime('now');
-        $endDate = (new \DateTime('now'))->modify('+1 month');
-
-        $availabilities = $tutorAvailabilityRepository->findAvailabilitiesForTutor($tutorId, $startDate, $endDate);
-
-        return $this->render('booking/index.html.twig', [
-            'availabilities' => $availabilities,
-        ]);
     }
 }
