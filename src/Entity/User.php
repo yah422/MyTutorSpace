@@ -366,9 +366,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: SauvegardeProfil::class, mappedBy: 'user')]
     private Collection $sauvegardeProfils;
 
-    #[ORM\Column(length: 255)]
-    private ?string $ville = null;
-
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
@@ -609,18 +606,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->niveaux->removeElement($niveau)) {
             $niveau->removeUser($this); 
         }
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): static
-    {
-        $this->ville = $ville;
 
         return $this;
     }

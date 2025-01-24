@@ -127,11 +127,14 @@ class RegistrationFormType extends AbstractType
             'locale' => 'fr',
         ]);
 
-        $builder->add('hourly_rate', MoneyType::class, [
-            'label' => 'Taux horaire ',
-            'required' => true,
-            'currency' => 'EUR',
-        ]);
+        // Ajouter le champ 'hourly_rate' seulement si l'option 'role' est 'ROLE_TUTEUR'
+        if (isset($options['role']) && $options['role'] === 'ROLE_TUTEUR') {
+            $builder->add('hourly_rate', MoneyType::class, [
+                'label' => 'Taux horaire ',
+                'required' => true,
+                'currency' => 'EUR',
+            ]);
+        }
 
     }
 
@@ -139,6 +142,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'role' => 'user',
         ]);
     }
 }

@@ -71,7 +71,6 @@
                         &nbsp; <span class="text-[#FFD700]">|</span>
                     </li>
                     <li><a href="{{ path('app_forum') }}" class="text-gray-300 hover:text-white">Forum</a> &nbsp;
-                        <span class="text-[#FFD700]">|</span>
                     </li>
 
                     <!-- Vérifier si l'utilisateur est connecté -->
@@ -83,7 +82,8 @@
                                 {# <div>
                                     <img src="{{ asset('img/user.png') }}" loading="lazy" alt="iconProfil">
                                 </div> #}
-                                <div class="pProfil">
+                                <div class="pProfil">  
+                                     <span class="text-[#FFD700]">|</span>
                                     <p> {{ app.user.prenom }}</p>
                                 </div>
                             </div>
@@ -92,20 +92,20 @@
                     <li>
                         <a href="{{ path('app_logout') }}" style="background-color: #FFD700;"
                             class="bg-500 text-black px-4 py-2 rounded hover:bg-700">
-                            <strong>Se déconnecter</strong>
+                            Se déconnecter
                         </a>
                     </li>
                     {% else %}
                     <li>
                         <a href="{{ path('app_login') }}" style="background-color: #ECECEC; color: black;"
                             class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
-                            <strong>Se connecter</strong>
+                            Se connecter
                         </a>
                     </li>
                     <li>
                         <a href="{{ path('app_role_choice') }}" style="background-color: #FFD700; color: black;"
                             class="bg-500 text-gray-300 px-4 py-2 rounded hover:bg-700">
-                            <strong>S'inscrire</strong>
+                            S'inscrire
                         </a>
                     </li>
                     {% endif %}
