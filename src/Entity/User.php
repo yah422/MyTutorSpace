@@ -454,15 +454,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
     public function isVerified(): bool
     {
-        return $this->isVerified;
+        return $this->isVerified; // Renvoie la valeur du champ isVerified
     }
 
     public function setIsVerified(bool $isVerified): void
     {
-        $this->isVerified = $isVerified;
+        $this->isVerified = $isVerified; // Définit la valeur du champ isVerified
     }
 
     /**
