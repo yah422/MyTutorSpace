@@ -11,7 +11,17 @@
 
 {% block body %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Réservation de Tutorat</h1>
+    <h1 class="text-3xl font-bold mb-6"><strong>Réservation de Tutorat</strong></h1>
+
+    <div class="bg-white p-4 rounded-lg shadow">
+        <!-- BookingInformation -->
+        <div class="bg-white flex flex-col p-4 rounded-lg shadow">
+            <h2 class="text-[#1B4255] text-xxl font-semibold mb-4"><strong>Informations de Réservation</strong></h2>
+            <p>Choisissez votre matière et un créneau disponible avec le tuteur de votre choix qui pour un cours
+                personnalisé.</p>
+        </div>
+    </div>
+    <br>
 
     <!-- Calendar -->
     <div class="mb-8">
@@ -20,7 +30,7 @@
 
     <!-- Booking Form -->
     <div class="bg-white p-4 rounded-lg shadow">
-        <h2 class="text-xl font-semibold mb-4">Réserver un créneau</h2>
+        <h2 class="text-[#1B4255] text-xxl font-semibold mb-4"><strong>Réserver un créneau</strong></h2>
         <div class="px-4 py-5 sm:p-6">
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
@@ -87,39 +97,52 @@
 
             {{ form_end(form) }}
         </div>
+
+        <div class="mt-8 bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900">Informations importantes</h3>
+                <div class="mt-2 text-sm text-gray-800">
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>** Les cours sont d'une durée de 1 heure</li>
+                        <li>** Annulation possible jusqu'à 24h avant le cours</li>
+                        <li>** Le tuteur vous contactera pour confirmer la réservation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block javascripts %}
-{{ parent() }}
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/main.min.js'></script>
+    {% block javascripts %}
+    {{ parent() }}
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/main.min.js'></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
-            slotMinTime: '08:00:00',
-            slotMaxTime: '20:00:00',
-            allDaySlot: false,
-            locale: 'fr',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek'
-            },
-            events: '{{ path("app_tutor_availabilities") }}',
-            selectable: true,
-            select: function (info) {
-                document.querySelector('#tutoring_booking_preferredDate').value = info.start.toISOString().slice(0, 10);
-                calendar.unselect();
-            }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                allDaySlot: false,
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                events: '{{ path("app_tutor_availabilities") }}',
+
+                selectable: true,
+                select: function (info) {
+                    document.querySelector('#tutoring_booking_preferredDate').value = info.start.toISOString().slice(0, 10);
+                    calendar.unselect();
+                }
+            });
+            calendar.render();
         });
-        calendar.render();
-    });
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}

@@ -35,7 +35,7 @@
                                 <h2 class="text-2xl md:text-3xl font-extrabold mt-4 text-center text-[#FFD700]">
                                         {{ user.prenom }} {{ user.nom }}
                                 </h2>
-                                {% if user.roles is defined and 'ROLE_TUTOR' in user.roles %}
+                                {% if user.roles is defined and 'ROLE_TUTEUR' in user.roles %}
                                 <span
                                         class="px-3 py-1 text-sm font-semibold bg-[#70F9D9] text-[#1B4255] rounded-full mt-2">
                                         Tuteur
@@ -60,12 +60,12 @@
                                         <p class="text-gray-300 text-sm md:text-base">
                                                 {{ user.aboutMe | default("Aucune information disponible.") }}
                                         </p>
-                                        {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
+                                        {# {% if app.user and 'ROLE_TUTEUR' in app.user.roles %} #}
                                         <div>
                                                 <p class="text-gray-300 text-base md:text-lg">Taux horaire :</p>
                                                 <p class="text-gray-300 font-medium">{{ user.hourlyRate }}€/h</p>
                                         </div>
-                                        {% endif %}
+                                        {# {% endif %} #}
                                 </div>
 
                                 <!-- Actions avec restrictions d'accès -->

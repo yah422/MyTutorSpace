@@ -23,4 +23,28 @@ class HomeController extends AbstractController
             'matiere' => 'matiere',
         ]);
     }
+
+    #[Route('/howItWorks', name: 'howItWorks')]
+    public function howItWorks(Matiere $matiere, MatiereRepository $matiereRepository): Response
+    {
+        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+
+        return $this->render('home/howItWorks.html.twig', [
+            'matieres' => $matieres,
+            'matiere' => 'matiere',
+        ]);
+    }
+
+    #[Route('/pricing', name: 'pricing')]
+    public function pricing(Matiere $matiere, MatiereRepository $matiereRepository): Response
+    {
+        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+
+        return $this->render('home/pricing.html.twig', [
+            'matieres' => $matieres,
+            'matiere' => 'matiere',
+        ]);
+    }
+
+
 }

@@ -114,16 +114,20 @@ class BookingController extends AbstractController
 
         $events = [];
         foreach ($availabilities as $availability) {
+            $tutor = $availability->getTutor();
             $events[] = [
                 'id' => $availability->getId(),
-                'title' => 'Disponible',
+
+                'title' => $tutor->getPrenom(),
                 'start' => $availability->getStart()->format('Y-m-d\TH:i:s'),
                 'end' => $availability->getEnd()->format('Y-m-d\TH:i:s'),
+                'tutor_id' => $tutor->getId(),
                 'backgroundColor' => $availability->isBooked() ? '#FF6347' : '#90EE90',
                 'borderColor' => $availability->isBooked() ? '#FF6347' : '#90EE90',
             ];
         }
 
         return new JsonResponse($events);
+
     }
 }
