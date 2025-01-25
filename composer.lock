@@ -4,57 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "656d3511d2a1c41b7b93685b0f92879f",
+    "content-hash": "a204cbdda8259a69e94dc88a314c88c4",
     "packages": [
-        {
-            "name": "components/jquery",
-            "version": "v3.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/components/jquery.git",
-                "reference": "8edc7785239bb8c2ad2b83302b856a1d61de60e7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/8edc7785239bb8c2ad2b83302b856a1d61de60e7",
-                "reference": "8edc7785239bb8c2ad2b83302b856a1d61de60e7",
-                "shasum": ""
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "files": [
-                        "jquery.min.js",
-                        "jquery.min.map",
-                        "jquery.slim.js",
-                        "jquery.slim.min.js",
-                        "jquery.slim.min.map"
-                    ],
-                    "scripts": [
-                        "jquery.js"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "JS Foundation and other contributors"
-                }
-            ],
-            "description": "jQuery JavaScript Library",
-            "homepage": "http://jquery.com",
-            "support": {
-                "forum": "http://forum.jquery.com",
-                "irc": "irc://irc.freenode.org/jquery",
-                "issues": "https://github.com/jquery/jquery/issues",
-                "source": "https://github.com/jquery/jquery",
-                "wiki": "http://docs.jquery.com/"
-            },
-            "time": "2023-09-22T01:43:46+00:00"
-        },
         {
             "name": "composer/installers",
             "version": "v2.3.0",
@@ -1443,16 +1394,16 @@
         },
         {
             "name": "doctrine/sql-formatter",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "b784cbde727cf806721451dde40eff4fec3bbe86"
+                "reference": "d6d00aba6fd2957fe5216fe2b7673e9985db20c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/b784cbde727cf806721451dde40eff4fec3bbe86",
-                "reference": "b784cbde727cf806721451dde40eff4fec3bbe86",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/d6d00aba6fd2957fe5216fe2b7673e9985db20c8",
+                "reference": "d6d00aba6fd2957fe5216fe2b7673e9985db20c8",
                 "shasum": ""
             },
             "require": {
@@ -1462,8 +1413,7 @@
                 "doctrine/coding-standard": "^12",
                 "ergebnis/phpunit-slow-test-detector": "^2.14",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.5",
-                "vimeo/psalm": "^5.24"
+                "phpunit/phpunit": "^10.5"
             },
             "bin": [
                 "bin/sql-formatter"
@@ -1493,22 +1443,22 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
-                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.1"
+                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.2"
             },
-            "time": "2024-10-21T18:21:57+00:00"
+            "time": "2025-01-24T11:45:48+00:00"
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.23.1",
+            "version": "v4.23.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "dbe0b3cd7d7295ae48741f910e6d8d4c25f59ff8"
+                "reference": "3c043c25f75a72cb2c7c292e5051218b1e0d1ee0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/dbe0b3cd7d7295ae48741f910e6d8d4c25f59ff8",
-                "reference": "dbe0b3cd7d7295ae48741f910e6d8d4c25f59ff8",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/3c043c25f75a72cb2c7c292e5051218b1e0d1ee0",
+                "reference": "3c043c25f75a72cb2c7c292e5051218b1e0d1ee0",
                 "shasum": ""
             },
             "require": {
@@ -1588,7 +1538,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.23.1"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.23.3"
             },
             "funding": [
                 {
@@ -1596,7 +1546,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-20T19:52:16+00:00"
+            "time": "2025-01-23T07:32:51+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1664,71 +1614,6 @@
                 }
             ],
             "time": "2024-12-27T00:36:43+00:00"
-        },
-        {
-            "name": "fullcalendar/fullcalendar",
-            "version": "v3.10.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fullcalendar/fullcalendar.git",
-                "reference": "791e71059c597473d48d1d1aa2f72cbff670252c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fullcalendar/fullcalendar/zipball/791e71059c597473d48d1d1aa2f72cbff670252c",
-                "reference": "791e71059c597473d48d1d1aa2f72cbff670252c",
-                "shasum": ""
-            },
-            "require": {
-                "components/jquery": "2 - 3",
-                "moment/moment": "^2.20.1",
-                "robloach/component-installer": "*"
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "files": [
-                        "dist/fullcalendar.min.js",
-                        "dist/fullcalendar.min.css",
-                        "dist/fullcalendar.print.css",
-                        "dist/fullcalendar.print.min.css",
-                        "dist/gcal.js",
-                        "dist/gcal.min.js",
-                        "dist/locale-all.js",
-                        "dist/locale/*.js"
-                    ],
-                    "styles": [
-                        "dist/fullcalendar.css"
-                    ],
-                    "scripts": [
-                        "dist/fullcalendar.js"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Shaw",
-                    "email": "arshaw@arshaw.com",
-                    "homepage": "http://arshaw.com/"
-                }
-            ],
-            "description": "Full-sized drag & drop event calendar",
-            "homepage": "https://fullcalendar.io/",
-            "keywords": [
-                "calendar",
-                "event",
-                "full-sized",
-                "jquery-plugin"
-            ],
-            "support": {
-                "issues": "https://github.com/fullcalendar/fullcalendar/issues",
-                "source": "https://github.com/fullcalendar/fullcalendar/tree/v3.10.5"
-            },
-            "time": "2021-11-02T23:57:34+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -2090,53 +1975,6 @@
             "time": "2024-10-07T16:11:50+00:00"
         },
         {
-            "name": "kriswallsmith/assetic",
-            "version": "v1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "8ab3638325af9cd144242765494a9dc9b53ab430"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/8ab3638325af9cd144242765494a9dc9b53ab430",
-                "reference": "8ab3638325af9cd144242765494a9dc9b53ab430",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Assetic": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kris Wallsmith",
-                    "email": "kris.wallsmith@gmail.com",
-                    "homepage": "http://kriswallsmith.net/"
-                }
-            ],
-            "description": "Asset Management for PHP",
-            "homepage": "https://github.com/kriswallsmith/assetic",
-            "keywords": [
-                "assets",
-                "compression",
-                "minification"
-            ],
-            "support": {
-                "issues": "https://github.com/kriswallsmith/assetic/issues",
-                "source": "https://github.com/kriswallsmith/assetic/tree/1.0.x"
-            },
-            "time": "2014-12-12T05:07:58+00:00"
-        },
-        {
             "name": "league/uri",
             "version": "7.5.1",
             "source": {
@@ -2376,64 +2214,6 @@
                 "source": "https://github.com/Masterminds/html5-php/tree/2.9.0"
             },
             "time": "2024-03-31T07:05:07+00:00"
-        },
-        {
-            "name": "moment/moment",
-            "version": "2.30.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/moment/moment.git",
-                "reference": "485d9a7d709bd5f3869a7ad24630cf0746d072dc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment/zipball/485d9a7d709bd5f3869a7ad24630cf0746d072dc",
-                "reference": "485d9a7d709bd5f3869a7ad24630cf0746d072dc",
-                "shasum": ""
-            },
-            "require": {
-                "oomphinc/composer-installers-extender": "*"
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "files": [
-                        "min/*.js",
-                        "locale/*.js"
-                    ],
-                    "scripts": [
-                        "moment.js"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tim Wood",
-                    "email": "washwithcare@gmail.com"
-                }
-            ],
-            "description": "Parse, validate, manipulate, and display dates in JavaScript.",
-            "homepage": "https://github.com/moment/moment",
-            "keywords": [
-                "date",
-                "ender",
-                "format",
-                "i18n",
-                "l10n",
-                "moment",
-                "parse",
-                "time",
-                "validate"
-            ],
-            "support": {
-                "issues": "https://github.com/moment/moment/issues",
-                "source": "https://github.com/moment/moment/tree/2.30.1"
-            },
-            "time": "2023-12-27T10:35:18+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3230,55 +3010,6 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
             "time": "2024-09-11T13:17:53+00:00"
-        },
-        {
-            "name": "robloach/component-installer",
-            "version": "0.0.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RobLoach/component-installer.git",
-                "reference": "1864f25db21fc173e02a359f646acd596c1b0460"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/1864f25db21fc173e02a359f646acd596c1b0460",
-                "reference": "1864f25db21fc173e02a359f646acd596c1b0460",
-                "shasum": ""
-            },
-            "require": {
-                "kriswallsmith/assetic": "1.*",
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "composer/composer": "1.*"
-            },
-            "type": "composer-installer",
-            "extra": {
-                "class": "ComponentInstaller\\Installer"
-            },
-            "autoload": {
-                "psr-0": {
-                    "ComponentInstaller": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rob Loach",
-                    "email": "robloach@gmail.com",
-                    "homepage": "http://robloach.net"
-                }
-            ],
-            "description": "Allows installation of Components via Composer.",
-            "support": {
-                "issues": "https://github.com/RobLoach/component-installer/issues",
-                "source": "https://github.com/RobLoach/component-installer/tree/master"
-            },
-            "abandoned": "oomphinc/composer-installers-extender",
-            "time": "2013-08-31T23:46:48+00:00"
         },
         {
             "name": "symfony/asset",
