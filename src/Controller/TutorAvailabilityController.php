@@ -2,82 +2,91 @@
 
 namespace App\Controller;
 
-use App\Services\TutorAvailabilityManager;
+use App\Entity\TutorAvailability;
+use App\Form\TutorAvailabilityType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\TutorAvailabilityRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/tutor/availability')]
 class TutorAvailabilityController extends AbstractController
 {
-    private $availabilityManager;
-
-    public function __construct(TutorAvailabilityManager $availabilityManager)
+    #[Route('/', name: 'tutor_availability_index', methods: ['GET'])]
+    #[IsGranted('ROLE_TUTEUR')]
+    public function index(TutorAvailabilityRepository $repository): Response
     {
-        $this->availabilityManager = $availabilityManager;
+        $this->denyAccessUnlessGranted('ROLE_TUTEUR');
+
+        return $this->render('tutor_availability/index.html.twig', [
+            'availabilities' => $repository->findBy(['tutor' => $this->getUser()]),
+        ]);
     }
 
-    #[Route('/new', name: 'app_tutor_availability_new', methods: ['POST'])]
-    public function new(Request $request): JsonResponse
+    #[Route('/new', name: 'tutor_availability_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_TUTEUR')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $data = json_decode($request->getContent(), true);
+        $this->denyAccessUnlessGranted('ROLE_TUTEUR');
 
-        if (!isset($data['start'], $data['end'])) {
-            return $this->json(['error' => 'Missing required fields: start, end'], Response::HTTP_BAD_REQUEST);
+        $availability = new TutorAvailability();
+        $availability->setTutor($this->getUser());
+
+        $form = $this->createForm(TutorAvailabilityType::class, $availability);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($availability);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('tutor_availability_index');
         }
 
-        try {
-            $availability = $this->availabilityManager->createAvailability(
-                $this->getUser(),
-                new \DateTime($data['start']),
-                new \DateTime($data['end']),
-                $data['isRecurring'] ?? false,
-                $data['recurrencePattern'] ?? null
-            );
-
-            return $this->json([
-                'id' => $availability->getId(),
-                'start' => $availability->getStart()->format('Y-m-d\TH:i:s'),
-                'end' => $availability->getEnd()->format('Y-m-d\TH:i:s'),
-            ], Response::HTTP_CREATED);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
+        return $this->render('tutor_availability/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-
-    #[Route('/{id}/edit', name: 'app_tutor_availability_edit', methods: ['PUT'])]
-    public function edit(Request $request, int $id): JsonResponse
+    #[Route('/{id}/edit', name: 'tutor_availability_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_TUTEUR')]
+    public function edit(Request $request, TutorAvailability $availability, EntityManagerInterface $entityManager): Response
     {
-        $data = json_decode($request->getContent(), true);
+        $this->denyAccessUnlessGranted('ROLE_TUTEUR');
 
-        if (!isset($data['start'], $data['end'])) {
-            return $this->json(['error' => 'Missing required fields: start, end'], Response::HTTP_BAD_REQUEST);
+        if ($availability->getTutor() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
         }
 
-        $availability = $this->availabilityManager->findAvailability($id);
+        $form = $this->createForm(TutorAvailabilityType::class, $availability);
+        $form->handleRequest($request);
 
-        if (!$availability) {
-            return $this->json(['error' => 'Availability not found'], Response::HTTP_NOT_FOUND);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('tutor_availability_index');
         }
 
-        try {
-            $availability = $this->availabilityManager->updateAvailability(
-                $availability,
-                new \DateTime($data['start']),
-                new \DateTime($data['end']),
-                $data['isRecurring'] ?? false,
-                $data['recurrencePattern'] ?? null
-            );
+        return $this->render('tutor_availability/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    #[Route('/{id}', name: 'tutor_availability_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_TUTEUR')]
+    public function delete(Request $request, TutorAvailability $availability, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_TUTEUR');
 
-            return $this->json([
-                'id' => $availability->getId(),
-                'start' => $availability->getStart()->format('Y-m-d\TH:i:s'),
-                'end' => $availability->getEnd()->format('Y-m-d\TH:i:s'),
-            ]);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        if ($availability->getTutor() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
         }
+
+        if ($this->isCsrfTokenValid('delete' . $availability->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($availability);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('tutor_availability_index');
     }
 }

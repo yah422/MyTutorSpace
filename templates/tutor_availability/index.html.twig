@@ -7,21 +7,6 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-6">Gérer mes disponibilités</h1>
 
-    <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Ajouter une disponibilité</h2>
-        {{ form_start(form) }}
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {{ form_row(form.start) }}
-            {{ form_row(form.end) }}
-            {{ form_row(form.isRecurring) }}
-            {{ form_row(form.recurrencePattern) }}
-        </div>
-        <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-            Ajouter
-        </button>
-        {{ form_end(form) }}
-    </div>
-
     <div>
         <h2 class="text-xl font-semibold mb-4">Mes disponibilités</h2>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -30,20 +15,26 @@
                 <p>Début: {{ availability.start|date('d/m/Y H:i') }}</p>
                 <p>Fin: {{ availability.end|date('d/m/Y H:i') }}</p>
                 <div class="mt-2">
-                    <a href="{{ path('app_tutor_availability_edit', {id: availability.id}) }}"
+                    <a href="{{ path('tutor_availability_edit', {id: availability.id}) }}"
                         class="text-blue-500 hover:underline mr-2">Modifier</a>
-                    <form action="{{ path('app_tutor_availability_delete', {id: availability.id}) }}" method="POST"
+                    <form action="{{ path('tutor_availability_delete', {id: availability.id}) }}" method="POST"
                         class="inline">
                         <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ availability.id) }}">
                         <button type="submit" class="text-red-500 hover:underline"
                             onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette disponibilité ?')">
                             Supprimer
                         </button>
                     </form>
                 </div>
+
             </div>
-            {% endfor %}
         </div>
     </div>
+    <br>
+    {% endfor %}
+    {% if is_granted('ROLE_TUTEUR') %}
+    <a href="{{ path('tutor_availability_new') }}" class="btn btn-success">Ajouter une disponibilité</a>
+    {% endif %}
 </div>
 {% endblock %}

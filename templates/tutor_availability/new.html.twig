@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une disponibilité{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Ajouter une disponibilité</h1>
+
+    {{ form_start(form) }}
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {{ form_row(form.start) }}
+        {{ form_row(form.end) }}
+        {{ form_row(form.isRecurring) }}
+        {{ form_row(form.recurrencePattern) }}
+    </div>
+    <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('tutor_availability_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">Retour à la
+        liste</a>
+</div>
+{% endblock %}
