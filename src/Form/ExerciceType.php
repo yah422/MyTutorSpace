@@ -16,20 +16,26 @@ class ExerciceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre', TextType::class)
-            ->add('description', TextType::class)
+            ->add('titre', TextType::class, [
+                'label_attr' => ['class' => 'text-gray-900'], // Applique le style au label
+            ])
+            ->add('description', TextType::class, [
+                'label_attr' => ['class' => 'text-gray-900'], // Applique le style au label
+            ])
             ->add('dateCreation', null, [
                 'widget' => 'single_text',
+                'label_attr' => ['class' => 'text-gray-900'], // Applique le style au label
             ])
             ->add('lecon', EntityType::class, [
                 'class' => Lecon::class,
-                'label' => 'titre',
+                'label' => 'Leçon',
+                'label_attr' => ['class' => 'text-gray-900'], // Applique le style au label
             ])
             ->add('type', EntityType::class, [
                 'class' => Type::class,
-                'label' => 'nom',
-            ])
-        ;
+                'label' => 'Type',
+                'label_attr' => ['class' => 'text-gray-900'], // Applique le style au label
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

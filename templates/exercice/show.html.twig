@@ -1,20 +1,84 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Détail exercice {% endblock %}
+{% block title %}Détail Exercice{% endblock %}
 
 {% block body %}
-<div style="margin-left: 100px; margin-right: 100px;" class="content px-8 py-8">
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-4xl mx-auto px-4">
+        <!-- En-tête -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold text-center mb-2">{{ exercice.titre }}</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full mx-auto"></div>
+        </div>
 
-    {# --------------------------------  Affichage details exercices  ----------------------------- #}
+        <!-- Détails de l'exercice -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 fade-in">
+            <div class="mb-6">
+                <h2 class="text-[#1B4255] text-2xl font-semibold">Informations générales</h2>
+                <div class="h-1 w-16 bg-[#FFD700] rounded-full"></div>
+            </div>
+            <p class="text-gray-700 mb-4">
+                <strong class="text-gray-900">Date de Création :</strong>
+                <span class="text-gray-600">{{ exercice.dateCreation|date('d/m/Y') }}</span>
+            </p>
+            <p class="text-gray-700 mb-4">
+                <strong class="text-gray-900">Description :</strong>
+            </p>
+            <p class="text-gray-600 mt-2 leading-relaxed">{{ exercice.description }}</p>
+        </div>
 
-    <div class="container">
-        <h1 class="text-2xl font-bold text-center mb-4"> {{ exercice.titre }}</h1><br>
+        <!-- Boutons pour les administrateurs -->
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="mt-12 text-center fade-in">
+            <a href="{{ path('edit_exercice', {'id': exercice.id}) }}"
+                class="inline-flex items-center px-6 py-3 bg-[#70F9D9] text-[#1B4255] rounded-lg font-semibold hover:bg-[#5CD9B9] transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5h2m-2 5h2m-6 4h12m-6 4h.01M12 3v2m0 16v-2m8-8H4m16 0h-8m-4 0H4" />
+                </svg>
+                <span>Modifier</span>
+            </a>
+            <form action="{{ path('delete_exercice', {'id': exercice.id}) }}" method="post"
+                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');"
+                class="inline-block ml-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_exercice') }}">
+                <button type="submit"
+                    class="inline-flex items-center px-6 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span>Supprimer</span>
+                </button>
+            </form>
+        </div>
+        {% endif %}
     </div>
-
-    <p class="text-gray-300 px-8">  {# Ajoutez du padding au paragraphe également #}
-        <strong>Date de Création :</strong> {{ exercice.dateCreation|date('d/m/Y') }} <br>
-        <strong>Description : </strong> <br>{{ exercice.description }} <br>
-    </p>
-
 </div>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 {% endblock %}

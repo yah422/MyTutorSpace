@@ -3,37 +3,76 @@
 {% block title %}Ajouter un Exercice{% endblock %}
 
 {% block body %}
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Ajouter un Exercice</h1>
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-3xl mx-auto px-4">
+        <!-- Titre principal -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold text-center mb-2">Ajouter un Exercice</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full mx-auto"></div>
+        </div>
 
-    {% if app.session.flashbag().get('success') %}
-    <div class="mb-6 p-4 bg-green-200 border border-green-400 text-green-800 rounded">
-        {{ app.session.flashbag().get('success')|first }}
-    </div>
-    {% endif %}
+        <!-- Message de succès -->
+        {% if app.session.flashbag().get('success') %}
+        <div class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-md shadow-md fade-in">
+            {{ app.session.flashbag().get('success')|first }}
+        </div>
+        {% endif %}
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        {{ form_start(form) }}
-        <div class="space-y-4">
-            {% for field in form %}
-                <div class="mb-4">
-                    <label for="{{ field.vars.id }}" class="block text-sm font-medium text-gray-700">
+        <!-- Formulaire d'ajout -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 fade-in">
+            {{ form_start(form) }}
+            <div class="space-y-6">
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.vars.id }}" class="block text-sm font-medium text-gray-900">
                         {{ form_label(field) }}
                     </label>
-                    <div class="mt-1">
-                        {{ form_widget(field, {'attr': {'class': 'w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'}}) }}
+                    <div class="mt-2">
+                        {{ form_widget(field, {
+                        'attr': {
+                        'class': 'w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2
+                        focus:ring-[#70F9D9]'
+                        }
+                        }) }}
                     </div>
+                    {{ form_errors(field) }}
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="mt-8">
+                <button type="submit"
+                    class="w-full bg-[#70F9D9] text-[#1B4255] py-3 rounded-md font-semibold hover:bg-[#5CD9B9] transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
+                    Ajouter l'Exercice
+                </button>
+            </div>
+            {{ form_end(form) }}
         </div>
-        <div class="mt-6">
-            <button type="submit"
-                class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Ajouter l'Exercice
-            </button>
-        </div>
-        {{ form_end(form) }}
-        
     </div>
 </div>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 {% endblock %}

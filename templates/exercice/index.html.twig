@@ -1,26 +1,126 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Exercices {% endblock %}
+{% block title %}Exercices{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gradient-to-br from-[#1B4255] to-[#567C8D] py-16">
+    <div class="container max-w-4xl mx-auto px-4">
+        <!-- En-tête -->
+        <div class="mb-12 slide-in">
+            <h1 class="text-[#70F9D9] text-4xl font-bold mb-2">Liste des Exercices</h1>
+            <div class="h-1 w-24 bg-[#FFD700] rounded-full"></div>
+        </div>
 
-<div class="listExercice">
-    {% for exercice in exercices %}
-    <ul class="divide-y divide-gray-200 rounded-lg">
-        <li class="px-4 py-2">
-            <a href="{{ path('show_exercice',{'id': exercice.id })}}" class="text-gray-300">
-                {{ exercice.titre }}
+        <!-- Liste des exercices -->
+        <div class="space-y-4 fade-in">
+            {% for exercice in exercices %}
+            <div
+                class="bg-white/95 backdrop-blur-sm rounded-xl overflow-hidden transform hover:translate-x-2 transition-all duration-300 shadow-lg">
+                <div class="p-6 flex items-center justify-between">
+                    <a href="{{ path('show_exercice', {'id': exercice.id}) }}" class="flex-1 group">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-[#1B4255]/10 rounded-lg">
+                                <svg class="w-6 h-6 text-[#1B4255]" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 14l9-5-9-5-9 5 9 5z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 9l9 5 9-5" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-[#1B4255] text-xl font-semibold group-hover:text-[#567C8D] transition-colors">
+                                    {{ exercice.titre }}
+                                </h3>
+                            </div>
+                        </div>
+                    </a>
+
+                    {% if is_granted('ROLE_TUTEUR') %}
+                    <div class="flex items-center space-x-3">
+                        <form action="{{ path('delete_exercice', {'id': exercice.id}) }}" method="post"
+                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');"
+                            class="inline-block">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_exercice') }}">
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-md">
+                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                <span>Supprimer</span>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white/95 backdrop-blur-sm rounded-xl p-8 text-center">
+                <div class="text-[#1B4255] mb-4">
+                    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-lg">Aucun exercice n'est disponible pour le moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Bouton d'ajout pour les administrateurs -->
+        {% if is_granted('ROLE_TUTEUR') %}
+        <div class="mt-12 text-center fade-in">
+            <a href="{{ path('add_exercice') }}"
+                class="inline-flex items-center px-6 py-3 bg-[#70F9D9] text-[#1B4255] rounded-lg font-semibold hover:bg-[#5CD9B9] transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Ajouter un exercice</span>
             </a>
-        </li>
-    </ul> <br>
-    {% endfor %}
-    <br>
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('add_exercice') }}" class="text-black font-bold py-2 px-4 rounded"
-        style="background-color: #FFD700;">
-        Ajouter un exercice
-    </a>
-    {% endif %}
-
+        </div>
+        {% endif %}
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const fadeInElements = document.querySelectorAll(".fade-in");
+        const slideInElements = document.querySelectorAll(".slide-in");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        });
+
+        fadeInElements.forEach(el => observer.observe(el));
+        slideInElements.forEach(el => observer.observe(el));
+    });
+</script>
+
+<style>
+    .fade-in,
+    .slide-in {
+        opacity: 0;
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+    }
+
+    .slide-in.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .slide-in {
+        transform: translateX(-20px);
+    }
+</style>
 {% endblock %}
