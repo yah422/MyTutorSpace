@@ -1,26 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Ressources {% endblock %}
+{% block title %}Liste des Ressources{% endblock %}
 
 {% block body %}
+<div class="container mx-auto p-6 min-h-screen">
+    <h1 class="text-3xl font-bold mb-6 text-center">Liste des Ressources</h1>
 
-<div class="listRessource">
-    {% for ressource in ressources %}
-    <ul class="divide-y divide-gray-200 rounded-lg">
-        <li class="px-4 py-2">
-            <a href="{{ path('show_ressource',{'id': ressource.id })}}" class="text-gray-300">
-                {{ ressource.titre }}
-            </a>
-        </li>
-    </ul> <br>
-    {% endfor %}
-    <br>
+    <div id="ressourceList" class="bg-white p-6 rounded-lg shadow-md">
+        {% if ressources is not empty %}
+        <ul class="divide-y divide-gray-200">
+            {% for ressource in ressources %}
+            <li class="px-4 py-3 hover:bg-gray-100 transition duration-200 rounded-lg">
+                <a href="{{ path('show_ressource', {'id': ressource.id}) }}"
+                    class="text-gray-800 font-medium hover:text-blue-600 transition">
+                    {{ ressource.titre }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+            <strong class="font-bold">Aucune ressource trouvée !</strong>
+            <span class="block sm:inline">Veuillez en ajouter.</span>
+        </div>
+        {% endif %}
+    </div>
+
     {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('add_ressource') }}" class="text-black font-bold py-2 px-4 rounded"
-        style="background-color: #FFD700;">
-        Ajouter une ressource
-    </a>
+    <div class="mt-6 text-center">
+        <a id="addRessourceBtn" href="{{ path('add_ressource') }}"
+            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded shadow transition">
+            Ajouter une ressource
+        </a>
+    </div>
     {% endif %}
-
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ressourceList = document.getElementById('ressourceList');
+        const addRessourceBtn = document.getElementById('addRessourceBtn');
+
+        // Animation lors de l'affichage des ressources
+        ressourceList.style.opacity = 0;
+        ressourceList.style.transform = "translateY(20px)";
+        setTimeout(() => {
+            ressourceList.style.transition = "all 0.5s ease-out";
+            ressourceList.style.opacity = 1;
+            ressourceList.style.transform = "translateY(0)";
+        }, 100);
+
+        // Ajout d’un effet hover sur le bouton
+        addRessourceBtn.addEventListener('mouseover', () => {
+            addRessourceBtn.style.transform = "scale(1.05)";
+        });
+
+        addRessourceBtn.addEventListener('mouseout', () => {
+            addRessourceBtn.style.transform = "scale(1)";
+        });
+    });
+</script>
 {% endblock %}

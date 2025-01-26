@@ -1,9 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Type {% endblock %}
+{% block title %}Liste des Types{% endblock %}
 
 {% block body %}
+<div class="container min-h-screen mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Liste des Types</h1>
 
-
-
+    {% if types is empty %}
+    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Aucun type trouvé !</strong>
+        <span class="block sm:inline">Veuillez ajouter des types.</span>
+    </div>
+    {% else %}
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <ul class="space-y-4">
+            {% for type in types %}
+            <li class="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm">
+                <span class="text-lg font-medium text-gray-900">{{ type.nom }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

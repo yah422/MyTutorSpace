@@ -1,23 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Détail {{ ressource.titre }} {% endblock %}
+{% block title %}Détail de {{ ressource.titre }}{% endblock %}
 
 {% block body %}
+<div class="container mx-auto px-6 py-8 min-h-screen">
 
-<div class="content">
-
-    {# -------------------------------- Affichage details ressources ----------------------------- #}
-
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold text-center mb-4"> {{ ressource.titre }}</h1><br>
+    {# Affichage du titre de la ressource #}
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold">{{ ressource.titre }}</h1>
     </div>
 
-    <div class=" p-6 rounded-lg">
-        <p class="text-gray-300">
-            <strong class="font-semibold"> Contenu: </strong> <br> {{ ressource.contenu }} <br>
+    {# Affichage du contenu de la ressource #}
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
+        <p class="text-gray-700">
+            <strong class="text-lg font-semibold">Contenu:</strong> <br>
+            <span class="text-gray-600">{{ ressource.contenu }}</span>
         </p>
-        <br>
+    </div>
+
+    {# Bouton de retour ou autre action #}
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_ressource') }}"
+            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
+            Retour à la liste
+        </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Animation d'apparition de la ressource
+        const contentContainer = document.querySelector('.container');
+        contentContainer.style.opacity = 0;
+        contentContainer.style.transform = "translateY(20px)";
+        setTimeout(() => {
+            contentContainer.style.transition = "all 0.5s ease-out";
+            contentContainer.style.opacity = 1;
+            contentContainer.style.transform = "translateY(0)";
+        }, 100);
+    });
+</script>
 
 {% endblock %}

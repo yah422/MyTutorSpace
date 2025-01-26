@@ -1,37 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Ajouter une Ressource {% endblock %}
+{% block title %}Ajouter une Ressource{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold text-center mb-4"> Ajouter une nouvelle Ressource </h1>
+<div class="container mx-auto px-6 py-8 min-h-screen">
+
+    <h1 class="text-3xl font-bold text-center mb-6">Ajouter une nouvelle Ressource</h1>
 
     {{ form_start(form) }}
 
-    <div class="mb-4">
-        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
-        {{ form_widget(form.titre, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
-        {{ form_errors(form.titre) }}
-    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="mb-6">
+            {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'font-bold text-gray-700'}}) }}
+            {{ form_widget(form.titre, {'attr': {'class': 'mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md
+            focus:outline-none focus:ring-2 focus:ring-indigo-500'}}) }}
+            {{ form_errors(form.titre) }}
+        </div>
 
-    <div class="mb-4">
-        {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
-        {{ form_widget(form.contenu, {'attr': {'class': 'form-input mt-1 block w-full text-black'}}) }}
-        {{ form_errors(form.contenu) }}
-    </div>
+        <div class="mb-6">
+            {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'font-bold text-gray-700'}}) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'mt-1 block w-full px-4 py-2 border border-gray-300
+            rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'}}) }}
+            {{ form_errors(form.contenu) }}
+        </div>
 
-    <div class="mb-4">
-        {{ form_label(form.exercice, 'Exercice', {'label_attr': {'class': 'font-bold text-gray-300'}}) }}
-        {{ form_widget(form.exercice, {'attr': {'class': 'form-select mt-1 block w-full text-black'}}) }}
-        {{ form_errors(form.exercice) }}
-    </div>
+        <div class="mb-6">
+            {{ form_label(form.exercice, 'Exercice', {'label_attr': {'class': 'font-bold text-gray-700'}}) }}
+            {{ form_widget(form.exercice, {'attr': {'class': 'mt-1 block w-full px-4 py-2 border border-gray-300
+            rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'}}) }}
+            {{ form_errors(form.exercice) }}
+        </div>
 
-    <div class="mt-6">
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Enregistrer
-        </button>
+        <div class="mt-6 text-center">
+            <button type="submit"
+                class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Enregistrer
+            </button>
+        </div>
     </div>
 
     {{ form_end(form) }}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Animation de fade-in pour le formulaire
+        const formContainer = document.querySelector('.container');
+        formContainer.style.opacity = 0;
+        formContainer.style.transform = "translateY(20px)";
+        setTimeout(() => {
+            formContainer.style.transition = "all 0.5s ease-out";
+            formContainer.style.opacity = 1;
+            formContainer.style.transform = "translateY(0)";
+        }, 100);
+    });
+</script>
+
 {% endblock %}
