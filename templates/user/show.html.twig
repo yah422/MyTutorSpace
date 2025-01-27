@@ -54,10 +54,10 @@
                                                 <span class="italic">Information privée :</span>
                                                 {% endif %}
                                         </p>
-                                        <p class="text-gray-300 text-base md:text-lg">
+                                        <p class=" flex justify-start text-gray-300 text-base md:text-lg">
                                                 <span class="font-bold">À propos :</span>
                                         </p>
-                                        <p class="text-gray-300 text-sm md:text-base">
+                                        <p class=" flex justify-center text-gray-300 text-sm md:text-base">
                                                 {{ user.aboutMe | default("Aucune information disponible.") }}
                                         </p>
                                         {# {% if app.user and 'ROLE_TUTEUR' in app.user.roles %} #}
@@ -88,14 +88,15 @@
                                         <div class="flex flex-row justify-between space-x-[10px]">
                                                 {% if app.user and app.user != user %}
                                                 <a href="{{ path('new_message') }}"
-                                                   class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
-                                                    Contacter le tuteur
+                                                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
+                                                        Contacter le tuteur
                                                 </a>
-                                                <button class="save-profile-btn" data-id="{{ user.id }}" data-url="{{ path('app_save_profile', { id: user.id }) }}">
-                                                    <img src="{{ asset('img/save.png') }}" alt="saveImage">
+                                                <button class="save-profile-btn" data-id="{{ user.id }}"
+                                                        data-url="{{ path('app_save_profile', { id: user.id }) }}">
+                                                        <img src="{{ asset('img/save.png') }}" alt="saveImage">
                                                 </button>
                                                 {% endif %}
-                                            </div>
+                                        </div>
                                         {% if app.user and 'ROLE_ELEVE' and 'ROLE_PARENT' in app.user.roles %}
                                         <a href="{{ path('app_booking', { tuteur: user.id }) }}"
                                                 class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
@@ -128,6 +129,9 @@
                                                 const img = button.querySelector('img');
                                                 img.src = "{{ asset('img/saved-icon.png') }}";  // Remplacez avec l'icône de "profil sauvegardé"
                                                 img.alt = "Profil sauvegardé";
+
+                                                // Sauvegarder l'état dans le localStorage pour persister après rafraîchissement
+                                                localStorage.setItem('profileSaved_' + button.dataset.id, 'true');
                                         } else {
                                                 // Afficher le message d'erreur si le profil est déjà sauvegardé
                                                 alert(data.message);
@@ -136,5 +140,16 @@
                                 .catch(error => console.error('Erreur lors de la sauvegarde :', error));
                 });
         });
+
+        // Vérifier l'état de la sauvegarde après le chargement de la page
+        document.querySelectorAll('.save-profile-btn').forEach(button => {
+                const isSaved = localStorage.getItem('profileSaved_' + button.dataset.id);
+                if (isSaved === 'true') {
+                        const img = button.querySelector('img');
+                        img.src = "{{ asset('img/saved-icon.png') }}";  // L'icône de profil sauvegardé
+                        img.alt = "Profil sauvegardé";
+                }
+        });
+
 </script>
 {% endblock %}

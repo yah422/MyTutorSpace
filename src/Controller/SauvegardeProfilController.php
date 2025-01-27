@@ -43,7 +43,8 @@ class SauvegardeProfilController extends AbstractController
     
         return new JsonResponse([
             'success' => true,
-            'message' => 'Votre profil a été sauvegardé.'
+            'message' => 'Votre profil a été sauvegardé.',
+            'isSaved' => true  
         ]);
     }
     
