@@ -60,12 +60,13 @@
                                         <p class=" flex justify-center text-gray-300 text-sm md:text-base">
                                                 {{ user.aboutMe | default("Aucune information disponible.") }}
                                         </p>
-                                        {# {% if app.user and 'ROLE_TUTEUR' in app.user.roles %} #}
+                                        {# Vérifier les rôles avant d'afficher le taux horaire #}
+                                        {% if not (is_granted('ROLE_PARENT') or is_granted('ROLE_ELEVE')) %}
                                         <div>
                                                 <p class="text-gray-300 text-base md:text-lg">Taux horaire :</p>
                                                 <p class="text-gray-300 font-medium">{{ user.hourlyRate }}€/h</p>
                                         </div>
-                                        {# {% endif %} #}
+                                        {% endif %}
                                 </div>
 
                                 <!-- Actions avec restrictions d'accès -->
