@@ -24,14 +24,6 @@ class TutorAvailabilityType extends AbstractType
                 'widget' => 'single_text',
                 'label' => 'Fin',
                 'required' => true
-            ])
-            ->add('isRecurring', CheckboxType::class, [
-                'label' => 'Récurrent',
-                'required' => false
-            ])
-            ->add('recurrencePattern', TextType::class, [
-                'label' => 'Pattern de récurrence',
-                'required' => false
             ]);
     }
 

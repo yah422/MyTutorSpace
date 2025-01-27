@@ -31,12 +31,6 @@ class TutorAvailability
     #[ORM\Column(type: 'boolean')]
     private bool $isBooked = false;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $isRecurring = false;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $recurrencePattern = null;
-
     #[ORM\OneToOne(targetEntity: TutoringBooking::class, mappedBy: 'availability', cascade: ['persist'])]
     private ?TutoringBooking $booking = null;
 
@@ -86,28 +80,6 @@ class TutorAvailability
     public function setIsBooked(bool $isBooked): self
     {
         $this->isBooked = $isBooked;
-        return $this;
-    }
-
-    public function isRecurring(): bool
-    {
-        return $this->isRecurring;
-    }
-
-    public function setIsRecurring(bool $isRecurring): self
-    {
-        $this->isRecurring = $isRecurring;
-        return $this;
-    }
-
-    public function getRecurrencePattern(): ?string
-    {
-        return $this->recurrencePattern;
-    }
-
-    public function setRecurrencePattern(?string $recurrencePattern): self
-    {
-        $this->recurrencePattern = $recurrencePattern;
         return $this;
     }
 
