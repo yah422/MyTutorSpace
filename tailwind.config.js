@@ -10,6 +10,12 @@ module.exports = {
       colors: {
         gold: '#D4AF37',
         darkGray: '#1D1D1D',
+        primary: '#1B4255',
+        secondary: '#567C8D',
+        accent: '#FFD700',
+        background: '#ECECEC',
+        highlight: '#70F9D9'
+      
       },
     },
   },

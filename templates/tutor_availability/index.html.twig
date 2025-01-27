@@ -1,40 +1,67 @@
-{# templates/tutor_availability/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Gérer mes disponibilités{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6">Gérer mes disponibilités</h1>
+<div class="min-h-screen bg-[#ECECEC]">
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-6xl mx-auto">
+            <header class="mb-10">
+                <h1 class="text-3xl font-bold text-[#1B4255] mb-2 flex items-center gap-3">
+                    Gérer mes disponibilités
+                </h1>
+                <div class="h-1 w-20 bg-[#FFD700] rounded"></div>
+            </header>
 
-    <div>
-        <h2 class="text-xl font-semibold mb-4">Mes disponibilités</h2>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {% for availability in availabilities %}
-            <div class="border p-4 rounded">
-                <p>Début: {{ availability.start|date('d/m/Y H:i') }}</p>
-                <p>Fin: {{ availability.end|date('d/m/Y H:i') }}</p>
-                <div class="mt-2">
-                    <a href="{{ path('tutor_availability_edit', {id: availability.id}) }}"
-                        class="text-blue-500 hover:underline mr-2">Modifier</a>
-                    <form action="{{ path('tutor_availability_delete', {id: availability.id}) }}" method="POST"
-                        class="inline">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ availability.id) }}">
-                        <button type="submit" class="text-red-500 hover:underline"
-                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette disponibilité ?')">
-                            Supprimer
-                        </button>
-                    </form>
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-[#567C8D] mb-6">Mes disponibilités</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for availability in availabilities %}
+                    <div
+                        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border-l-4 border-[#FFD700]">
+                        <div class="p-6">
+                            <div class="flex flex-col space-y-3">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-medium text-[#567C8D]">Début :</span>
+                                    <span class="text-[#1B4255]">{{ availability.start|date('d/m/Y H:i') }}</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-medium text-[#567C8D]">Fin :</span>
+                                    <span class="text-[#1B4255]">{{ availability.end|date('d/m/Y H:i') }}</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex items-center justify-end space-x-4">
+                                <a href="{{ path('tutor_availability_edit', {id: availability.id}) }}"
+                                    class="flex items-center text-[#567C8D] hover:text-[#1B4255] transition-colors duration-200">
+                                    Modifier
+                                </a>
+                                <form action="{{ path('tutor_availability_delete', {id: availability.id}) }}"
+                                    method="POST" class="inline">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token"
+                                        value="{{ csrf_token('delete' ~ availability.id) }}">
+                                    <button type="submit"
+                                        class="flex items-center text-red-600 hover:text-red-800 transition-colors duration-200"
+                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette disponibilité ?')">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-
             </div>
+
+            {% if is_granted('ROLE_TUTEUR') %}
+            <div class="mt-8">
+                <a href="{{ path('tutor_availability_new') }}"
+                    class="inline-flex items-center px-6 py-3 bg-[#1B4255] text-white font-medium rounded-lg hover:bg-[#567C8D] transition-colors duration-200 shadow-md hover:shadow-lg">
+                    Ajouter une disponibilité
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
-    <br>
-    {% endfor %}
-    {% if is_granted('ROLE_TUTEUR') %}
-    <a href="{{ path('tutor_availability_new') }}" class="btn btn-success">Ajouter une disponibilité</a>
-    {% endif %}
 </div>
 {% endblock %}

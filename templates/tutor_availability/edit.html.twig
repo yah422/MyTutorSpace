@@ -3,20 +3,105 @@
 {% block title %}Modifier une disponibilité{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6">Modifier une disponibilité</h1>
+<div class="min-h-screen bg-[#ECECEC]">
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-3xl mx-auto">
+            <header class="mb-10">
+                <h1 class="text-3xl font-bold text-[#1B4255] mb-2">
+                    Modifier une disponibilité
+                </h1>
+                <div class="h-1 w-20 bg-[#FFD700] rounded"></div>
+            </header>
 
-    {{ form_start(form) }}
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {{ form_row(form.start) }}
-        {{ form_row(form.end) }}
-        {{ form_row(form.isRecurring) }}
-        {{ form_row(form.recurrencePattern) }}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-[#FFD700]">
+                {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        {{ form_label(form.start, null, {
+                        'label_attr': {
+                        'class': 'block text-sm font-medium text-[#567C8D]'
+                        }
+                        }) }}
+                        {{ form_widget(form.start, {
+                        'attr': {
+                        'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#70F9D9]
+                        focus:ring focus:ring-[#70F9D9] focus:ring-opacity-50'
+                        }
+                        }) }}
+                        {{ form_errors(form.start, {
+                        'attr': {
+                        'class': 'text-red-600 text-sm mt-1'
+                        }
+                        }) }}
+                    </div>
+
+                    <div class="space-y-2">
+                        {{ form_label(form.end, null, {
+                        'label_attr': {
+                        'class': 'block text-sm font-medium text-[#567C8D]'
+                        }
+                        }) }}
+                        {{ form_widget(form.end, {
+                        'attr': {
+                        'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#70F9D9]
+                        focus:ring focus:ring-[#70F9D9] focus:ring-opacity-50'
+                        }
+                        }) }}
+                        {{ form_errors(form.end, {
+                        'attr': {
+                        'class': 'text-red-600 text-sm mt-1'
+                        }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        {{ form_widget(form.isRecurring, {
+                        'attr': {
+                        'class': 'h-4 w-4 rounded border-gray-300 text-[#1B4255] focus:ring-[#70F9D9]'
+                        }
+                        }) }}
+                        {{ form_label(form.isRecurring, null, {
+                        'label_attr': {
+                        'class': 'text-sm font-medium text-[#567C8D]'
+                        }
+                        }) }}
+                    </div>
+
+                    <div class="space-y-2">
+                        {{ form_label(form.recurrencePattern, null, {
+                        'label_attr': {
+                        'class': 'block text-sm font-medium text-[#567C8D]'
+                        }
+                        }) }}
+                        {{ form_widget(form.recurrencePattern, {
+                        'attr': {
+                        'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#70F9D9]
+                        focus:ring focus:ring-[#70F9D9] focus:ring-opacity-50'
+                        }
+                        }) }}
+                        {{ form_errors(form.recurrencePattern, {
+                        'attr': {
+                        'class': 'text-red-600 text-sm mt-1'
+                        }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-4 pt-6">
+                    <a href="{{ path('tutor_availability_index') }}"
+                        class="inline-flex items-center px-4 py-2 text-[#567C8D] hover:text-[#1B4255] transition-colors duration-200">
+                        Retour à la liste
+                    </a>
+                    <button type="submit"
+                        class="inline-flex items-center px-6 py-3 bg-[#1B4255] text-white font-medium rounded-lg hover:bg-[#567C8D] transition-colors duration-200 shadow-md hover:shadow-lg">
+                        Enregistrer
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
-    {{ form_end(form) }}
-
-    <a href="{{ path('tutor_availability_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">Retour à la
-        liste</a>
 </div>
 {% endblock %}
