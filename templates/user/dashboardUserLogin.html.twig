@@ -116,6 +116,26 @@
                 </div>
             </a>
 
+            {# Profil Sauvegardés #}
+            <a href="{{ path('app_list_saved_profiles') }}"
+                class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+                <div class="p-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3 rounded-lg bg-[#70F9D9] bg-opacity-20 text-[#1B4255] group-hover:bg-[#FFD700] group-hover:text-[#1B4255] transition-colors">
+                            <!-- SVG pour "Profils sauvegardés" -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="7" r="4" />
+                                <path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-[#1B4255]">Mes profils sauvegardés</h3>
+                    </div>
+                    <p class="text-[#567C8D]">Accédez à vos profils sauvegardés et gérez vos sélections.</p>
+                </div>
+            </a>
+
             {# Mes disponibilités #}
             {% if is_granted('ROLE_TUTEUR') %}
             <a href="{{ path('tutor_availability_index') }}"

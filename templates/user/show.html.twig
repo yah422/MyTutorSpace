@@ -88,15 +88,14 @@
                                         <div class="flex flex-row justify-between space-x-[10px]">
                                                 {% if app.user and app.user != user %}
                                                 <a href="{{ path('new_message') }}"
-                                                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
-                                                        Contacter le tuteur
+                                                   class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#70F9D9] text-[#1B4255] hover:bg-[#FFD700] transition-colors duration-300">
+                                                    Contacter le tuteur
                                                 </a>
-                                                <button class="save-profile-btn" data-id="{{ user.id }}"
-                                                        data-url="{{ path('app_save_profile', { id: user.id }) }}">
-                                                        <img src="{{ asset('img/save.png') }}" alt="saveImage">
+                                                <button class="save-profile-btn" data-id="{{ user.id }}" data-url="{{ path('app_save_profile', { id: user.id }) }}">
+                                                    <img src="{{ asset('img/save.png') }}" alt="saveImage">
                                                 </button>
                                                 {% endif %}
-                                        </div>
+                                            </div>
                                         {% if app.user and 'ROLE_ELEVE' and 'ROLE_PARENT' in app.user.roles %}
                                         <a href="{{ path('app_booking', { tuteur: user.id }) }}"
                                                 class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
@@ -107,22 +106,6 @@
                         </div>
                 </div>
         </div>
-
-        <br>
-        {% if app.user and 'ROLE_USER' in app.user.roles %}
-
-        <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
-                {# <a href="{{ path('app_message', { receiver: user.id }) }}"
-                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">
-                        Contacter le tuteur
-                </a> #}
-                <br>
-                <a href="{{ path('app_list_saved_profiles') }}"
-                        class="block w-full text-center py-2 text-sm md:text-base font-bold rounded bg-[#FFD700] text-[#1B4255] hover:bg-[#70F9D9] transition-colors duration-300">>
-                        Mes profils sauvegardés
-                </a>
-        </div>
-        {% endif %}
 
 </div>
 <script>
@@ -139,23 +122,18 @@
                         })
                                 .then(response => response.json())
                                 .then(data => {
+                                        // Si la sauvegarde est réussie
                                         if (data.success) {
-                                                alert(data.message);
+                                                // Changer l'image du bouton pour montrer qu'il a été sauvegardé
+                                                const img = button.querySelector('img');
+                                                img.src = "{{ asset('img/saved-icon.png') }}";  // Remplacez avec l'icône de "profil sauvegardé"
+                                                img.alt = "Profil sauvegardé";
                                         } else {
-                                                alert('Erreur : ' + data.message);
+                                                // Afficher le message d'erreur si le profil est déjà sauvegardé
+                                                alert(data.message);
                                         }
                                 })
                                 .catch(error => console.error('Erreur lors de la sauvegarde :', error));
-                });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-                const messages = document.querySelectorAll('.fade-out');
-
-                messages.forEach(message => {
-                        setTimeout(() => {
-                                message.classList.add('fade-out');
-                        }, 3000); // 3 secondes pour que le message disparaisse
                 });
         });
 </script>
