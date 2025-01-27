@@ -41,15 +41,7 @@ class TutorAvailabilityManager
         $availability = new TutorAvailability();
         $availability->setTutor($tutor)
             ->setStart($start)
-            ->setEnd($end)
-            ->setIsRecurring($isRecurring)
-            ->setRecurrencePattern($recurrencePattern);
-
-        // Check for overlapping availabilities
-        $overlapping = $this->availabilityRepository->findOverlappingAvailabilities($availability);
-        if (!empty($overlapping)) {
-            throw new BadRequestException('This time slot overlaps with existing availabilities');
-        }
+            ->setEnd($end);
 
         $this->entityManager->persist($availability);
         $this->entityManager->flush();
@@ -69,15 +61,7 @@ class TutorAvailabilityManager
         }
 
         $availability->setStart($start)
-            ->setEnd($end)
-            ->setIsRecurring($isRecurring)
-            ->setRecurrencePattern($recurrencePattern);
-
-        // Check for overlapping availabilities
-        $overlapping = $this->availabilityRepository->findOverlappingAvailabilities($availability);
-        if (!empty($overlapping)) {
-            throw new BadRequestException('This time slot overlaps with existing availabilities');
-        }
+            ->setEnd($end);
 
         $this->entityManager->flush();
 

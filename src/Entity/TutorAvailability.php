@@ -99,8 +99,4 @@ class TutorAvailability
         return $this->start->diff($this->end);
     }
 
-    public function overlaps(TutorAvailability $other): bool
-    {
-        return $this->start < $other->end && $this->end > $other->start;
-    }
 }
