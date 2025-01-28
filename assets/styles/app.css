@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.flatpickr-calendar {
-    /* styles pour le calendrier */
-}
-
-.flatpickr-calendar.open {
-    /* styles pour le calendrier ouvert */
-}
-
-.flatpickr-day.selected {
-    /* styles pour la journée sélectionnée */
-}
-
 body {
     background-color: #1B4255;
 }
@@ -334,3 +322,13 @@ label{
     justify-content: center;
     margin: 60px;
 }
+
+/* ---------------------------- RESPONSIVE --------------------------------- */
+/* @media screen and (max-width: 768px){
+
+    h1 {
+        font-size:small;
+    }
+
+
+} */

@@ -210,7 +210,7 @@ class ForumController extends AbstractController
         $entityManager->remove($topic);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_forum_index', [
+        return $this->redirectToRoute('app_forum', [
             'topic' => $topic,
         ]);
     }

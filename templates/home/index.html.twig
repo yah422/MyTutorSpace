@@ -17,7 +17,7 @@
         <div class="PicTitle flex flex-col md:flex-row items-center justify-between">
             <div class="TextTitle flex flex-col flex-start items-start text-left w-1/2 animate-fadeIn">
                 <h1
-                    class="flex items-start justify-start content-start text-5xl font-bold mb-4 text-yellow-400 transition-all duration-500 ease-in-out transform hover:text-teal-500">
+                    class="flex items-start justify-start content-start text-5xl font-bold mb-4 text-yellow-400 transition-all duration-500 ease-in-out transform hover:text-teal-500 md:text:base">
                     My Tutor Space
                 </h1>
                 <p class="pHomePage text-gray-300 mb-6 transition-all duration-300 ease-in-out">
@@ -51,14 +51,14 @@
             {% for matiere in matieres %}
             <a href="{{ path('show_matiere', { 'id': matiere.id }) }}">
                 <button
-                    class="text-black w-[200px] h-[60px] border border-gray-300 px-4 py-2 rounded bg-gray-100 hover:bg-teal-300 transition-all duration-300 transform hover:scale-110">
+                    class="text-black w-[350px] h-[80px] border border-gray-300 px-4 py-2 rounded bg-gray-100 hover:bg-teal-300 transition-all duration-300 transform hover:scale-110">
                     {{ matiere.nom ?? 'Nom non défini' }}
                 </button>
             </a>
             {% endfor %}
             <a href="{{ path('app_matiere') }}">
                 <button
-                    class="text-black w-[200px] h-[60px] border px-4 py-2 rounded bg-teal-300 hover:bg-white transition-all duration-300 transform hover:scale-110">
+                    class="text-black w-[350px] h-[80px] border px-4 py-2 rounded bg-teal-300 hover:bg-white transition-all duration-300 transform hover:scale-110">
                     Toutes les matières
                 </button>
             </a>
