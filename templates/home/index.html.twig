@@ -45,20 +45,20 @@
     </div>
 
     <!-- Section Choisir Une Matière -->
-    <div style="margin-top: 30px; margin-bottom:30px;" class="text-center mb-8">
-        <h2 class="text-4xl font-bold text-teal-300 mb-6">Choisi Une Matière</h2>
-        <div class="flex flex-wrap justify-center gap-3 mt-4">
+    <div style="margin-bottom:150px;" class="text-center mb-8">
+        <h2 class="text-6xl font-bold text-teal-300 mb-16">Choisi Une Matière</h2>
+        <div class="flex flex-wrap justify-center gap-6 mt-4">
             {% for matiere in matieres %}
             <a href="{{ path('show_matiere', { 'id': matiere.id }) }}">
                 <button
-                    class="text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition-all duration-300 transform hover:scale-110">
+                    class="text-black w-[200px] h-[60px] border border-gray-300 px-4 py-2 rounded bg-gray-100 hover:bg-teal-300 transition-all duration-300 transform hover:scale-110">
                     {{ matiere.nom ?? 'Nom non défini' }}
                 </button>
             </a>
             {% endfor %}
             <a href="{{ path('app_matiere') }}">
                 <button
-                    class="text-black border px-4 py-2 rounded bg-teal-300 hover:bg-white transition-all duration-300 transform hover:scale-110">
+                    class="text-black w-[200px] h-[60px] border px-4 py-2 rounded bg-teal-300 hover:bg-white transition-all duration-300 transform hover:scale-110">
                     Toutes les matières
                 </button>
             </a>
@@ -66,10 +66,10 @@
     </div>
 
     <!-- Section Simple et Efficace -->
-    <div class="text-center mb-10 w-full animate-fadeIn delay-400">
-        <h2 class="text-5xl font-bold text-yellow-400">Simple et Efficace</h2>
+    <div class="text-center mb-[150px] w-full animate-fadeIn delay-400">
+        <h2 class="text-6xl font-bold text-yellow-400 mb-14">Simple et Efficace</h2>
         <br>
-        <div class="flex flex-wrap justify-center gap-6 mt-8">
+        <div class="flex flex-wrap justify-center gap-14 mt-8">
             <div
                 class="card flex flex-col items-center bg-yellow-400 text-black p-6 py-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
                 <img src="/img/objectif.png" alt="Icône cible"
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Section Blocs d'Inform ation avec Images -->
-    <div class="space-y-12">
+    <div class="space-y-12 mt-14 mb-14 text-justify">
         {% for block in [
         {'title': 'Fixe tes objectifs', 'text': 'Avant de commencer, il est important de définir clairement ce que tu
         souhaites accomplir. Prends le temps de réfléchir à tes priorités et à tes objectifs à court et long terme. Cela
@@ -115,8 +115,8 @@
         <div
             class="flex flex-col {{ loop.index is odd ? 'md:flex-row' : 'md:flex-row-reverse' }} items-center gap-6 animate-fadeIn">
             <div class="text-white md:w-1/2">
-                <h3 class="text-2xl font-bold mb-4">{{ block.title }}</h3>
-                <p class="mt-4">{{ block.text }}</p>
+                <h3 class="text-4xl text-[#70F9D9] m-10 font-bold mb-4">{{ block.title }}</h3>
+                <p class="m-10 text-lg">{{ block.text }}</p>
             </div>
             <div class="md:w-1/2">
                 <img src="{{ block.img }}" alt="{{ block.title }}"
