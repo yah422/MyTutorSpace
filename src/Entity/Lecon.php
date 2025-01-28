@@ -18,7 +18,7 @@ class Lecon
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "text")]
     private ?string $description = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]

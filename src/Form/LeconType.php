@@ -34,11 +34,11 @@ class LeconType extends AbstractType
                 'class' => Matiere::class,
                 'choice_label' => 'nom',
             ])
-            ->add('niveau', EntityType::class, [
-                'class' => Niveau::class,
-                'choice_label' => 'titre',
-                'multiple' => true,
-            ])
+            // ->add('niveau', EntityType::class, [
+            //     'class' => Niveau::class,
+            //     'choice_label' => 'titre',
+            //     'multiple' => true,
+            // ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'query_builder' => function (EntityRepository $er) {
@@ -46,11 +46,11 @@ class LeconType extends AbstractType
                               ->where('u.roles LIKE :role')
                               ->setParameter('role', '%"ROLE_TUTEUR"%');
                 },
-                'choice_label' => 'nom',
+                'choice_label' => 'prenom',
             ])
             ->add('users', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'nom',
+                'choice_label' => 'prenom',
                 'multiple' => true,
             ])
             ->add('pdfFile', FileType::class, [

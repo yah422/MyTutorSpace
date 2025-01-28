@@ -99,11 +99,18 @@
     <!-- Section Blocs d'Inform ation avec Images -->
     <div class="space-y-12">
         {% for block in [
-        {'title': 'Fixe tes objectifs', 'text': 'Lorem ipsum dolor sit amet...', 'img': '/img/education.svg'},
-        {'title': 'Atteins tes buts', 'text': 'Consectetur adipiscing elit...', 'img': '/img/goal.svg'},
-        {'title': 'Trouvez les meilleurs tuteurs', 'text': 'Sed do eiusmod tempor incididunt...', 'img':
-        '/img/tutors.svg'},
-        {'title': 'Tarifs compétitifs', 'text': 'Ut labore et dolore magna aliqua...', 'img': '/img/price.svg'}
+        {'title': 'Fixe tes objectifs', 'text': 'Avant de commencer, il est important de définir clairement ce que tu
+        souhaites accomplir. Prends le temps de réfléchir à tes priorités et à tes objectifs à court et long terme. Cela
+        te permettra de garder une vision claire tout au long de ton parcours.', 'img': '/img/education.svg'},
+        {'title': 'Atteins tes buts', 'text': 'Une fois tes objectifs définis, il est temps de passer à l\'action.
+        Organise-toi, crée un plan d\'action réaliste et reste déterminé. Les obstacles feront partie du chemin, mais
+        chaque étape franchie te rapprochera de tes aspirations.', 'img': '/img/goal.svg'},
+        {'title': 'Trouvez les meilleurs tuteurs', 'text': 'Le bon accompagnement est essentiel pour atteindre tes
+        objectifs. Choisis des tuteurs qualifiés qui comprennent tes besoins et peuvent t\'aider à progresser
+        efficacement. Le bon soutien peut faire toute la différence dans ton apprentissage.', 'img': '/img/tutors.svg'},
+        {'title': 'Tarifs compétitifs', 'text': 'Nous offrons des tarifs accessibles tout en garantissant un
+        enseignement de qualité. L\'éducation ne doit pas être un luxe, et nous nous engageons à te fournir les
+        meilleurs services au meilleur prix pour t\'aider à réussir.', 'img': '/img/price.svg'}
         ] %}
         <div
             class="flex flex-col {{ loop.index is odd ? 'md:flex-row' : 'md:flex-row-reverse' }} items-center gap-6 animate-fadeIn">
