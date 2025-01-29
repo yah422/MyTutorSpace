@@ -36,7 +36,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-xl font-semibold mb-2">{{ matiere.nom }}</h3>
                 {% if matiere.description %}
-                <p class="text-gray-600 mb-4">{{ matiere.description|slice(0, 150) }}...</p>
+                <p class="text-gray-600 text-justify mb-4">{{ matiere.description|slice(0, 150) }}...</p>
                 {% endif %}
                 <a href="{{ path('show_matiere', {'id': matiere.id}) }}"
                     class="inline-block bg-[#1B4255] text-white px-4 py-2 rounded hover:bg-[#2C5A6E] transition-colors">
