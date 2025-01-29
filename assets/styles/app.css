@@ -120,7 +120,7 @@ h2{
 li {
     list-style: none;
 }
-#homePage1Part{
+/* #homePage1Part{
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -132,19 +132,14 @@ li {
     padding-right: 50px;
     margin-top: 80px;
     flex-direction: column;
-}
+} */
 
-.pHomePage{
-    color: #ECECEC;
-    font-size: x-large;
-    text-align: left;
-}
-.PicTitle{
+/* .PicTitle{
     display: flex;
     gap: 100px;
     justify-content: space-between;
     width: 100%;
-}
+} */
 
 /* ------------------------------- Exercices --------------------------------------- */
 .listExercice ul li{
