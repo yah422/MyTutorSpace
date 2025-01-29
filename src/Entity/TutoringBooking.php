@@ -50,7 +50,7 @@ class TutoringBooking
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank]
-    #[Assert\Choice(['morning', 'afternoon', 'evening'])]
+    #[Assert\Choice(['matin', 'après-midi', 'soirée'])]
     private ?string $preferredTimeSlot = null;
 
     #[ORM\Column(length: 20)]
