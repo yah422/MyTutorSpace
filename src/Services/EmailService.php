@@ -5,7 +5,6 @@ namespace App\Services;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Contact;
-use App\Entity\Reservation;
 use App\Entity\TutoringBooking;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
