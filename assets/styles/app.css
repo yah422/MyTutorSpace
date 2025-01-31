@@ -298,6 +298,10 @@ label{
     font-size: large;
 }
 
+.required {
+    color: black !important;
+}
+
 .listEditUser{
     display: flex;
     flex-direction: column;

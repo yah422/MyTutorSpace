@@ -156,6 +156,26 @@
             </a>
             {% endif %}
 
+            {# ADMIN #}
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin') }}"
+                class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+                <div class="p-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3 rounded-lg bg-[#70F9D9] bg-opacity-20 text-[#1B4255] group-hover:bg-[#FFD700] group-hover:text-[#1B4255] transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3h18M8 7h8M8 11h8M3 17h18M6 21v-4M18 21v-4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-[#1B4255]">planel administrateur</h3>
+                    </div>
+                    <p class="text-[#567C8D]">Gérer le planel administrateur.</p>
+                </div>
+            </a>
+            {% endif %}
+
         </div>
     </main>
 

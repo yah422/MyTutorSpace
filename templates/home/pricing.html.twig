@@ -1,55 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Prix{% endblock %}
 
 {% block body %}
 
-<div class="bg-gray-100 min-h-screen py-10">
-    <div class="container mx-auto px-6">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Nos Tarifs</h1>
-        <p class="text-center text-gray-600 mb-12">Choisissez le plan qui correspond le mieux à vos besoins.</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Basic Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">Basique</h2>
-                <p class="text-gray-600 mb-6">Idéal pour débuter.</p>
-                <p class="text-4xl font-bold text-blue-500 mb-6">9.99€</p>
-                <ul class="text-gray-600 mb-6">
-                    <li class="mb-2">1 session par mois</li>
-                    <li class="mb-2">Accès aux cours de base</li>
-                    <li>Support par email</li>
-                </ul>
-                <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-600">
-                    Choisir
-                </button>
-            </div>
-            <!-- Standard Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">Standard</h2>
-                <p class="text-gray-600 mb-6">Pour un apprentissage régulier.</p>
-                <p class="text-4xl font-bold text-blue-500 mb-6">19.99€</p>
-                <ul class="text-gray-600 mb-6">
-                    <li class="mb-2">5 sessions par mois</li>
-                    <li class="mb-2">Accès aux cours avancés</li>
-                    <li>Support prioritaire</li>
-                </ul>
-                <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-600">
-                    Choisir
-                </button>
-            </div>
-            <!-- Premium Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">Premium</h2>
-                <p class="text-gray-600 mb-6">Pour les apprenants intensifs.</p>
-                <p class="text-4xl font-bold text-blue-500 mb-6">29.99€</p>
-                <ul class="text-gray-600 mb-6">
-                    <li class="mb-2">Sessions illimitées</li>
-                    <li class="mb-2">Accès à toutes les ressources</li>
-                    <li>Support dédié</li>
-                </ul>
-                <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-600">
-                    Choisir
-                </button>
+<div class="bg-gray-100 min-h-screen justify-center text-gray-800">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl text-[#1B4255] font-bold text-center mb-8">Tarifs des Tuteurs</h1>
+
+        <!-- Section Explication -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl text-[#1B4255] font-semibold mb-4">Comment ça marche ?</h2>
+            <p class="mb-4">
+                Chaque tuteur fixe son propre tarif horaire. Les prix peuvent être dégressifs en fonction de la récurrence des séances.
+            </p>
+            <p>
+                Par exemple, plus vous réservez de séances, plus le prix horaire diminue.
+            </p>
+        </div>
+
+        <!-- Section Tarifs -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl text-[#1B4255] font-semibold mb-4">Exemple de Tarifs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Carte 1 -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">1 Séance</h3>
+                    <p class="text-gray-600 mb-4">Tarif horaire standard.</p>
+                    <p class="text-2xl font-bold">30€/h</p>
+                </div>
+
+                <!-- Carte 2 -->
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">5 Séances</h3>
+                    <p class="text-gray-600 mb-4">Réduction de 10%.</p>
+                    <p class="text-2xl font-bold">27€/h</p>
+                </div>
+
+                <!-- Carte 3 -->
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">10 Séances</h3>
+                    <p class="text-gray-600 mb-4">Réduction de 20%.</p>
+                    <p class="text-2xl font-bold">24€/h</p>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions générales{% endblock %}
+
+{% block body %}
+
+<div class="bg-gray-100 min-h-screen text-gray-800">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl text-[#1B4255]  font-bold text-center mb-8">Conditions Générales</h1>
+
+        <!-- Section RGPD -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl text-[#1B4255]  font-semibold mb-4">Respect du RGPD</h2>
+            <p class="mb-4">
+                Nous nous engageons à protéger vos données personnelles conformément au Règlement Général sur la
+                Protection des Données (RGPD).
+            </p>
+            <ul class="list-disc list-inside mb-4">
+                <li>Vos données sont collectées de manière transparente et légitime.</li>
+                <li>Elles sont utilisées uniquement pour les finalités prévues.</li>
+                <li>Vous avez le droit d'accéder, de rectifier et de supprimer vos données.</li>
+            </ul>
+            <p>
+                Pour en savoir plus, consultez notre <a href="#" class="text-blue-500 underline">Politique de
+                    Confidentialité</a>.
+            </p>
+        </div>
+
+        <!-- Section Conditions Générales -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl text-[#1B4255]  font-semibold mb-4">Conditions Générales d'Utilisation</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-bold mb-2">1. Acceptation des Conditions</h3>
+                    <p class="text-gray-600">
+                        En utilisant ce service, vous acceptez les présentes conditions générales.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-2">2. Réservation de Séances</h3>
+                    <p class="text-gray-600">
+                        Les séances sont réservables en ligne. Les tarifs sont dégressifs en fonction du nombre de
+                        séances.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-2">3. Annulation et Remboursement</h3>
+                    <p class="text-gray-600">
+                        Les annulations doivent être effectuées au moins 24 heures à l'avance pour un remboursement
+                        complet.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-2">4. Responsabilités</h3>
+                    <p class="text-gray-600">
+                        Les tuteurs sont responsables de la qualité des cours dispensés.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

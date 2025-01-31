@@ -46,5 +46,16 @@ class HomeController extends AbstractController
         ]);
     }
 
+    #[Route('/rules', name: 'rules')]
+    public function rules(Matiere $matiere, MatiereRepository $matiereRepository): Response
+    {
+        $matieres = $matiereRepository->findBy([],["nom" => "ASC"]);
+
+        return $this->render('home/rules.html.twig', [
+            'matieres' => $matieres,
+            'matiere' => 'matiere',
+        ]);
+    }
+
 
 }
