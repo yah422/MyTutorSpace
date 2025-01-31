@@ -54,7 +54,7 @@
 <body>
     <header>
         <nav class="bg-[#1B4255] p-4">
-            <div class="container mx-auto flex justify-around lg:justify-between items-center">
+            <div class="container mx-auto flex flex-col justify-around lg:flex-row lg:justify-between items-center">
                 <!-- Logo de la navbar -->
                 <a href="{{ path('home') }}" style="color:#FFD700;" class="text-2xl flex items-center">
                     <img id="iconTitre" src="{{ asset('img/iconTitle.png') }}" loading="lazy" alt="Logo">
@@ -152,7 +152,7 @@
                         </a>
                         <a href="{{ path('pricing') }}"
                             class="text-gray-300 hover:text-yellow-400 flex items-center transition-all duration-300 ease-in-out">
-                            <span class="ml-2">Prix</span>
+                            <span class="ml-2">Tarifs</span>
                         </a>
                         <a href="{{ path('howItWorks') }}"
                             class="text-gray-300 hover:text-yellow-400 flex items-center transition-all duration-300 ease-in-out">
