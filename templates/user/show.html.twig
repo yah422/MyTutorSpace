@@ -5,14 +5,14 @@
 {% block body %}
 <div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex-col gap-7.5">
         <!-- Flash Messages -->
-        {% for label, messages in app.session.flashBag.all() %}
+        {# {% for label, messages in app.session.flashBag.all() %}
         <div
                 class="p-4 rounded-lg mb-4 font-bold text-black {% if label == 'success' %}bg-teal-500 border-teal-700{% elseif label == 'warning' %}bg-yellow-400 border-yellow-600{% elseif label == 'error' %}bg-red-500 border-red-700{% endif %}">
                 {% for message in messages %}
                 {{ message }}
                 {% endfor %}
         </div>
-        {% endfor %}
+        {% endfor %} #}
 
 
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
@@ -100,6 +100,7 @@
                                 </div>
                         </div>
                 </div>
+        
         </div>
 
 </div>

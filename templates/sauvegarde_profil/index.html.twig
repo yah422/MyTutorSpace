@@ -43,7 +43,7 @@
                             alt="Photo de profil de {{ sauvegarde.tuteur.prenom }} {{ sauvegarde.tuteur.nom }}"
                             class="w-24 h-24 object-cover rounded-full shadow-md">
                         <div>
-                            <p class="text-lg font-semibold">{{ sauvegarde.tuteur.nom }}</p>
+                            <p class="text-lg font-semibold">{{ sauvegarde.tuteur.nom }} {{ sauvegarde.tuteur.prenom }}</p>
                             <p class="text-sm text-gray-600">Sauvegardé le : {{ sauvegarde.dateSauvegarde|date('d/m/Y')
                                 }}</p>
                         </div>

@@ -118,7 +118,7 @@
                     <span class="text-sm text-black">
                         {# {{ lecon.dateCreation|date('d/m/Y') }} #}
                     </span>
-                    <a href="{{ path('show_lecon', {'id': lecon.id}) }}" class="block">
+                    <a href="{{ path('show_lecon', {'slug': lecon.slug}) }}" class="block">
                         <span class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
                             Voir le détail
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

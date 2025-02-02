@@ -18,6 +18,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,12 +64,12 @@ class LeconController extends AbstractController
             'matieres' => $matieres,
             'niveaux' => $niveaux,
             'selectedMatiere' => $selectedMatiere,
-            'selectedNiveau' => $selectedNiveau
+            'selectedNiveau' => $selectedNiveau,
         ]);
     }
 
     #[Route('/lecon/ajouter', name: 'add_lecon')]
-    public function add(MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    public function add(MatiereRepository $matiereRepository, Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, Security $security): Response
     {
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
             return $this->render('user/errorPage.html.twig');
@@ -78,6 +79,10 @@ class LeconController extends AbstractController
         $lecon = new Lecon();
 
         $lecon->setDateCreation(new \DateTime());
+
+        // Générer le slug
+        $slug = $slugger->slug($lecon->getTitre()); // Assurez-vous d'avoir un champ "titre" dans votre entité Lecon
+        $lecon->setSlug($slug);
 
         $form = $this->createForm(LeconType::class, $lecon);
         $form->handleRequest($request);
@@ -110,10 +115,11 @@ class LeconController extends AbstractController
         return $this->render('lecon/add.html.twig', [
             'form' => $form->createView(),
             'matieres' => $matieres,
+            'slug' => $lecon->getSlug(),  // Passer le slug
         ]);
     }
     #[Route('/lecon/edit/{id}', name: 'edit_lecon')]
-    public function edit(UserRepository $userRepository, Lecon $lecon, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    public function edit(UserRepository $userRepository, Lecon $lecon, SluggerInterface $slugger, MatiereRepository $matiereRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_TUTEUR')) {
             return $this->render('user/errorPage.html.twig');
@@ -122,6 +128,10 @@ class LeconController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
+
+        // Générer le slug lors de la modification
+        $slug = $slugger->slug($lecon->getTitre()); // Assurez-vous que le titre soit défini
+        $lecon->setSlug($slug);
 
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
 
@@ -190,21 +200,23 @@ class LeconController extends AbstractController
             'matiere' => $matiere,
         ]);
     }
-
-    #[Route('/lecon/{id}', name: 'show_lecon')]
-    public function show(Lecon $lecon, LeconRepository $leconRepository, ExerciceRepository $exerciceRepository): Response
+    #[Route('/lecon/{slug}', name: 'show_lecon')]
+    public function show(string $slug, LeconRepository $leconRepository, SluggerInterface $slugger, ExerciceRepository $exerciceRepository): Response
     {
+        $lecon = $leconRepository->findOneBySlug($slug);  // Recherche de la leçon par slug
+
+        if (!$lecon) {
+            throw $this->createNotFoundException('La leçon avec le slug ' . $slug . ' n\'existe pas.');
+        }
+
         $exercices = $exerciceRepository->findBy([], ['titre' => 'ASC']);
         $leconExercices = $leconRepository->findExercicesByLecon($lecon);
-
-        // Récupérer l'exercice associé à la leçon
-        $exercice = $lecon->getExercice();
 
         return $this->render('lecon/detail.html.twig', [
             'lecon' => $lecon,
             'exercices' => $leconExercices,
-            'exercice' => $exercice,
             'exercice_list' => $exercices,
         ]);
     }
+
 }

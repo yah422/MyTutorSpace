@@ -46,6 +46,15 @@ class LeconRepository extends ServiceEntityRepository // Définition de la class
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findOneBySlug(string $slug): ?Lecon
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * Find resources by lesson.
     //  * @param Lecon $lecon

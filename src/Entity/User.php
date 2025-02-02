@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Forum\Post;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -80,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Niveau::class)]
     private $niveau = null;
 
-    #[ORM\ManyToMany(targetEntity:Niveau::class, mappedBy:"users")]
+    #[ORM\ManyToMany(targetEntity: Niveau::class, mappedBy: "users")]
     private $niveaux;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -133,6 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->availabilities = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->sent = new ArrayCollection();
+        $this->posts = new ArrayCollection();
         $this->received = new ArrayCollection();
         $this->eleves = new ArrayCollection();
         $this->sauvegardeProfils = new ArrayCollection();
@@ -583,6 +585,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    // Ajouter un Post
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setAuthor($this); // Associe cet utilisateur comme auteur du post
+        }
+        return $this;
+    }
+
+    // Supprimer un Post
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->contains($post)) {
+            $this->posts->removeElement($post);
+            // Déconnecte l'utilisateur du post
+            if ($post->getAuthor() === $this) {
+                $post->setAuthor(null);
+            }
+        }
+        return $this;
+
+    }
 
     public function addNiveau(Niveau $niveau): self
     {
@@ -597,7 +623,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeNiveau(Niveau $niveau): self
     {
         if ($this->niveaux->removeElement($niveau)) {
-            $niveau->removeUser($this); 
+            $niveau->removeUser($this);
         }
 
         return $this;

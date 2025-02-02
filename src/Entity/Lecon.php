@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LeconRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LeconRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: LeconRepository::class)]
 class Lecon
@@ -48,6 +49,9 @@ class Lecon
     #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'lecon')]
     private Collection $exercice;
 
+    #[ORM\Column(type: "string", unique: true)]
+    private $slug;
+
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
@@ -68,6 +72,7 @@ class Lecon
     public function setTitre(string $titre): self
     {
         $this->titre = $titre;
+
         return $this;
     }
 
@@ -196,6 +201,25 @@ class Lecon
         }
 
         return $this;
+    }
+
+    // Getter et setter pour le slug
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function generateSlug(): void
+    {
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->getTitre());
     }
 
     public function __toString(): string
