@@ -34,10 +34,10 @@ class MessageType extends AbstractType
 
                 // Cache le champ et son label pour qu'ils ne soient pas visibles dans le formulaire
                 'attr' => [
-                    'class' => 'd-none', // Cache visuellement le champ
+                    'class' => 'hidden', // Cache visuellement le champ
                 ],
                 'label_attr' => [
-                    'class' => 'd-none', // Cache visuellement le label
+                    'class' => 'hidden', // Cache visuellement le label
                 ],
             ]);
         } else {
@@ -47,6 +47,13 @@ class MessageType extends AbstractType
                 'label' => 'Destinataire',
                 'class' => User::class,
                 'choice_label' => 'prenom', // Permet de sélectionner un utilisateur via le prenom
+                  // Cache le champ et son label pour qu'ils ne soient pas visibles dans le formulaire
+                'attr' => [
+                    'class' => 'hidden', // Cache visuellement le champ
+                ],
+                'label_attr' => [
+                    'class' => 'hidden', // Cache visuellement le label
+                ],
             ]);
         }
 

@@ -5,23 +5,15 @@
 {% block body %}
 <div class="min-h-screen flex items-center justify-center bg-[#1B4255] flex-col gap-7.5">
         <!-- Flash Messages -->
-        {# <div class="
-                p-4 rounded-lg mb-4 font-bold
-                text-black
-                {% if app.flashes is not empty %}
-                        {% for label, messages in app.flashes %}
-                        {% if label == 'success' %} bg-teal-500 border-teal-700
-                        {% elseif label == 'warning' %} bg-yellow-400 border-yellow-600
-                        {% elseif label == 'error' %} bg-red-500 border-red-700
-                        {% endif %}
-                        {% endfor %}
-                {% endif %}
-                fade-out
-                ">
+        {% for label, messages in app.session.flashBag.all() %}
+        <div
+                class="p-4 rounded-lg mb-4 font-bold text-black {% if label == 'success' %}bg-teal-500 border-teal-700{% elseif label == 'warning' %}bg-yellow-400 border-yellow-600{% elseif label == 'error' %}bg-red-500 border-red-700{% endif %}">
                 {% for message in messages %}
                 {{ message }}
                 {% endfor %}
-        </div> #}
+        </div>
+        {% endfor %}
+
 
         <div class="container mx-auto max-w-4xl p-6 rounded-lg shadow-lg bg-[#567C8D]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -61,7 +53,8 @@
                                                 {{ user.aboutMe | default("Aucune information disponible.") }}
                                         </p>
                                         {# Vérifier les rôles avant d'afficher le taux horaire #}
-                                        {% if not (is_granted('ROLE_PARENT') or is_granted('ROLE_ELEVE')) %}
+                                        {% if not (is_granted('ROLE_PARENT') or is_granted('ROLE_ELEVE') or
+                                        is_granted('ROLE_ADMIN'))%}
                                         <div>
                                                 <p class="text-gray-300 text-base md:text-lg">Taux horaire :</p>
                                                 <p class="text-gray-300 font-medium">{{ user.hourlyRate }}€/h</p>

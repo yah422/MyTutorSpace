@@ -24,7 +24,6 @@ class LeconCrudController extends AbstractCrudController
             TextField::new('titre'),
             TextField::new('pdf_path'),
             TextEditorField::new('description'),
-            DateTimeField::new('dateCreation'),
         ];
     }
 

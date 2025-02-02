@@ -20,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class UserType extends AbstractType
-{ 
+{
     private $security;
 
     public function __construct(Security $security)
@@ -79,7 +79,7 @@ class UserType extends AbstractType
                     ]),
                 ],
             ]);
-            
+
         if (isset($options['role']) && $options['role'] === 'ROLE_TUTEUR') {
 
             $builder->add('hourly_rate', MoneyType::class, [
@@ -88,9 +88,9 @@ class UserType extends AbstractType
                 'currency' => 'EUR',
             ]);
         }
+        
+    }
 
-    }    
-    
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

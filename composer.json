@@ -11,7 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
-        "easycorp/easyadmin-bundle": "^4.23",
+        "easycorp/easyadmin-bundle": "^4.24",
         "google/recaptcha": "^1.3",
         "karser/karser-recaptcha3-bundle": "^0.1.28",
         "knplabs/knp-paginator-bundle": "^6.6",

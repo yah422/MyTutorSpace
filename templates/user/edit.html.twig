@@ -33,49 +33,47 @@
 
         {# Champ pour la nouvelle photo #}
         <div class="mb-4">
-            {{ form_label(form.image, 'Nouvelle photo de profil', {'label_attr': {'class': 'block font-semibold
-            text-gray-300 mb-2'}}) }}
+            {{ form_label(form.image, 'Nouvelle photo de profil', {'label_attr': {'class': 'block font-semibold text-gray-300 mb-2'}}) }}
             {{ form_widget(form.image, {
-            'attr': {
-            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2
-            focus:ring-[#FFD700]'
-            }
+                'attr': {
+                    'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2 focus:ring-[#FFD700]'
+                }
             }) }}
             <small class="text-gray-300">Formats acceptés : JPG, JPEG, PNG. Taille maximale : 5MB</small>
         </div>
 
-        <!-- HourlyRate -->
+        {# Hourly Rate #}
         {% if app.user and 'ROLE_TUTEUR' in app.user.roles %}
-        <div> 
-            {{ form_row(form.hourly_rate, {'attr': {'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2
-            focus:ring-[#FFD700]'}}) }}
+        <div>
+            {{ form_row(form.hourly_rate, {
+                'attr': {
+                    'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2 focus:ring-[#FFD700]'
+                }
+            }) }}
         </div>
         {% endif %}
 
-        {# Autres champs du formulaire, en excluant "profilePicture" et "hourly_rate" #}
+        {# Autres champs du formulaire, en excluant "image", "hourly_rate" et "_token" #}
         {% for field in form %}
-        {% if field.vars.name != 'image' and field.vars.name != 'hourly_rate' %}
-        <div class="mb-4">
-            {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300 mb-2'}}) }}
-            {{ form_widget(field, {
-            'attr': {
-            'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2
-            focus:ring-[#FFD700]'
-            }
-            }) }}
-            {{ form_errors(field, {'attr': {'class': 'text-red-500 mt-1'}}) }}
-        </div>
-        {% endif %}
+            {% if field.vars.name not in ['image', 'hourly_rate', '_token'] %}
+            <div class="mb-4">
+                {{ form_label(field, null, {'label_attr': {'class': 'block font-semibold text-gray-300 mb-2'}}) }}
+                {{ form_widget(field, {
+                    'attr': {
+                        'class': 'w-full bg-[#1B4255] text-gray-200 rounded p-3 border border-gray-400 focus:ring-2 focus:ring-[#FFD700]'
+                    }
+                }) }}
+                {{ form_errors(field, {'attr': {'class': 'text-red-500 mt-1'}}) }}
+            </div>
+            {% endif %}
         {% endfor %}
 
         {# Boutons d'action #}
         <div class="flex justify-center gap-4 mt-6">
-            <a href="{{ path('app_show_user', {'id': user.id}) }}"
-                class="bg-gray-500 text-white font-bold py-3 px-6 rounded transition duration-200 hover:bg-gray-600">
+            <a href="{{ path('app_show_user', {'id': user.id}) }}" class="bg-gray-500 text-white font-bold py-3 px-6 rounded transition duration-200 hover:bg-gray-600">
                 Annuler
             </a>
-            <button type="submit" class="font-bold py-3 px-6 rounded transition duration-200 hover:bg-[#FFE44D]"
-                style="background-color: #FFD700; color: #1B4255;">
+            <button type="submit" class="font-bold py-3 px-6 rounded transition duration-200 hover:bg-[#FFE44D]" style="background-color: #FFD700; color: #1B4255;">
                 Enregistrer
             </button>
         </div>

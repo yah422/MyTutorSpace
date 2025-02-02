@@ -27,10 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Matiere::class, inversedBy: "users")]
     private Collection $matieres;
 
-    /**
-     * @var Collection<int, Contact>
-     */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'user')]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contact::class, cascade: ['persist', 'remove'])]
     private Collection $contacts;
 
     #[ORM\Column(length: 255)]
