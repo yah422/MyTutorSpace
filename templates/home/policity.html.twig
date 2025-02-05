@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Politique de Confidentialité</h1>
+
+    <p class="text-gray-700 mb-4">
+        Votre vie privée est importante pour nous. Cette politique de confidentialité explique quelles informations nous
+        collectons, comment nous les utilisons et quels droits vous avez concernant vos données personnelles.
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1. Collecte des données personnelles</h2>
+    <p class="text-gray-700 mb-4">
+        Nous collectons les données suivantes lors de l'inscription et de l'utilisation de nos services :
+    <ul class="list-disc pl-6">
+        <li>Nom et prénom</li>
+        <li>Adresse e-mail</li>
+        <li>Numéro de téléphone</li>
+        <li>Informations de connexion</li>
+    </ul>
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Utilisation des données</h2>
+    <p class="text-gray-700 mb-4">
+        Les données collectées sont utilisées pour :
+    <ul class="list-disc pl-6">
+        <li>Gérer les réservations de cours et la communication entre les utilisateurs</li>
+        <li>Améliorer l'expérience utilisateur</li>
+        <li>Assurer la sécurité de l'application</li>
+    </ul>
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Droits des utilisateurs</h2>
+    <p class="text-gray-700 mb-4">
+        Conformément au RGPD, vous disposez des droits suivants :
+    <ul class="list-disc pl-6">
+        <li>Droit d'accès et de modification de vos données personnelles</li>
+        <li>Droit à l'oubli (suppression de votre compte et de vos données)</li>
+        <li>Droit de recevoir une copie de vos données</li>
+    </ul>
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">4. Sécurité des données</h2>
+    <p class="text-gray-700 mb-4">
+        Nous mettons en œuvre des mesures de sécurité appropriées pour protéger vos données contre tout accès non
+        autorisé, modification ou suppression.
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">5. Contact</h2>
+    <p class="text-gray-700 mb-4">
+        Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter à l'adresse
+        suivante : <a href="mailto:support@mytutorspace.com" class="text-blue-500 underline">support@mytutorspace.com</a>.
+    </p>
+
+    <p class="text-gray-600 mt-10 text-sm">
+        Dernière mise à jour : {{ "now"|date("d/m/Y") }}
+    </p>
+</div>
+{% endblock %}

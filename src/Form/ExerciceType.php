@@ -42,6 +42,7 @@ class ExerciceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Exercice::class,
+            'csrf_protection' => true,
         ]);
     }
 }
