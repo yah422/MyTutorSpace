@@ -18,7 +18,7 @@
                 {% if lecon.description %}
                 <p class="text-gray-600 mb-4">{{ lecon.description|slice(0, 150) }}...</p>
                 {% endif %}
-                <a href="{{ path('show_lecon', {'id': lecon.id}) }}"
+                <a href="{{ path('show_lecon', {'slug': lecon.slug}) }}"
                     class="inline-block bg-[#1B4255] text-white px-4 py-2 rounded hover:bg-[#2C5A6E] transition-colors">
                     Voir la leçon
                 </a>
