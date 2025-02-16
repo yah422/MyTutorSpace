@@ -293,10 +293,10 @@ li {
 
 
 /* -------------------------------  Users ------------------------------- */
-/* label{
+label{
     color: #ECECEC;
     font-size: large;
-} */
+}
 
 .required {
     color: black !important;

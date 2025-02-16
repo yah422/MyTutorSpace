@@ -157,7 +157,7 @@
             {% endif %}
 
             {# Listes des séances #}
-            {% if is_granted('ROLE_USER') %}
+            {# {% if is_granted('ROLE_USER') %}
             <a href="{{ path('booking_list') }}"
                 class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
                 <div class="p-6">
@@ -174,7 +174,7 @@
                     <p class="text-[#567C8D]">Visualiser, annuler et modifier ses séances réserver.</p>
                 </div>
             </a>
-            {% endif %}
+            {% endif %} #}
 
             {# ADMIN #}
             {% if is_granted('ROLE_ADMIN') %}
