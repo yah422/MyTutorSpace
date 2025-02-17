@@ -128,8 +128,14 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger,
+        Security $security,
         #[Autowire('%avatars_directory%')] string $avatarsDirectory
     ): Response {
+
+        if (!$security->isGranted('ROLE_ADMIN')) {
+            return $this->render('user/errorPage.html.twig');
+        }
+
         $user = $entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
@@ -185,7 +191,7 @@ class UserController extends AbstractController
 
     #[Route('/user/ban/{id}', name: 'app_ban_user')]
     #[IsGranted('ROLE_ADMIN')]
-    public function ban(User $user, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function ban(User $user, Security $security, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $user = $userRepository->find($id);
         // Bannir l'utilisateur
@@ -215,15 +221,28 @@ class UserController extends AbstractController
 
     #[Route('/user/{id}', name: 'app_show_user')]
     public function profile(
-        User $user,
+        User $user, // Symfony récupère automatiquement l'utilisateur
         MatiereRepository $matiereRepository,
         NiveauRepository $niveauRepository,
+        Security $security,
         EntityManagerInterface $em
     ): Response {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur n'existe pas.");
+        }
+
+        if (!$security->isGranted('ROLE_ADMIN') && !$security->isGranted('ROLE_USER')) {
+            return $this->render('user/errorPage.html.twig');
+        }
+
         $matieres = $matiereRepository->findBy([], ["nom" => "ASC"]);
         $niveaux = $niveauRepository->findBy([], ["titre" => "ASC"]);
 
         $tuteur = null;
+
+        if (in_array('ROLE_TUTEUR', $user->getRoles(), true)) {
+            $tuteur = $user;
+        }
 
         $existingSauvegarde = $em->getRepository(SauvegardeProfil::class)
             ->findOneBy(['user' => $user, 'tuteur' => $tuteur]);
@@ -231,10 +250,6 @@ class UserController extends AbstractController
         if ($existingSauvegarde) {
             $this->addFlash('warning', 'Ce profil est déjà sauvegardé.');
             return $this->redirectToRoute('app_show_user', ['id' => $user->getId()]);
-        }
-
-        if (in_array('ROLE_TUTEUR', $user->getRoles(), true)) {
-            $tuteur = $user; // L'utilisateur est lui-même le tuteur
         }
 
         $this->addFlash('success', 'Votre profil a été sauvegardé.');
@@ -245,5 +260,6 @@ class UserController extends AbstractController
             'tuteur' => $tuteur,
         ]);
     }
+
 
 }

@@ -100,51 +100,73 @@
                                 </div>
                         </div>
                 </div>
-        
+
         </div>
 
 </div>
 <script>
+        // Je sélectionne tous les boutons ayant la classe 'save-profile-btn'
         document.querySelectorAll('.save-profile-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                        const url = button.dataset.url;
 
+                // Je récupère l'élément image à l'intérieur du bouton
+                const img = button.querySelector('img');
+
+                // Je récupère l'ID de l'utilisateur à partir de l'attribut data-id du bouton
+                const userId = button.dataset.id;
+
+                // Je récupère l'URL de sauvegarde à partir de l'attribut data-url du bouton
+                const url = button.dataset.url;
+
+                // Je définis une clé unique pour stocker l'état de sauvegarde de ce profil dans le localStorage
+                const savedKey = 'profileSaved_' + userId;
+
+                // Je vérifie si ce profil a déjà été sauvegardé en consultant le localStorage
+                if (localStorage.getItem(savedKey) === 'true') {
+                        // Si oui, je mets à jour l'image pour afficher l'icône de profil sauvegardé
+                        img.src = "{{ asset('img/saved-icon.png') }}";
+                        img.alt = "Profil sauvegardé";
+                }
+
+                // J'ajoute un événement au clic sur le bouton
+                button.addEventListener('click', () => {
+                        // Je vérifie si le profil est déjà sauvegardé dans le localStorage
+                        const isSaved = localStorage.getItem(savedKey) === 'true';
+
+                        // J'envoie une requête POST à l'URL pour sauvegarder ou supprimer le profil
                         fetch(url, {
                                 method: 'POST',
                                 headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'Content-Type': 'application/json'
+                                        'X-Requested-With': 'XMLHttpRequest', // Je précise que la requête est envoyée via AJAX
+                                        'Content-Type': 'application/json' // J'indique que le contenu de la requête est au format JSON
                                 }
                         })
-                                .then(response => response.json())
+                                .then(response => response.json()) // Je convertis la réponse en JSON
                                 .then(data => {
-                                        // Si la sauvegarde est réussie
+                                        // Si l'action a réussi
                                         if (data.success) {
-                                                // Changer l'image du bouton pour montrer qu'il a été sauvegardé
-                                                const img = button.querySelector('img');
-                                                img.src = "{{ asset('img/saved-icon.png') }}";  // Remplacez avec l'icône de "profil sauvegardé"
-                                                img.alt = "Profil sauvegardé";
+                                                if (!isSaved) {
+                                                        // Si le profil n'était pas sauvegardé, je change l'image pour montrer qu'il l'est maintenant
+                                                        img.src = "{{ asset('img/saved-icon.png') }}";
+                                                        img.alt = "Profil sauvegardé";
 
-                                                // Sauvegarder l'état dans le localStorage pour persister après rafraîchissement
-                                                localStorage.setItem('profileSaved_' + button.dataset.id, 'true');
+                                                        // Je mets à jour le localStorage pour conserver l'état sauvegardé
+                                                        localStorage.setItem(savedKey, 'true');
+                                                } else {
+                                                        // Si le profil était déjà sauvegardé, je remets l'image de base
+                                                        img.src = "{{ asset('img/save.png') }}";
+                                                        img.alt = "Sauvegarder le profil";
+
+                                                        // Je supprime l'état de sauvegarde du localStorage
+                                                        localStorage.removeItem(savedKey);
+                                                }
                                         } else {
-                                                // Afficher le message d'erreur si le profil est déjà sauvegardé
+                                                // Si une erreur s'est produite, j'affiche un message d'alerte
                                                 alert(data.message);
                                         }
                                 })
-                                .catch(error => console.error('Erreur lors de la sauvegarde :', error));
+                                .catch(error => console.error('Erreur lors de la sauvegarde :', error)); // Je gère les erreurs en les affichant dans la console
                 });
         });
-
-        // Vérifier l'état de la sauvegarde après le chargement de la page
-        document.querySelectorAll('.save-profile-btn').forEach(button => {
-                const isSaved = localStorage.getItem('profileSaved_' + button.dataset.id);
-                if (isSaved === 'true') {
-                        const img = button.querySelector('img');
-                        img.src = "{{ asset('img/saved-icon.png') }}";  // L'icône de profil sauvegardé
-                        img.alt = "Profil sauvegardé";
-                }
-        });
-
 </script>
+
 {% endblock %}
