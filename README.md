@@ -1,7 +1,5 @@
 # 🎓 MyTutorSpace - Plateforme de Tutorat Connecté
 
-![Bannière MyTutorSpace](https://github.com/user-attachments/assets/1f595fc5-0969-45be-b2b0-ae8641e4b1e0)
-
 ## 🌟 Transformez votre apprentissage
 
 MyTutorSpace révolutionne le soutien scolaire en connectant étudiants et tuteurs experts à travers une expérience digitale fluide et personnalisée.
